@@ -1,12 +1,13 @@
 package org.powbot.dax.engine.interaction;
 
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.types.RSInterface;
-import org.powbot.dax.shared.helpers.InterfaceHelper;
+import org.powbot.api.rt4.Component;
+import org.powbot.api.rt4.Components;
+import org.powbot.api.rt4.Widgets;
 import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.WaitFor;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -31,17 +32,20 @@ public class DoomsToggle implements Loggable {
         }
     }
 
-    public static void handle(int parentInterface, String... option){
-        if (!Interfaces.isInterfaceSubstantiated(parentInterface)){
+    public static void handle(int parentInterface, String... options){
+        if (!Widgets.component(parentInterface, 0).valid()){
             return;
         }
         getInstance().log("Handling Interface: " + parentInterface);
-        Optional<RSInterface> optional = InterfaceHelper.getAllInterfaces(parentInterface).stream().filter(rsInterface -> {
-            String[] actions = rsInterface.getActions();
-            return actions != null && Arrays.stream(option).anyMatch(s -> Arrays.stream(actions).anyMatch(s1 -> s1.equals(s)));
-        }).findAny();
-        optional.ifPresent(rsInterface -> rsInterface.click(option));
-        WaitFor.milliseconds(500, 1500);
+        for (Component component : Components.stream(parentInterface)) {
+            List<String> actions = component.actions();
+            String option = Arrays.stream(options).filter(actions::contains).findFirst().orElse(null);
+            if (option != null) {
+                component.click(option);
+                WaitFor.milliseconds(500, 1500);
+                return;
+            }
+        }
     }
 
     @Override

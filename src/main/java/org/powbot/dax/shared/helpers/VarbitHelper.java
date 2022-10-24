@@ -607,11 +607,12 @@ public class VarbitHelper {
         STASH_UNIT_34738(8256),
         STASH_UNIT_34739(8257);
 
+        private int id;
         /**
          * The raw varbit ID.
          */
         Varbits(int id){
-            this.varBit = Varpbits.varpbit(id);
+            this.id = id;
         }
     }
 
@@ -649,7 +650,7 @@ public class VarbitHelper {
     }
 
     public static boolean hasPlacedLumbridgeSwampsRope(){
-        return Varpbits.value(279);
+        return Varpbits.value(279) > 0;
     }
 
     public static int getHosidiusFavor(){

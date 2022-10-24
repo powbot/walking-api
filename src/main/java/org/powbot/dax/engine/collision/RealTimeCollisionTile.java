@@ -1,6 +1,5 @@
 package org.powbot.dax.engine.collision;
 
-import org.tribot.api.General;
 import org.powbot.dax.shared.PathFindingNode;
 import org.powbot.dax.shared.RSRegion;
 

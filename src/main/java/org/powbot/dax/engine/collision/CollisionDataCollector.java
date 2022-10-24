@@ -1,10 +1,12 @@
 package org.powbot.dax.engine.collision;
 
-import org.tribot.api.General;
-import org.tribot.api2007.PathFinding;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSTile;
 
+import org.powbot.api.Tile;
+import org.powbot.api.rt4.Game;
+import org.powbot.api.rt4.Movement;
+import org.powbot.api.rt4.Players;
+import org.powbot.util.TransientGetter;
+import org.powbot.util.TransientGetter2D;
 
 public class CollisionDataCollector {
 
@@ -12,35 +14,30 @@ public class CollisionDataCollector {
         RealTimeCollisionTile.clearMemory();
 
         Tile playerPosition = Players.local().tile();
-        int[][] collisionData = PathFinding.getCollisionData();
+        TransientGetter2D<Integer> collisionData = Movement.collisionMap(Game.floor()).flags();
 
-        if (collisionData == null) {
-            return;
-        }
-
-        for (int i = 0; i < collisionData.length; i++) {
-            for (int j = 0; j < collisionData[i].length; j++) {
-                Tile localTile = new Tile(i, j, playerPosition.getPlane(), Tile.TYPES.LOCAL);
-                Tile worldTile = localTile.toWorldTile();
-                RealTimeCollisionTile.create(worldTile.getX(), worldTile.getY(), worldTile.getPlane(), collisionData[i][j]);
+        Tile mapOffset = Game.mapOffset();
+        for (int i = 0; i < collisionData.getSize(); i++) {
+            for (int j = 0; j < collisionData.get(i).getSize(); j++) {
+                Tile worldTile = new Tile(mapOffset.x() + i, mapOffset.y() + j, playerPosition.floor());
+                RealTimeCollisionTile.create(worldTile.getX(), worldTile.getY(), worldTile.floor(), collisionData.get(i).get(j));
             }
         }
     }
 
     public static void updateRealTimeCollision(){
         Tile playerPosition = Players.local().tile();
-        int[][] collisionData = PathFinding.getCollisionData();
-        if(collisionData == null)
-            return;
-        for (int i = 0; i < collisionData.length; i++) {
-            for (int j = 0; j < collisionData[i].length; j++) {
-                Tile localTile = new Tile(i, j, playerPosition.getPlane(), Tile.TYPES.LOCAL);
-                Tile worldTile = localTile.toWorldTile();
-                RealTimeCollisionTile realTimeCollisionTile = RealTimeCollisionTile.get(worldTile.getX(), worldTile.getY(), worldTile.getPlane());
+        TransientGetter2D<Integer> collisionData = Movement.collisionMap(Game.floor()).flags();
+
+        Tile mapOffset = Game.mapOffset();
+        for (int i = 0; i < collisionData.getSize(); i++) {
+            for (int j = 0; j < collisionData.get(i).getSize(); j++) {
+                Tile worldTile = new Tile(mapOffset.x() + i, mapOffset.y() + j, playerPosition.floor());
+                RealTimeCollisionTile realTimeCollisionTile = RealTimeCollisionTile.get(worldTile.getX(), worldTile.getY(), worldTile.floor());
                 if (realTimeCollisionTile != null){
-                    realTimeCollisionTile.setCollisionData(collisionData[i][j]);
+                    realTimeCollisionTile.setCollisionData(collisionData.get(i).get(j));
                 } else {
-                    RealTimeCollisionTile.create(worldTile.getX(), worldTile.getY(), worldTile.getPlane(), collisionData[i][j]);
+                    RealTimeCollisionTile.create(worldTile.getX(), worldTile.getY(), worldTile.floor(), collisionData.get(i).get(j));
                 }
             }
         }

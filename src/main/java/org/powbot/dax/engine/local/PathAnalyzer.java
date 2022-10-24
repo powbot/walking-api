@@ -34,7 +34,7 @@ public class PathAnalyzer {
             return null;
         }
         outside:
-        for (int i = path.indexOf(currentPosition.getRSTile()); i < path.size() && i >= 0; i++) {
+        for (int i = path.indexOf(currentPosition.getTile()); i < path.size() && i >= 0; i++) {
             Tile currentNode = path.get(i);
             RealTimeCollisionTile current = RealTimeCollisionTile.get(currentNode.getX(), currentNode.getY(), currentNode.getPlane());
             if (current == null){
@@ -51,7 +51,7 @@ public class PathAnalyzer {
                 return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current);
             }
             RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getX(), nextNode.getY(), nextNode.getPlane());
-            Direction direction = directionTo(current.getRSTile(), nextNode);
+            Direction direction = directionTo(current.getTile(), nextNode);
             if (direction == Direction.UNKNOWN){
                 furthestReachable = current;
                 return new DestinationDetails(PathState.DISCONNECTED_PATH, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
@@ -62,7 +62,7 @@ public class PathAnalyzer {
                     Tile nextInPath = path.get(i + j);
                     RealTimeCollisionTile nextInPathCollision = RealTimeCollisionTile.get(nextInPath.getX(), nextInPath.getY(), nextInPath.getPlane());
                     if (nextInPathCollision != null && nextInPathCollision.isWalkable()){
-                        if (BFS.isReachable(current, nextInPathCollision, 150) && Projection.isInMinimap(nextInPathCollision.getRSTile())) {
+                        if (BFS.isReachable(current, nextInPathCollision, 150) && Projection.isInMinimap(nextInPathCollision.getTile())) {
                             i += j-2;
                             continue outside;
                         }
@@ -101,7 +101,7 @@ public class PathAnalyzer {
             return null;
         }
         outside:
-        for (int i = path.indexOf(currentPosition.getRSTile()); i < path.size() && i >= 0; i++) {
+        for (int i = path.indexOf(currentPosition.getTile()); i < path.size() && i >= 0; i++) {
             Tile currentNode = path.get(i);
             RealTimeCollisionTile current = RealTimeCollisionTile.get(currentNode.getX(), currentNode.getY(), currentNode.getPlane());
             if (current == null){
@@ -115,7 +115,7 @@ public class PathAnalyzer {
                 return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current);
             }
             RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getX(), nextNode.getY(), nextNode.getPlane());
-            Direction direction = directionTo(current.getRSTile(), nextNode);
+            Direction direction = directionTo(current.getTile(), nextNode);
             if (direction == Direction.UNKNOWN){
                 furthestReachable = current;
                 return new DestinationDetails(PathState.DISCONNECTED_PATH, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());

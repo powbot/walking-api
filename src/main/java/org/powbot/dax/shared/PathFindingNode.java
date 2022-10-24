@@ -1,7 +1,7 @@
 package org.powbot.dax.shared;
 
 
-import org.tribot.api2007.types.RSTile;
+import org.powbot.api.Tile;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -32,7 +32,7 @@ public abstract class PathFindingNode implements Comparable {
         return distance(pathFindingNode);
     }
 
-    public Tile getRSTile(){
+    public Tile getTile(){
         return new Tile(getX(), getY(), getZ());
     }
 

@@ -1,6 +1,8 @@
 package org.powbot.dax.teleports.utils;
 
 import org.powbot.api.Tile;
+import org.powbot.api.rt4.Inventory;
+import org.powbot.api.rt4.Item;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.interfaces.Clickable07;
@@ -12,6 +14,7 @@ import org.powbot.dax.shared.helpers.VarbitHelper.RSVarBit;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 
@@ -175,8 +178,8 @@ public class MasterScrollBook {
 		return getBook().length > 0;
 	}
 
-	private static RSItem[] getBook(){
-		return Inventory.find("Master scroll book");
+	private static List<Item> getBook(){
+		return Inventory.stream().name("Master scroll book").list();
 	}
 	
 	private static boolean waitForBookToOpen(){

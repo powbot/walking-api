@@ -1,8 +1,7 @@
 package org.powbot.dax.engine.bfs;
 
 
-import org.tribot.api.General;
-import org.tribot.api2007.types.RSTile;
+import org.powbot.api.Tile;
 import org.powbot.dax.shared.NodeInfo;
 import org.powbot.dax.shared.PathFindingNode;
 import org.powbot.dax.engine.WaitFor;
@@ -16,16 +15,16 @@ public class BFS {
     private static final int DEFAULT_OFFSET = 12;
     public static int OFFSET_SEARCH = DEFAULT_OFFSET;
 
-    public static PathFindingNode bfsClosestToPath(List<RSTile> path, PathFindingNode start){
+    public static PathFindingNode bfsClosestToPath(List<Tile> path, PathFindingNode start){
         return bfsClosestToPath(path, start, -1);
     }
 
-    public static PathFindingNode bfsClosestToPath(List<RSTile> path, PathFindingNode start, int limit){
+    public static PathFindingNode bfsClosestToPath(List<Tile> path, PathFindingNode start, int limit){
         if (path == null || start == null){
             System.out.println("BFS: path or start is null");
             return null;
         }
-        if (path.contains(start.getRSTile().toWorldTile())) {
+        if (path.contains(start.getTile())) {
             return start;
         }
         NodeInfo.clearMemory(start.getClass());
@@ -47,7 +46,7 @@ public class BFS {
                     continue;
                 }
                 nodeInfo.traversed = true;
-                if (path.contains(neighbor.getRSTile())){
+                if (path.contains(neighbor.getTile())){
                     return neighbor;
                 }
                 queue.add(neighbor);

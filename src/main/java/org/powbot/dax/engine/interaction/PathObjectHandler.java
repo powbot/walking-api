@@ -149,27 +149,27 @@ public class PathObjectHandler implements Loggable {
         GAMES_ROOM_STAIRS("Stairs", "Climb-down", new Tile(2899, 3565, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getRSTile().equals(new Tile(2899, 3565, 0)) &&
+                return destinationDetails.getDestination().getTile().equals(new Tile(2899, 3565, 0)) &&
                     destinationDetails.getAssumed().equals(new Tile(2205, 4934, 1));
             }
         }),
         FALADOR_GATE("Gate", "Close", new Tile(3031, 3314, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getRSTile().equals(new Tile(3031, 3314, 0));
+                return destinationDetails.getDestination().getTile().equals(new Tile(3031, 3314, 0));
             }
         }),
         CANIFIS_BASEMENT_WALL("Wall", "Search", new Tile(3480, 9836, 0),new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getRSTile().equals(new Tile(3480, 9836, 0)) ||
+                return destinationDetails.getDestination().getTile().equals(new Tile(3480, 9836, 0)) ||
                     destinationDetails.getAssumed().equals(new Tile(3480, 9836, 0));
             }
         }),
         BRINE_RAT_CAVE_BOULDER("Cave", "Exit", new Tile(2690, 10125, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getRSTile().equals(new Tile(2690, 10125, 0))
+                return destinationDetails.getDestination().getTile().equals(new Tile(2690, 10125, 0))
                     && NPCs.find(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll"))).length > 0;
             }
         });
@@ -334,7 +334,7 @@ public class PathObjectHandler implements Loggable {
                                     WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                     break;
                 case FALADOR_GATE:
-                    int targetTile = path.indexOf(PathAnalyzer.closestTileInPathToPlayer(path).getRSTile());
+                    int targetTile = path.indexOf(PathAnalyzer.closestTileInPathToPlayer(path).getTile());
                     targetTile += 10;
                     if(targetTile > path.size()){
                         targetTile = path.size()-1;
@@ -399,7 +399,7 @@ public class PathObjectHandler implements Loggable {
             }
             if (current.getNextTile() != null){
                 PathAnalyzer.DestinationDetails hoverDetails = PathAnalyzer.furthestReachableTile(path, current.getNextTile());
-                if (hoverDetails != null && hoverDetails.getDestination() != null && hoverDetails.getDestination().getRSTile().distanceTo(Players.local().tile()) > 7 && !strongholdDoor && Players.local().tile().distanceTo(object) <= 2){
+                if (hoverDetails != null && hoverDetails.getDestination() != null && hoverDetails.getDestination().getTile().distanceTo(Players.local().tile()) > 7 && !strongholdDoor && Players.local().tile().distanceTo(object) <= 2){
                     WalkerEngine.getInstance().hoverMinimap(hoverDetails.getDestination());
                 }
             }
@@ -434,7 +434,7 @@ public class PathObjectHandler implements Loggable {
                 if (actions2.contains("Climb-down")){
                     return 1;
                 }
-            } else if(destinationDetails.getAssumed().distanceTo(destinationDetails.getDestination().getRSTile()) > 20){
+            } else if(destinationDetails.getAssumed().distanceTo(destinationDetails.getDestination().getTile()) > 20){
                 if(actions1.contains("Climb-up") || actions1.contains("Climb-down")){
                     return -1;
                 } else if(actions2.contains("Climb-up") || actions2.contains("Climb-down")){
@@ -493,7 +493,7 @@ public class PathObjectHandler implements Loggable {
                 if (actionsList.stream().anyMatch(s -> s != null && getInstance().sortedBlackListOptions.contains(s))){
                     return false;
                 }
-                if (rsObject.getPosition().distanceTo(destinationDetails.getDestination().getRSTile()) > 5) {
+                if (rsObject.getPosition().distanceTo(destinationDetails.getDestination().getTile()) > 5) {
                     return false;
                 }
                 if (Arrays.stream(rsObject.getAllTiles()).noneMatch(rsTile -> rsTile.distanceTo(position) <= 3)) {

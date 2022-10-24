@@ -131,11 +131,11 @@ public class WalkerEngine implements Loggable{
                 CustomConditionContainer conditionContainer = new CustomConditionContainer(walkingCondition);
                 switch (destinationDetails.getState()) {
                     case DISCONNECTED_PATH:
-                        if (currentNode.getRSTile().distanceTo(Players.local().tile()) > 10){
+                        if (currentNode.getTile().distanceTo(Players.local().tile()) > 10){
                             clickMinimap(currentNode);
                             WaitFor.milliseconds(1200, 3400);
                         }
-                        NavigationSpecialCase.SpecialLocation specialLocation = NavigationSpecialCase.getLocation(currentNode.getRSTile()),
+                        NavigationSpecialCase.SpecialLocation specialLocation = NavigationSpecialCase.getLocation(currentNode.getTile()),
                             specialLocationDestination = NavigationSpecialCase.getLocation(assumedNext);
                         if (specialLocation != null && specialLocationDestination != null) {
                             log("[SPECIAL LOCATION] We are at " + specialLocation + " and our destination is " + specialLocationDestination);
@@ -149,7 +149,7 @@ public class WalkerEngine implements Loggable{
                         }
 
                         Charter.LocationProperty
-                            locationProperty = Charter.LocationProperty.getLocation(currentNode.getRSTile()),
+                            locationProperty = Charter.LocationProperty.getLocation(currentNode.getTile()),
                             destinationProperty = Charter.LocationProperty.getLocation(assumedNext);
                         if (locationProperty != null && destinationProperty != null) {
                             log("Chartering to: " + destinationProperty);
@@ -162,7 +162,7 @@ public class WalkerEngine implements Loggable{
                         }
                         //DO NOT BREAK OUT
                     case OBJECT_BLOCKING:
-                        Tile walkingTile = Reachable.getBestWalkableTile(destination.getRSTile(), new Reachable());
+                        Tile walkingTile = Reachable.getBestWalkableTile(destination.getTile(), new Reachable());
                         if (isDestinationClose(destination) || (walkingTile != null ? AccurateMouse.clickMinimap(walkingTile) : clickMinimap(destination))) {
                             log("Handling Object...");
                             if (!PathObjectHandler.handle(destinationDetails, path)) {
@@ -193,7 +193,7 @@ public class WalkerEngine implements Loggable{
                                     failedAttempt();
                                     return WaitFor.Return.FAIL;
                                 }
-                                int indexCurrentDestination = path.indexOf(currentDestination.getRSTile());
+                                int indexCurrentDestination = path.indexOf(currentDestination.getTile());
 
                                 PathFindingNode closestToPlayer = PathAnalyzer.closestTileInPathToPlayer(path);
                                 if (closestToPlayer == null) {
@@ -201,14 +201,14 @@ public class WalkerEngine implements Loggable{
                                     failedAttempt();
                                     return WaitFor.Return.FAIL;
                                 }
-                                int indexCurrentPosition = path.indexOf(closestToPlayer.getRSTile());
+                                int indexCurrentPosition = path.indexOf(closestToPlayer.getTile());
                                 if (furthestReachable == null) {
                                     System.out.println("Furthest reachable is null");
                                     return WaitFor.Return.FAIL;
                                 }
-                                int indexNextDestination = path.indexOf(furthestReachable.getDestination().getRSTile());
+                                int indexNextDestination = path.indexOf(furthestReachable.getDestination().getTile());
                                 if (indexNextDestination - indexCurrentDestination > 4 || indexCurrentDestination - indexCurrentPosition < 4) {
-                                    log("New destination is available: " + furthestReachable.getDestination().getRSTile());
+                                    log("New destination is available: " + furthestReachable.getDestination().getTile());
                                     return WaitFor.Return.SUCCESS;
                                 }
                                 if (System.currentTimeMillis() > offsetWalkingTimeout && !Player.isMoving()){
@@ -218,7 +218,7 @@ public class WalkerEngine implements Loggable{
                                 return WaitFor.milliseconds(100);
                             });
                         } else {
-                            log("Failed to click minimap tile: " + currentNode.getRSTile());
+                            log("Failed to click minimap tile: " + currentNode.getTile());
                             failedAttempt();
                         }
                         break;
@@ -259,7 +259,7 @@ public class WalkerEngine implements Loggable{
 
     public boolean clickMinimap(PathFindingNode pathFindingNode){
         final Tile playerPosition = Players.local().tile();
-        if (playerPosition.distanceTo(pathFindingNode.getRSTile()) <= 1){
+        if (playerPosition.distanceTo(pathFindingNode.getTile()) <= 1){
             log("We are 1 tile or less away from target node, returning true.");
             return true;
         }
