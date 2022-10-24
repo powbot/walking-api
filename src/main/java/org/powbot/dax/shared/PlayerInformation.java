@@ -1,10 +1,12 @@
 package org.powbot.dax.shared;
 
 import org.powbot.api.rt4.*;
+import org.powbot.api.rt4.walking.model.Skill;
 import org.powbot.dax.shared.json.JSONObject;
 import org.powbot.dax.shared.json.JSONValue;
 
 import java.util.HashMap;
+import java.util.List;
 
 
 public class PlayerInformation {
@@ -24,7 +26,7 @@ public class PlayerInformation {
             return new PlayerInformation(
                     Worlds.isCurrentWorldMembers(),
                     rsPlayer.getCombatLevel(),
-                    Skills.SKILLS.values(),
+                    Skill.values(),
                     grabSettings(),
                     Inventory.stream().list(),
                     Equipment.stream().list());
@@ -45,27 +47,27 @@ public class PlayerInformation {
         return settingsMap;
     }
 
-    private static HashMap<String, Integer> skillsConversion(Skills.SKILLS[] skills){
+    private static HashMap<String, Integer> skillsConversion(Skill[] skills){
         HashMap<String, Integer> skillsMap = new HashMap<>();
-        for (Skills.SKILLS skill : skills){
-            skillsMap.put(skill.toString(), skill.getActualLevel());
+        for (Skill skill : skills){
+            skillsMap.put(skill.toString(), Skills.realLevel(skill));
         }
         return skillsMap;
     }
 
-    private static HashMap<Integer, Integer> rsItemsConversion(RSItem[] items){
+    private static HashMap<Integer, Integer> rsItemsConversion(List<Item> items){
         HashMap<Integer, Integer> itemsMap = new HashMap<>();
-        for (RSItem item : items){
-            if (itemsMap.containsKey(item.getID())){
-                itemsMap.put(item.getID(), itemsMap.get(item.getID()) + item.getStack());
+        for (Item item : items){
+            if (itemsMap.containsKey(item.id())){
+                itemsMap.put(item.id(), itemsMap.get(item.id()) + item.getStack());
             } else {
-                itemsMap.put(item.getID(), item.getStack());
+                itemsMap.put(item.id(), item.getStack());
             }
         }
         return itemsMap;
     }
 
-    private PlayerInformation(boolean member, int combatLevel, Skills.SKILLS[] skills, HashMap<Integer, Integer> gameSettings, RSItem[] inventoryItems, RSItem[] equipItems){
+    private PlayerInformation(boolean member, int combatLevel, Skill[] skills, HashMap<Integer, Integer> gameSettings, List<Item> inventoryItems, List<Item> equipItems){
         this.member = member;
         this.combatLevel = combatLevel;
         this.skills = skillsConversion(skills);
@@ -107,7 +109,7 @@ public class PlayerInformation {
         return itemAmount != null && Integer.parseInt(itemAmount.toString()) >= amount;
     }
 
-    public boolean skillRequirement(Skills.SKILLS skill, int level){
+    public boolean skillRequirement(Skill skill, int level){
         if (skills == null){
             return false;
         }
