@@ -72,7 +72,7 @@ public class GnomeGlider {
             return false;
         }
 
-        if (WaitFor.condition(General.random(5400, 6500), () -> location.getRSTile().distanceTo(Players.local().tile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+        if (WaitFor.condition(Random.nextInt(5400, 6500), () -> location.getRSTile().distanceTo(Players.local().tile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
             WaitFor.milliseconds(250, 500);
             return true;
         }

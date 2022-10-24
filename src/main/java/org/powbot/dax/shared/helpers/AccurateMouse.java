@@ -63,7 +63,7 @@ public class AccurateMouse {
 //            Mouse.move(point.x, point.y);
 //        }
 //        Mouse.sendPress(point, button);
-//        General.sleep(General.randomSD(5, 180, 60, 25));
+//        General.sleep(Random.nextIntSD(5, 180, 60, 25));
 //        Mouse.sendRelease(point, button);
 //        Mouse.sendClickEvent(point, button);
     }
@@ -81,7 +81,7 @@ public class AccurateMouse {
         if (tile == null) {
             return false;
         }
-        for (int i = 0; i < General.random(7, 10); i++) {
+        for (int i = 0; i < Random.nextInt(7, 10); i++) {
             Tile currentDestination = Game.getDestination();
             if (currentDestination != null && currentDestination.equals(tile)) {
                 return true;
@@ -148,7 +148,7 @@ public class AccurateMouse {
      * @return whether action was successful.
      */
     private static boolean action(RSModel model, Clickable07 clickable, String targetName, boolean hover, String... clickActions) {
-        for (int i = 0; i < General.random(4, 7); i++) {
+        for (int i = 0; i < Random.nextInt(4, 7); i++) {
             if (attemptAction(model, clickable, targetName, hover, clickActions)) {
                 return true;
             }
@@ -161,7 +161,7 @@ public class AccurateMouse {
         if (!destination.isOnScreen() || !destination.isClickable()) {
             return false;
         }
-        for (int i = 0; i < General.random(3, 5); i++) {
+        for (int i = 0; i < Random.nextInt(3, 5); i++) {
             Point point = getWalkingPoint(destination);
             if (point == null) {
                 continue;
@@ -184,7 +184,7 @@ public class AccurateMouse {
     }
 
     public static boolean hoverScreenTileWalkHere(RSTile destination) {
-        for (int i = 0; i < General.random(4, 6); i++) {
+        for (int i = 0; i < Random.nextInt(4, 6); i++) {
             Point point = getWalkingPoint(destination);
             if (point == null) {
                 continue;

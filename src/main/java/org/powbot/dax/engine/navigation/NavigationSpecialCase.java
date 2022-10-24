@@ -616,7 +616,7 @@ public class NavigationSpecialCase implements Loggable {
                 RSObject[] logSearch = Objects.findNearest(15, Filters.Objects.nameEquals("Log balance").and(Filters.Objects.actionsContains("Walk-across")));
                 if (logSearch.length > 0 && AccurateMouse.click(logSearch[0], "Walk-across")){
                     int agilityXP = Skills.getXP(Skills.SKILLS.AGILITY);
-                    if (WaitFor.condition(General.random(7600, 1200), () -> Skills.getXP(Skills.SKILLS.AGILITY) > agilityXP ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
+                    if (WaitFor.condition(Random.nextInt(7600, 1200), () -> Skills.getXP(Skills.SKILLS.AGILITY) > agilityXP ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
                         return true;
                     }
                     if (Player.isMoving()){

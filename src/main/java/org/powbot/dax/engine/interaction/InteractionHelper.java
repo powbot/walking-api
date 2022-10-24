@@ -37,7 +37,7 @@ public class InteractionHelper {
         }
 
         if (clickable instanceof RSItem){
-            return clickable.click(actions) && (condition == null || WaitFor.condition(General.random(7000, 8000), condition) == WaitFor.Return.SUCCESS);
+            return clickable.click(actions) && (condition == null || WaitFor.condition(Random.nextInt(7000, 8000), condition) == WaitFor.Return.SUCCESS);
         }
 
         Tile position = ((Positionable) clickable).getPosition();
@@ -66,12 +66,12 @@ public class InteractionHelper {
 
         if (!AccurateMouse.click(clickable, actions)){
             if (Camera.getCameraAngle() < 90){
-                Camera.setCameraAngle(General.random(90, 100));
+                Camera.setCameraAngle(Random.nextInt(90, 100));
             }
             return false;
         }
 
-        return condition == null || WaitFor.condition(General.random(7000, 8500), condition) == WaitFor.Return.SUCCESS;
+        return condition == null || WaitFor.condition(Random.nextInt(7000, 8500), condition) == WaitFor.Return.SUCCESS;
     }
 
     public static RSItem getRSItem(Predicate<RSItem> filter){

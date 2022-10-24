@@ -115,7 +115,7 @@ public class NPCInteraction implements Loggable {
 
     public static void handleConversationRegex(String regex){
         while (true){
-            if (WaitFor.condition(General.random(650, 800), () -> isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+            if (WaitFor.condition(Random.nextInt(650, 800), () -> isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                 break;
             }
 
@@ -130,7 +130,7 @@ public class NPCInteraction implements Loggable {
                 continue;
             }
 
-            General.sleep(General.randomSD(350, 2250, 775, 350));
+            General.sleep(Random.nextIntSD(350, 2250, 775, 350));
             getInstance().log("Replying with option: " + selectableOptions.get(0).getText());
 //            Keyboard.typeString(selectableOptions.get(0).getIndex() + "");
             selectableOptions.get(0).click();
@@ -143,7 +143,7 @@ public class NPCInteraction implements Loggable {
         List<String> blackList = new ArrayList<>();
         int limit = 0;
         while (limit++ < 50){
-            if (WaitFor.condition(General.random(650, 800), () -> isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+            if (WaitFor.condition(Random.nextInt(650, 800), () -> isConversationWindowUp() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
                 getInstance().log("Conversation window not up.");
                 break;
             }
@@ -164,7 +164,7 @@ public class NPCInteraction implements Loggable {
                 if(blackList.contains(selected.getText())){
                     continue;
                 }
-                General.sleep(General.randomSD(350, 2250, 775, 350));
+                General.sleep(Random.nextIntSD(350, 2250, 775, 350));
                 getInstance().log("Replying with option: " + selected.getText());
                 blackList.add(selected.getText());
                 Keyboard.typeString(selected.getIndex() + "");

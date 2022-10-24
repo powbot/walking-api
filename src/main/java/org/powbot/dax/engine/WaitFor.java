@@ -44,7 +44,7 @@ public class WaitFor {
             return base;
         }
         int sleep = (int) (multiplier * distance);
-        return (int)General.randomSD(base * .8, base * 1.2, base, base * 0.1) + sleep;
+        return (int)Random.nextIntSD(base * .8, base * 1.2, base, base * 0.1) + sleep;
     }
 
 

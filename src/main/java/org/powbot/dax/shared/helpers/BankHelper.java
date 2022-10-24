@@ -1,5 +1,7 @@
 package org.powbot.dax.shared.helpers;
 
+import org.powbot.api.Locatable;
+import org.powbot.api.Tile;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.Game;
@@ -12,6 +14,7 @@ import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.InteractionHelper;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class BankHelper {
@@ -55,14 +58,14 @@ public class BankHelper {
         return InteractionHelper.click(object, "Bank") && waitForBankScreen(object);
     }
 
-    public static HashSet<RSTile> getBuilding(Positionable positionable){
+    public static Set<Tile> getBuilding(Locatable positionable){
         return computeBuilding(positionable, Game.getSceneFlags(), new HashSet<>());
     }
 
-    private static HashSet<RSTile> computeBuilding(Positionable positionable, byte[][][] sceneFlags, HashSet<RSTile> tiles){
+    private static Set<Tile> computeBuilding(Locatable positionable, byte[][][] sceneFlags, Set<Tile> tiles){
         try {
-            Tile local = positionable.getPosition().toLocalTile();
-            int localX = local.getX(), localY = local.getY(), localZ = local.getPlane();
+            Tile tile = positionable.tile();
+            int localX = tile.localX(), localY = tile.localY(), localZ = tile.floor();
             if (localX < 0 || localY < 0 || localZ < 0){
                 return tiles;
             }
@@ -85,11 +88,11 @@ public class BankHelper {
         return tiles;
     }
 
-    private static boolean isInBuilding(RSTile localRSTile, byte[][][] sceneFlags) {
-        return !(sceneFlags.length <= localRSTile.getPlane()
-                    || sceneFlags[localRSTile.getPlane()].length <= localRSTile.getX()
-                    || sceneFlags[localRSTile.getPlane()][localRSTile.getX()].length <= localRSTile.getY())
-                && sceneFlags[localRSTile.getPlane()][localRSTile.getX()][localRSTile.getY()] >= 4;
+    private static boolean isInBuilding(Tile localRSTile, byte[][][] sceneFlags) {
+        return !(sceneFlags.length <= localRSTile.floor()
+                    || sceneFlags[localRSTile.floor()].length <= localRSTile.getX()
+                    || sceneFlags[localRSTile.floor()][localRSTile.getX()].length <= localRSTile.getY())
+                && sceneFlags[localRSTile.floor()][localRSTile.getX()][localRSTile.getY()] >= 4;
     }
 
     private static boolean waitForBankScreen(RSObject object){

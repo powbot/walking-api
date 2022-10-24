@@ -250,14 +250,14 @@ public class Grouping {
 
             if(minigamePoint.getY() < rec.getY()){//scroll up
                 General.println("Scrolling up");
-                Point randomizedStart = new Point(scroll.getX() - General.randomSD(2, 30, 10, 5), scroll.getY() + General.randomSD(10, 150, 80, 40) );
-                Point randomizedEnd = new Point(randomizedStart.getX() + General.random(-5, 5), randomizedStart.getY() + General.randomSD(30, 120, 60, 30));
+                Point randomizedStart = new Point(scroll.getX() - Random.nextIntSD(2, 30, 10, 5), scroll.getY() + Random.nextIntSD(10, 150, 80, 40) );
+                Point randomizedEnd = new Point(randomizedStart.getX() + Random.nextInt(-5, 5), randomizedStart.getY() + Random.nextIntSD(30, 120, 60, 30));
                 General.println("Randomized start: " + randomizedStart + ", randomized end: " + randomizedEnd);
                 Input.drag(randomizedStart, randomizedEnd);
             } else {
                 General.println("Scrolling down");
-                Point randomizedStart = new Point(scroll.getX() - General.randomSD(2, 30, 10, 5), scroll.getY() + General.randomSD(2, 40, 15, 20) );
-                Point randomizedEnd = new Point(randomizedStart.getX() - General.random(-5, 5), randomizedStart.getY() - General.randomSD(30, 120, 60, 30));
+                Point randomizedStart = new Point(scroll.getX() - Random.nextIntSD(2, 30, 10, 5), scroll.getY() + Random.nextIntSD(2, 40, 15, 20) );
+                Point randomizedEnd = new Point(randomizedStart.getX() - Random.nextInt(-5, 5), randomizedStart.getY() - Random.nextIntSD(30, 120, 60, 30));
                 General.println("Randomized start: " + randomizedStart + ", randomized end: " + randomizedEnd);
                 Input.drag(randomizedStart, randomizedEnd);
             }

@@ -260,7 +260,7 @@ public class PathObjectHandler implements Loggable {
                 return false;
             }
         }
-        if (WaitFor.condition(General.random(5000, 8000), () -> object.isOnScreen() && object.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
+        if (WaitFor.condition(Random.nextInt(5000, 8000), () -> object.isOnScreen() && object.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
             return false;
         }
 
@@ -285,7 +285,7 @@ public class PathObjectHandler implements Loggable {
                             Walking.blindWalkTo(Players.local().tile());
                         }
                         if (web.getPosition().distanceTo(Players.local().tile()) <= 1) {
-                            WaitFor.milliseconds(General.randomSD(50, 800, 250, 150));
+                            WaitFor.milliseconds(Random.nextIntSD(50, 800, 250, 150));
                         } else {
                             WaitFor.milliseconds(2000, 4000);
                         }
@@ -302,12 +302,12 @@ public class PathObjectHandler implements Loggable {
                     break;
                 case ARDY_DOOR_LOCK_SIDE:
                 case YANILLE_DOOR_LOCK_SIDE:
-                    for (int i = 0; i < General.random(15, 25); i++) {
+                    for (int i = 0; i < Random.nextInt(15, 25); i++) {
                         if (!clickOnObject(object, new String[]{specialObject.getAction()})){
                             continue;
                         }
                         if (Players.local().tile().distanceTo(specialObject.getLocation()) > 1){
-                            WaitFor.condition(General.random(3000, 4000), () -> Players.local().tile().distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                            WaitFor.condition(Random.nextInt(3000, 4000), () -> Players.local().tile().distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                         }
                         if (Players.local().tile().equals(new Tile(2564, 3356, 0))){
                             successfulClick = true;
@@ -370,7 +370,7 @@ public class PathObjectHandler implements Loggable {
         boolean strongholdDoor = isStrongholdDoor(object);
 
         if (strongholdDoor){
-            if (WaitFor.condition(General.random(6700, 7800), () -> {
+            if (WaitFor.condition(Random.nextInt(6700, 7800), () -> {
                 Tile playerPosition = Players.local().tile();
                 if (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), destinationDetails.getNextTile(), 50)) {
                     WaitFor.milliseconds(500, 1000);
@@ -386,7 +386,7 @@ public class PathObjectHandler implements Loggable {
             }
         }
 
-        WaitFor.Return result = WaitFor.condition(General.random(8500, 11000), () -> {
+        WaitFor.Return result = WaitFor.condition(Random.nextInt(8500, 11000), () -> {
             DoomsToggle.handleToggle();
             PathAnalyzer.DestinationDetails destinationDetails1 = PathAnalyzer.furthestReachableTile(path);
             if (NPCInteraction.isConversationWindowUp()) {

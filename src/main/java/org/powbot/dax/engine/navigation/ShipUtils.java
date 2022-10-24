@@ -39,7 +39,7 @@ public class ShipUtils {
 //	        .condition(1000, () -> Game.getCrosshairState() == 2 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
 //            return false;
 //        }
-        return WaitFor.condition(General.random(2500, 3000), () -> !ShipUtils
+        return WaitFor.condition(Random.nextInt(2500, 3000), () -> !ShipUtils
 	        .isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
     }
 

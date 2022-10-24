@@ -1,6 +1,8 @@
 package org.powbot.dax.engine.local;
 
 
+import org.powbot.api.Locatable;
+import org.powbot.api.Tile;
 import org.tribot.api.General;
 import org.tribot.api.interfaces.Positionable;
 import org.tribot.api2007.PathFinding;
@@ -178,9 +180,9 @@ public class Reachable {
         return position;
     }
 
-    public static Tile getBestWalkableTile(Positionable positionable, Reachable reachable) {
+    public static Tile getBestWalkableTile(Locatable positionable, Reachable reachable) {
         Tile localPosition = positionable.getPosition().toLocalTile();
-        HashSet<RSTile> building = BankHelper.getBuilding(positionable);
+        Set<Tile> building = BankHelper.getBuilding(positionable);
         boolean[][] traversed = new boolean[104][104];
         Tile[][] parentMap = new Tile[104][104];
         Queue<RSTile> queue = new LinkedList<>();

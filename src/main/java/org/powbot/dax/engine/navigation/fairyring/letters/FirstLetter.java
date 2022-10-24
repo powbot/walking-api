@@ -45,7 +45,7 @@ public enum FirstLetter {
         int diff = current - target;
         int abs = Math.abs(diff);
         if(abs == 2){
-            return General.randomBoolean() ? turnClockwise(2) : turnAntiClockwise(2);
+            return Random.nextIntBoolean() ? turnClockwise(2) : turnAntiClockwise(2);
         } else if(diff == 3 || diff == -1){
             return turnClockwise(1);
         } else {

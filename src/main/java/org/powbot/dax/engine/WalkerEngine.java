@@ -2,6 +2,7 @@ package org.powbot.dax.engine;
 
 
 import org.powbot.api.Point;
+import org.powbot.api.Random;
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.Players;
 import org.powbot.dax.shared.PathFindingNode;
@@ -178,7 +179,7 @@ public class WalkerEngine implements Loggable{
 
                     case FURTHEST_CLICKABLE_TILE:
                         if (clickMinimap(currentNode)) {
-                            long offsetWalkingTimeout = System.currentTimeMillis() + General.random(2500, 4000);
+                            long offsetWalkingTimeout = System.currentTimeMillis() + Random.nextInt(2500, 4000);
                             WaitFor.condition(10000, () -> {
                                 switch (conditionContainer.trigger()) {
                                     case EXIT_OUT_WALKER_SUCCESS:
@@ -293,10 +294,10 @@ public class WalkerEngine implements Loggable{
 
     private void failedAttempt(){
         if (Camera.getCameraAngle() < 90) {
-            Camera.setCameraAngle(General.random(90, 100));
+            Camera.setCameraAngle(Random.nextInt(90, 100));
         }
         if (++attemptsForAction > 1) {
-            Camera.setCameraRotation(General.random(0, 360));
+            Camera.setCameraRotation(Random.nextInt(0, 360));
         }
         log("Failed attempt on action.");
         WaitFor.milliseconds(450 * (attemptsForAction + 1), 850 * (attemptsForAction + 1));
@@ -340,7 +341,7 @@ public class WalkerEngine implements Loggable{
             if(teleport.isAtTeleportSpot(startPosition) && !teleport.isAtTeleportSpot(playerPosition)){
                 log("Using teleport method: " + teleport);
                 teleport.trigger();
-                return WaitFor.condition(General.random(3000, 20000),
+                return WaitFor.condition(Random.nextInt(3000, 20000),
                     () -> startPosition.distanceTo(Players.local().tile()) < 10 ?
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
             }
