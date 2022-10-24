@@ -1,16 +1,12 @@
 package org.powbot.dax.engine.navigation;
 
-import org.tribot.api.General;
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.RSTile;
-import org.powbot.dax.shared.helpers.InterfaceHelper;
-import org.powbot.dax.engine.WaitFor;
-import org.powbot.dax.engine.interaction.InteractionHelper;
+import org.powbot.api.Condition;
+import org.powbot.api.Random;
+import org.powbot.api.Tile;
+import org.powbot.api.rt4.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 
 public class GnomeGlider {
@@ -54,17 +50,18 @@ public class GnomeGlider {
     }
 
     public static boolean to(Location location) {
-        if (!Interfaces.isInterfaceValid(GNOME_GLIDER_MASTER_INTERFACE)
-                && !InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.actionsContains("Glider")), "Glider", () -> Interfaces.isInterfaceValid(GNOME_GLIDER_MASTER_INTERFACE) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
+        if (!Widgets.component(GNOME_GLIDER_MASTER_INTERFACE, 0).visible()
+                && (!Npcs.stream().action("Glider").nearest().first().interact("Glider") ||
+                !Condition.wait(() -> Widgets.component(GNOME_GLIDER_MASTER_INTERFACE, 0).visible(), 300, 10))) {
             return false;
         }
 
-        RSInterface option = InterfaceHelper.getAllInterfaces(GNOME_GLIDER_MASTER_INTERFACE).stream().filter(rsInterface -> {
-            String[] actions = rsInterface.getActions();
-            return actions != null && Arrays.stream(actions).anyMatch(s -> s.contains(location.getName()));
+        Component option = Components.stream(GNOME_GLIDER_MASTER_INTERFACE).filter(rsInterface -> {
+            List<String> actions = rsInterface.actions();
+            return actions != null && actions.stream().anyMatch(s -> s.contains(location.getName()));
         }).findAny().orElse(null);
 
-        if (option == null){
+        if (!option.visible()){
             return false;
         }
 
@@ -72,11 +69,7 @@ public class GnomeGlider {
             return false;
         }
 
-        if (WaitFor.condition(Random.nextInt(5400, 6500), () -> location.getRSTile().distanceTo(Players.local().tile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
-            WaitFor.milliseconds(250, 500);
-            return true;
-        }
-        return false;
+        return Condition.wait(() -> location.getRSTile().distanceTo(Players.local().tile()) < 10, Random.nextInt(540, 650), 10);
     }
 
 }

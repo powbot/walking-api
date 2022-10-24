@@ -1,17 +1,19 @@
 package org.powbot.dax.engine.navigation;
 
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSArea;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.RSTile;
-import org.powbot.dax.shared.helpers.InterfaceHelper;
+import org.powbot.api.Area;
+import org.powbot.api.Condition;
+import org.powbot.api.Tile;
+import org.powbot.api.rt4.Component;
+import org.powbot.api.rt4.Components;
+import org.powbot.api.rt4.Npcs;
+import org.powbot.api.rt4.Widgets;
 import org.powbot.dax.engine.Loggable;
-import org.powbot.dax.engine.WaitFor;
-import org.powbot.dax.engine.interaction.InteractionHelper;
 import org.powbot.dax.engine.interaction.NPCInteraction;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Charter implements Loggable {
@@ -19,52 +21,47 @@ public class Charter implements Loggable {
     private static final int CHARTER_INTERFACE_MASTER = 72;
     private static Charter instance;
 
-    private static Charter getInstance(){
+    private static Charter getInstance() {
         return instance != null ? instance : (instance = new Charter());
     }
 
-    public static boolean to(LocationProperty locationProperty){
-        if (locationProperty == null){
+    public static boolean to(LocationProperty locationProperty) {
+        if (locationProperty == null) {
             return false;
         }
-        if (!openCharterMenu()){
+        if (!openCharterMenu()) {
             getInstance().log("Failed to open charter menu.");
             return false;
         }
-        HashMap<LocationProperty, Location> charterLocations = getCharterLocations();
+        Map<LocationProperty, Location> charterLocations = getCharterLocations();
         Location location = charterLocations.get(locationProperty);
-        if (location == null){
+        if (location == null) {
             getInstance().log("Location: " + locationProperty + " is not available. " + charterLocations.keySet());
             return false;
         }
-        if (!location.click()){
+        if (!location.click()) {
             getInstance().log("Failed to click charter location.");
             return false;
         }
-        if (!NPCInteraction.waitForConversationWindow()){
+        if (!NPCInteraction.waitForConversationWindow()) {
             getInstance().log("Confirmation dialogue did not appear.");
         }
-        NPCInteraction.handleConversation(new String[]{"Ok", "Okay"});
-        return WaitFor.condition(10000, () -> ShipUtils.isOnShip() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+        NPCInteraction.handleConversation("Ok", "Okay");
+        return Condition.wait(ShipUtils::isOnShip, 1000, 10);
     }
 
     private static boolean openCharterMenu() {
-        return Interfaces.isInterfaceValid(CHARTER_INTERFACE_MASTER) ||
-                InteractionHelper.click(
-	                InteractionHelper.getRSNPC(Filters.NPCs.actionsEquals("Charter")), "Charter", () -> Interfaces.isInterfaceValid(CHARTER_INTERFACE_MASTER) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+        return Widgets.component(CHARTER_INTERFACE_MASTER, 0).valid() ||
+                (Npcs.stream().action("Charter").nearest().first().interact("Charter") &&
+                        Condition.wait(() -> Widgets.component(CHARTER_INTERFACE_MASTER, 0).valid(), 300, 20));
     }
 
-    private static HashMap<LocationProperty, Location> getCharterLocations(){
-        HashMap<LocationProperty, Location> locations = new HashMap<>();
-        InterfaceHelper.getAllInterfaces(CHARTER_INTERFACE_MASTER).stream().filter(
+    private static Map<LocationProperty, Location> getCharterLocations() {
+        Map<LocationProperty, Location> locations = new HashMap<>();
+        for (Component c : Components.stream(CHARTER_INTERFACE_MASTER).filtered(c -> c.text().length() > 0 && c.visible())) {
+            locations.put(LocationProperty.stringToLocation(c.text()), new Location(c));
+        }
 
-                rsInterface -> rsInterface != null
-                && rsInterface.getText() != null
-                && !rsInterface.isHidden())
-
-                .collect(Collectors.toList())
-                .forEach(rsInterface -> locations.put(
-		                LocationProperty.stringToLocation(rsInterface.getText()), new Location(rsInterface)));
         return locations;
     }
 
@@ -74,43 +71,49 @@ public class Charter implements Loggable {
     }
 
     public enum LocationProperty {
-        PORT_TYRAS ("Port Tyras", null),
-        PORT_PHASMATYS ("Port Phasmatys", new Tile(3702, 3503, 0)),
-        CATHERBY ("Catherby", new Tile(2796, 3414, 0)),
-        SHIPYARD ("Shipyard", null),
-        KARAMJA ("Musa Point", new Tile(2956, 3146, 0)),
-        BRIMHAVEN ("Brimhaven", new Tile(2760, 3237, 0)),
-        PORT_KHAZARD ("Port Khazard", new Tile(2674, 3149, 0)),
-        PORT_SARIM ("Port Sarim", new Tile(3041, 3193, 0)),
-        MOS_LE_HARMLESS ("Mos le'Harmless", null),
-        CRANDOR ("Crandor", null);
+        PORT_TYRAS("Port Tyras", null),
+        PORT_PHASMATYS("Port Phasmatys", new Tile(3702, 3503, 0)),
+        CATHERBY("Catherby", new Tile(2796, 3414, 0)),
+        SHIPYARD("Shipyard", null),
+        KARAMJA("Musa Point", new Tile(2956, 3146, 0)),
+        BRIMHAVEN("Brimhaven", new Tile(2760, 3237, 0)),
+        PORT_KHAZARD("Port Khazard", new Tile(2674, 3149, 0)),
+        PORT_SARIM("Port Sarim", new Tile(3041, 3193, 0)),
+        MOS_LE_HARMLESS("Mos le'Harmless", null),
+        CRANDOR("Crandor", null);
 
         private String name;
-        private RSArea area;
+        private Area area;
 
-        LocationProperty(String name, Tile center){
+        LocationProperty(String name, Tile center) {
             this.name = name;
             if (center != null) {
-                this.area = new RSArea(center, 15);
+                List<Tile> tiles = new ArrayList<>();
+                for (int x = center.x() - 15; x <= center.x() + 15; x++) {
+                    for (int y = center.y() - 15; y <= center.y() + 15; y++) {
+                        tiles.add(new Tile(x, y, center.floor()));
+                    }
+                }
+                this.area = new Area(tiles.toArray(new Tile[0]));
             }
         }
 
-        public boolean valid(RSTile tile) {
+        public boolean valid(Tile tile) {
             return area != null && tile != null && area.contains(tile);
         }
 
-        public static LocationProperty stringToLocation(String name){
-            for (LocationProperty locationProperty : values()){
-                if (name.equals(locationProperty.name)){
+        public static LocationProperty stringToLocation(String name) {
+            for (LocationProperty locationProperty : values()) {
+                if (name.equals(locationProperty.name)) {
                     return locationProperty;
                 }
             }
             return null;
         }
 
-        public static LocationProperty getLocation(RSTile tile){
-            for (LocationProperty locationProperty : values()){
-                if (locationProperty.valid(tile)){
+        public static LocationProperty getLocation(Tile tile) {
+            for (LocationProperty locationProperty : values()) {
+                if (locationProperty.valid(tile)) {
                     return locationProperty;
                 }
             }
@@ -118,7 +121,7 @@ public class Charter implements Loggable {
         }
 
         @Override
-        public String toString(){
+        public String toString() {
             return name;
         }
     }
@@ -127,27 +130,31 @@ public class Charter implements Loggable {
     public static class Location {
 
         private String name;
-        private RSInterface rsInterface;
+        private Component component;
 
-        private Location(RSInterface rsInterface){
-            this.name = rsInterface.getText();
-            this.rsInterface = rsInterface;
+        private Location(Component component) {
+            this.name = component.text();
+            this.component = component;
         }
 
         public String getName() {
             return name;
         }
 
-        public RSInterface getRsInterface() {
-            return rsInterface;
+        public Component getComponent() {
+            return component;
         }
 
-        public boolean click(String... options){
-            return rsInterface.click(options);
+        public boolean click(String option) {
+            return component.click(option);
+        }
+
+        public boolean click() {
+            return component.click();
         }
 
         @Override
-        public String toString(){
+        public String toString() {
             return name;
         }
     }

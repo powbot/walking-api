@@ -4,7 +4,6 @@ package org.powbot.dax.api.models;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import org.powbot.api.Tile;
-import org.tribot.api2007.types.RSTile;
 
 import java.util.ArrayList;
 import java.util.List;

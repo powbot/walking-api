@@ -2,10 +2,8 @@ package org.powbot.dax.api.models;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import org.powbot.api.rt4.Game;
-import org.powbot.api.rt4.Item;
-import org.powbot.api.rt4.Skills;
-import org.powbot.api.rt4.Varpbits;
+import org.powbot.api.rt4.*;
+import org.powbot.api.rt4.walking.model.Skill;
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,32 +53,32 @@ public class PlayerDetails {
         boolean[] plantedSpiritTrees = {false, false, false, false, false};
 
         return new PlayerDetails(
-                Skills.realLevel(Skill.ATTACK),
-                Skills.realLevel(Skills.SKILLS.DEFENCE),
-                Skills.realLevel(Skills.SKILLS.STRENGTH),
-                Skills.realLevel(Skills.SKILLS.HITPOINTS),
-                Skills.realLevel(Skills.SKILLS.RANGED),
-                Skills.realLevel(Skills.SKILLS.PRAYER),
-                Skills.realLevel(Skills.SKILLS.MAGIC),
-                Skills.realLevel(Skills.SKILLS.COOKING),
-                Skills.realLevel(Skills.SKILLS.WOODCUTTING),
-                Skills.realLevel(Skills.SKILLS.FLETCHING),
-                Skills.realLevel(Skills.SKILLS.FISHING),
-                Skills.realLevel(Skills.SKILLS.FIREMAKING),
-                Skills.realLevel(Skills.SKILLS.CRAFTING),
-                Skills.realLevel(Skills.SKILLS.SMITHING),
-                Skills.realLevel(Skills.SKILLS.MINING),
-                Skills.realLevel(Skills.SKILLS.HERBLORE),
-                Skills.level(Skills.SKILLS.AGILITY),
-                Skills.realLevel(Skills.SKILLS.THIEVING),
-                Skills.realLevel(Skills.SKILLS.SLAYER),
-                Skills.realLevel(Skills.SKILLS.FARMING),
-                Skills.realLevel(Skills.SKILLS.RUNECRAFTING),
-                Skills.realLevel(Skills.SKILLS.HUNTER),
-                Skills.realLevel(Skills.SKILLS.CONSTRUCTION),
+                Skills.realLevel(Skill.Attack),
+                Skills.realLevel(Skill.Defence),
+                Skills.realLevel(Skill.Strength),
+                Skills.realLevel(Skill.Hitpoints),
+                Skills.realLevel(Skill.Ranged),
+                Skills.realLevel(Skill.Prayer),
+                Skills.realLevel(Skill.Magic),
+                Skills.realLevel(Skill.Cooking),
+                Skills.realLevel(Skill.Woodcutting),
+                Skills.realLevel(Skill.Fletching),
+                Skills.realLevel(Skill.Fishing),
+                Skills.realLevel(Skill.Firemaking),
+                Skills.realLevel(Skill.Crafting),
+                Skills.realLevel(Skill.Smithing),
+                Skills.realLevel(Skill.Mining),
+                Skills.realLevel(Skill.Herblore),
+                Skills.level(Skill.Agility),
+                Skills.realLevel(Skill.Thieving),
+                Skills.realLevel(Skill.Slayer),
+                Skills.realLevel(Skill.Farming),
+                Skills.realLevel(Skill.Runecrafting),
+                Skills.realLevel(Skill.Hunter),
+                Skills.realLevel(Skill.Construction),
                 settings,
                 varbit,
-                Game.is().orElse(false),
+                Worlds.isCurrentWorldMembers(),
                 equipment,
                 inventory
         );

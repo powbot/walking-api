@@ -4,7 +4,6 @@ import org.powbot.api.Locatable;
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.*;
 import org.powbot.dax.api.models.*;
-import org.powbot.dax.shared.helpers.InterfaceHelper;
 import org.powbot.dax.teleports.Teleport;
 import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.WaitFor;
@@ -67,16 +66,16 @@ public class DaxWalker implements Loggable {
             return true;
         }
 
-        RSItem[] inventory = Inventory.getAll();
-        RSItem[] equipment = Equipment.getItems();
+        List<Item> inventory = Inventory.stream().list();
+        List<Item> equipment = Equipment.stream().list();
         PlayerDetails playerDetails = PlayerDetails.generate(inventory, equipment);
-        boolean isInPvpWorld = InterfaceHelper.getAllInterfaces(90).stream()
-                .anyMatch(i -> i.getTextureID() == 1046 && Interfaces.isInterfaceSubstantiated(i));
+        boolean isInPvpWorld = Components.stream(90)
+                .anyMatch(i -> i.textureId() == 1046 && i.valid());
 
 
-        List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(playerDetails.isMember(), isInPvpWorld, destination.getPosition(), inventory, equipment);
+        List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(playerDetails.isMember(), isInPvpWorld, destination.tile(), inventory, equipment);
 
-        pathRequestPairs.add(new PathRequestPair(Point3D.fromTile(start), Point3D.fromTile(destination)));
+        pathRequestPairs.add(new PathRequestPair(Point3D.fromTile(start), Point3D.fromTile(destination.tile())));
 
 	    List<PathResult> pathResults = WebWalkerServerApi.getInstance().getPaths(new BulkPathRequest(playerDetails,pathRequestPairs));
 
@@ -153,7 +152,7 @@ public class DaxWalker implements Loggable {
                 .anyMatch(i -> i.textureId() == 1046 && i.valid());
 
 
-        List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(playerDetails.isMember(), isInPvpWorld, destination.getPosition(), inventory, equipment);
+        List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(playerDetails.isMember(), isInPvpWorld, destination.tile(), inventory, equipment);
 
         pathRequestPairs.add(new PathRequestPair(Point3D.fromTile(start), Point3D.fromTile(destination.tile())));
 

@@ -1,5 +1,6 @@
 package org.powbot.dax.engine.navigation;
 
+import org.powbot.api.Tile;
 import org.tribot.api.General;
 import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
@@ -270,9 +271,9 @@ public class NavigationSpecialCase implements Loggable {
         }
     }
 
-    public static SpecialLocation getLocation(RSTile rsTile){
+    public static SpecialLocation getLocation(Tile rsTile){
         return Arrays.stream(
-                SpecialLocation.values()).filter(tile -> tile.z == rsTile.getPlane()
+                SpecialLocation.values()).filter(tile -> tile.z == rsTile.floor()
                 && tile.getRSTile().distanceTo(rsTile) <= 2)
                      .findFirst().orElse(null);
     }
