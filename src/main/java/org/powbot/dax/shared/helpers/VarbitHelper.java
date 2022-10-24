@@ -607,16 +607,11 @@ public class VarbitHelper {
         STASH_UNIT_34738(8256),
         STASH_UNIT_34739(8257);
 
-        public RSVarBit getVarBit() {
-            return varBit;
-        }
-
         /**
          * The raw varbit ID.
          */
-        private final RSVarBit varBit;
         Varbits(int id){
-            this.varBit = RSVarBit.get(id);
+            this.varBit = Varpbits.varpbit(id);
         }
     }
 
@@ -637,28 +632,24 @@ public class VarbitHelper {
         }
 
         public int getValue(){
-            return RSVarBit.get(var).getValue();
+            return Varpbits.value(var);
         }
     }
 
     public static int getMiscellaniaFavor(){
-        RSVarBit bit = RSVarBit.get(72);
-        return bit.getValue();
+        return Varpbits.value(72);
     }
 
     public static int getMiscellaniaScore(){
-        RSVarBit bit = RSVarBit.get(71);
-        return bit.getValue();
+        return Varpbits.value(71);
     }
 
     public static int getMiscellaniaCoffer(){
-        RSVarBit bit = RSVarBit.get(74);
-        return bit.getValue();
+        return Varpbits.value(74);
     }
 
     public static boolean hasPlacedLumbridgeSwampsRope(){
-        RSVarBit var = RSVarBit.get(279);
-        return var.getValue() > 0;
+        return Varpbits.value(279);
     }
 
     public static int getHosidiusFavor(){

@@ -886,7 +886,7 @@ public enum Teleport {
 		Arrays.stream(values()).forEach(t -> t.setMoveCost(moveCost));
 	}
 
-	public static List<Tile> getValidStartingRSTiles(boolean membersWorld, boolean pvpWorld, List<Teleport> blacklist, RSItem[] inventory, RSItem[] equipment) {
+	public static List<Tile> getValidStartingRSTiles(boolean membersWorld, boolean pvpWorld, List<Teleport> blacklist, List<Item> inventory, List<Item> equipment) {
 		return Arrays.stream(values())
 				.filter(t -> {
 					if((!membersWorld && t.requiresMembers) || (pvpWorld && !t.canBeUsedInPvpWorlds))

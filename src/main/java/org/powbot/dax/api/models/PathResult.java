@@ -3,6 +3,7 @@ package org.powbot.dax.api.models;
 //import com.allatori.annotations.DoNotRename;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import org.powbot.api.Tile;
 import org.tribot.api2007.types.RSTile;
 
 import java.util.ArrayList;
@@ -59,13 +60,13 @@ public class PathResult {
         this.cost = cost;
     }
 
-    public ArrayList<RSTile> toRSTilePath() {
+    public List<Tile> toRSTilePath() {
         if (getPath() == null) {
             return new ArrayList<>();
         }
-        ArrayList<RSTile> path = new ArrayList<>();
+        List<Tile> path = new ArrayList<>();
         for (Point3D point3D : getPath()) {
-            path.add(point3D.toPositionable().getPosition());
+            path.add(point3D.toTile());
         }
         return path;
     }

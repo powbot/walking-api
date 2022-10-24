@@ -1,8 +1,14 @@
 package org.powbot.dax.shared.helpers.magic;
 
+import org.powbot.api.rt4.Equipment;
+import org.powbot.api.rt4.Inventory;
+import org.powbot.api.rt4.Item;
+import org.powbot.api.rt4.Varpbits;
 import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSItem;
 import org.powbot.dax.shared.Pair;
+
+import java.util.List;
 
 
 public enum Spell {
@@ -44,14 +50,14 @@ public enum Spell {
     }
 
     public boolean cast() {
-        return canUse(Inventory.getAll(), Equipment.getItems()) && Magic.selectSpell(getSpellName());
+        return canUse(Inventory.stream().list(), Equipment.stream().list()) && Magic.selectSpell(getSpellName());
     }
 
     public boolean canUse(){
-        return canUse(Inventory.getAll(), Equipment.getItems());
+        return canUse(Inventory.stream().list(), Equipment.stream().list());
     }
 
-    public boolean canUse(RSItem[] inventory, RSItem[] equipment){
+    public boolean canUse(List<Item> inventory, List<Item> equipment){
         if (SpellBook.getCurrentSpellBook() != spellBookType){
             return false;
         }

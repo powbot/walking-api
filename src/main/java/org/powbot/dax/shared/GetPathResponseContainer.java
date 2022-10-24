@@ -1,6 +1,6 @@
 package org.powbot.dax.shared;
 
-import org.tribot.api2007.types.RSTile;
+import org.powbot.api.Tile;
 import org.powbot.dax.shared.json.JSONObject;
 import org.powbot.dax.shared.json.JSONValue;
 
@@ -13,7 +13,7 @@ public class GetPathResponseContainer {
     private String response;
     private ArrayList<String> path;
     private PlayerInformation playerInformation;
-    private ArrayList<RSTile> rstilePath;
+    private ArrayList<Tile> rstilePath;
 
     public static GetPathResponseContainer CLIENT_ERROR = new GetPathResponseContainer(Status.CLIENT_ERROR, "No problem with server. Client issue.", new ArrayList<>(), null, true);
 
@@ -65,7 +65,7 @@ public class GetPathResponseContainer {
         }
     }
 
-    public ArrayList<RSTile> getRSTilePath(){
+    public ArrayList<Tile> getRSTilePath(){
         if (rstilePath != null){
             return rstilePath;
         }

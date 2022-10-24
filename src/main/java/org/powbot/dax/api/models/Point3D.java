@@ -3,8 +3,7 @@ package org.powbot.dax.api.models;
 //import com.allatori.annotations.DoNotRename;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import org.tribot.api.interfaces.Positionable;
-import org.tribot.api2007.types.RSTile;
+import org.powbot.api.Tile;
 
 //@DoNotRename
 public class Point3D {
@@ -40,28 +39,12 @@ public class Point3D {
         return "(" + x + ", " + y + ", " + z + ")";
     }
 
-    public Positionable toPositionable() {
-        return new Positionable() {
-            @Override
-            public Tile getAnimablePosition() {
-                return new Tile(x, y, z);
-            }
-
-            @Override
-            public boolean adjustCameraTo() {
-                return false;
-            }
-
-            @Override
-            public Tile getPosition() {
-                return new Tile(x, y, z);
-            }
-        };
+    public Tile toTile() {
+        return new Tile(x, y, z);
     }
 
-    public static Point3D fromPositionable(Positionable positionable) {
-        Tile rsTile = positionable.getPosition();
-        return new Point3D(rsTile.getX(), rsTile.getY(), rsTile.getPlane());
+    public static Point3D fromTile(Tile tile) {
+        return new Point3D(tile.getX(), tile.getY(), tile.floor());
     }
 
 }

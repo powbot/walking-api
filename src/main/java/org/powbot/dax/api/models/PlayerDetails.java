@@ -2,11 +2,10 @@ package org.powbot.dax.api.models;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import org.tribot.api2007.Game;
-import org.tribot.api2007.Skills;
-import org.tribot.api2007.WorldHopper;
-import org.tribot.api2007.types.RSItem;
-import org.powbot.dax.shared.helpers.VarbitHelper.RSVarBit;
+import org.powbot.api.rt4.Game;
+import org.powbot.api.rt4.Item;
+import org.powbot.api.rt4.Skills;
+import org.powbot.api.rt4.Varpbits;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,13 +14,15 @@ import java.util.stream.Stream;
 
 public class PlayerDetails {
 
-    public static PlayerDetails generate(RSItem[] inventoryItems, RSItem[] equipmentItems) {
+    public static PlayerDetails generate(List<Item> inventoryItems, List<Item> equipmentItems) {
 
-        List<IntPair> inventory = Arrays.stream(inventoryItems)
-                .map(rsItem -> new IntPair(rsItem.getID(), rsItem.getStack())).collect(Collectors.toList());
+        List<IntPair> inventory = inventoryItems
+                .stream()
+                .map(rsItem -> new IntPair(rsItem.id(), rsItem.getStack())).collect(Collectors.toList());
 
-        List<IntPair> equipment = Arrays.stream(equipmentItems)
-                .map(rsItem -> new IntPair(rsItem.getID(), rsItem.getStack())).collect(Collectors.toList());
+        List<IntPair> equipment = equipmentItems
+                .stream()
+                .map(rsItem -> new IntPair(rsItem.id(), rsItem.getStack())).collect(Collectors.toList());
 
         List<IntPair> settings = Stream.of(10, 11, 17, 32, 63, 68, 71, 101, 111, 116, 131, 144, 145, 150, 165, 176,
             179, 273, 299, 302, 307, 314, 335, 347, 351, 365, 371, 387, 399, 425, 437, 440, 482, 622, 655, 671, 705, 794, 810,
@@ -48,38 +49,38 @@ public class PlayerDetails {
             5810,
             9016
         })
-                .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(
+                .mapToObj(value -> new IntPair(value, Varpbits.value(value))).distinct().collect(
 				        Collectors.toList());
 
         boolean[] plantedSpiritTrees = {false, false, false, false, false};
 
         return new PlayerDetails(
-                Skills.getActualLevel(Skills.SKILLS.ATTACK),
-                Skills.getActualLevel(Skills.SKILLS.DEFENCE),
-                Skills.getActualLevel(Skills.SKILLS.STRENGTH),
-                Skills.getActualLevel(Skills.SKILLS.HITPOINTS),
-                Skills.getActualLevel(Skills.SKILLS.RANGED),
-                Skills.getActualLevel(Skills.SKILLS.PRAYER),
-                Skills.getActualLevel(Skills.SKILLS.MAGIC),
-                Skills.getActualLevel(Skills.SKILLS.COOKING),
-                Skills.getActualLevel(Skills.SKILLS.WOODCUTTING),
-                Skills.getActualLevel(Skills.SKILLS.FLETCHING),
-                Skills.getActualLevel(Skills.SKILLS.FISHING),
-                Skills.getActualLevel(Skills.SKILLS.FIREMAKING),
-                Skills.getActualLevel(Skills.SKILLS.CRAFTING),
-                Skills.getActualLevel(Skills.SKILLS.SMITHING),
-                Skills.getActualLevel(Skills.SKILLS.MINING),
-                Skills.getActualLevel(Skills.SKILLS.HERBLORE),
-                Skills.getCurrentLevel(Skills.SKILLS.AGILITY),
-                Skills.getActualLevel(Skills.SKILLS.THIEVING),
-                Skills.getActualLevel(Skills.SKILLS.SLAYER),
-                Skills.getActualLevel(Skills.SKILLS.FARMING),
-                Skills.getActualLevel(Skills.SKILLS.RUNECRAFTING),
-                Skills.getActualLevel(Skills.SKILLS.HUNTER),
-                Skills.getActualLevel(Skills.SKILLS.CONSTRUCTION),
+                Skills.realLevel(Skill.ATTACK),
+                Skills.realLevel(Skills.SKILLS.DEFENCE),
+                Skills.realLevel(Skills.SKILLS.STRENGTH),
+                Skills.realLevel(Skills.SKILLS.HITPOINTS),
+                Skills.realLevel(Skills.SKILLS.RANGED),
+                Skills.realLevel(Skills.SKILLS.PRAYER),
+                Skills.realLevel(Skills.SKILLS.MAGIC),
+                Skills.realLevel(Skills.SKILLS.COOKING),
+                Skills.realLevel(Skills.SKILLS.WOODCUTTING),
+                Skills.realLevel(Skills.SKILLS.FLETCHING),
+                Skills.realLevel(Skills.SKILLS.FISHING),
+                Skills.realLevel(Skills.SKILLS.FIREMAKING),
+                Skills.realLevel(Skills.SKILLS.CRAFTING),
+                Skills.realLevel(Skills.SKILLS.SMITHING),
+                Skills.realLevel(Skills.SKILLS.MINING),
+                Skills.realLevel(Skills.SKILLS.HERBLORE),
+                Skills.level(Skills.SKILLS.AGILITY),
+                Skills.realLevel(Skills.SKILLS.THIEVING),
+                Skills.realLevel(Skills.SKILLS.SLAYER),
+                Skills.realLevel(Skills.SKILLS.FARMING),
+                Skills.realLevel(Skills.SKILLS.RUNECRAFTING),
+                Skills.realLevel(Skills.SKILLS.HUNTER),
+                Skills.realLevel(Skills.SKILLS.CONSTRUCTION),
                 settings,
                 varbit,
-                WorldHopper.isCurrentWorldMembers().orElse(false),
+                Game.is().orElse(false),
                 equipment,
                 inventory
         );

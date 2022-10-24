@@ -1,5 +1,7 @@
 package org.powbot.dax.shared.helpers.magic;
 
+import org.powbot.api.rt4.Inventory;
+import org.powbot.api.rt4.Varpbits;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.WorldHopper;
 import org.powbot.dax.shared.helpers.VarbitHelper.RSVarBit;
@@ -24,7 +26,7 @@ public class RunePouch{
         }
 
         public String getRuneName(){
-            switch(RSVarBit.get(type).getValue()){
+            switch(Varpbits.value(type)){
                 case 1: return "Air rune";
                 case 2: return "Water rune";
                 case 3: return "Earth rune";
@@ -72,7 +74,7 @@ public class RunePouch{
     }
 
     private static boolean hasPouch(){
-        return Inventory.getCount("Rune pouch") > 0 && WorldHopper.isCurrentWorldMembers().orElse(false);
+        return Inventory.stream().name("Rune pouch").isNotEmpty() && WorldHopper.isCurrentWorldMembers().orElse(false);
     }
 
 

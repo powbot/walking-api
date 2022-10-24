@@ -1,11 +1,10 @@
 package org.powbot.dax.shared.helpers.magic;
 
-import org.tribot.api2007.Equipment;
-import org.tribot.api2007.Inventory;
-import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSItemDefinition;
+import org.powbot.api.rt4.Equipment;
+import org.powbot.api.rt4.Inventory;
+import org.powbot.api.rt4.Item;
 
-import java.util.Arrays;
+import java.util.List;
 
 public enum RuneElement {
 
@@ -31,7 +30,7 @@ public enum RuneElement {
         if (haveStaff()) {
             return Integer.MAX_VALUE;
         }
-        RSItem[] items = Inventory.find(rsItem -> {
+        return Inventory.stream().filtered(rsItem -> {
             String name = getItemName(rsItem).toLowerCase();
 
             if (!name.contains("rune")) {
@@ -44,15 +43,14 @@ public enum RuneElement {
                 }
             }
             return false;
-        });
-        return Arrays.stream(items).mapToInt(RSItem::getStack).sum() + RunePouch.getQuantity(this);
+        }).list().stream().mapToInt(Item::getStack).sum() + RunePouch.getQuantity(this);
     }
 
-    public int getCount(RSItem[] inventory, RSItem[] equipment) {
+    public int getCount(List<Item> inventory, List<Item> equipment) {
         if (haveStaff(equipment)) {
             return Integer.MAX_VALUE;
         }
-        return Arrays.stream(inventory).filter(rsItem -> {
+        return inventory.stream().filter(rsItem -> {
             String name = getItemName(rsItem).toLowerCase();
 
             if (!name.contains("rune")) {
@@ -65,11 +63,11 @@ public enum RuneElement {
                 }
             }
             return false;
-        }).mapToInt(RSItem::getStack).sum() + RunePouch.getQuantity(this);
+        }).mapToInt(Item::getStack).sum() + RunePouch.getQuantity(this);
     }
 
-    private boolean haveStaff(RSItem[] equipment) {
-        return Arrays.stream(equipment).anyMatch(rsItem -> {
+    private boolean haveStaff(List<Item> equipment) {
+        return equipment.stream().anyMatch(rsItem -> {
             String name = getItemName(rsItem).toLowerCase();
             if (!name.contains("staff")) {
                 return false;
@@ -84,17 +82,15 @@ public enum RuneElement {
     }
 
     private boolean haveStaff() {
-        return haveStaff(Equipment.getItems());
+        return haveStaff(Equipment.stream().list());
     }
 
     /**
      * @param item
      * @return item name. Never null. "null" if no name.
      */
-    private static String getItemName(RSItem item) {
-        RSItemDefinition definition = item.getDefinition();
-        String name;
-        return definition == null || (name = definition.getName()) == null ? "null" : name;
+    private static String getItemName(Item item) {
+        return item.name().equals("") ? "null" : item.name();
     }
 
 

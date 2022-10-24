@@ -1,6 +1,6 @@
 package org.powbot.dax.shared.helpers.magic;
 
-import org.powbot.dax.shared.helpers.VarbitHelper.RSVarBit;
+import org.powbot.api.rt4.Varpbits;
 
 import java.util.Arrays;
 
@@ -20,9 +20,7 @@ public class SpellBook {
         }
 
         public boolean isInUse() {
-            RSVarBit varBit = RSVarBit.get(SPELLBOOK_VARBIT);
-
-            return varBit != null && varBit.getValue() == varbit;
+            return Varpbits.value(SPELLBOOK_VARBIT) == varbit;
         }
     }
 

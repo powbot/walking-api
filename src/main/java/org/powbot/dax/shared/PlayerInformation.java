@@ -1,10 +1,6 @@
 package org.powbot.dax.shared;
 
-import org.tribot.api2007.*;
-import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSPlayer;
-import org.powbot.dax.shared.helpers.VarbitHelper.RSVarBit;
-import org.powbot.dax.shared.helpers.WorldHelper;
+import org.powbot.api.rt4.*;
 import org.powbot.dax.shared.json.JSONObject;
 import org.powbot.dax.shared.json.JSONValue;
 
@@ -24,14 +20,14 @@ public class PlayerInformation {
 
     public static PlayerInformation generatePlayerInformation(){
         try {
-            RSPlayer rsPlayer = Players.local();
+            Player rsPlayer = Players.local();
             return new PlayerInformation(
-                    WorldHelper.isMember(WorldHopper.getWorld()),
+                    Worlds.isCurrentWorldMembers(),
                     rsPlayer.getCombatLevel(),
                     Skills.SKILLS.values(),
                     grabSettings(),
-                    Inventory.getAll(),
-                    Equipment.getItems());
+                    Inventory.stream().list(),
+                    Equipment.stream().list());
         } catch (Exception e){
             System.out.println("No Player Information to grab.");
             return null;
@@ -44,7 +40,7 @@ public class PlayerInformation {
             settingsMap.put(setting, Varpbits.varpbit(setting));
         }
         for (int varbit : VARBITS){
-            settingsMap.put(varbit, RSVarBit.get(varbit).getValue());
+            settingsMap.put(varbit, Varpbits.value(varbit));
         }
         return settingsMap;
     }

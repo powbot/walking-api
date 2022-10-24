@@ -2,7 +2,7 @@ package org.powbot.dax.api;
 
 import org.powbot.api.Locatable;
 import org.powbot.api.Tile;
-import org.powbot.api.rt4.Players;
+import org.powbot.api.rt4.*;
 import org.powbot.dax.api.models.*;
 import org.powbot.dax.shared.helpers.InterfaceHelper;
 import org.powbot.dax.teleports.Teleport;
@@ -76,7 +76,7 @@ public class DaxWalker implements Loggable {
 
         List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(playerDetails.isMember(), isInPvpWorld, destination.getPosition(), inventory, equipment);
 
-        pathRequestPairs.add(new PathRequestPair(Point3D.fromPositionable(start), Point3D.fromPositionable(destination)));
+        pathRequestPairs.add(new PathRequestPair(Point3D.fromTile(start), Point3D.fromTile(destination)));
 
 	    List<PathResult> pathResults = WebWalkerServerApi.getInstance().getPaths(new BulkPathRequest(playerDetails,pathRequestPairs));
 
@@ -90,7 +90,7 @@ public class DaxWalker implements Loggable {
             getInstance().log("Path cost: " + pathResult.getCost());
         }
 
-        List<RSTile> path = new ArrayList<>(pathResult.toRSTilePath());
+        List<Tile> path = new ArrayList<>(pathResult.toRSTilePath());
         getInstance().log("Path: [" + path.stream().map(Object::toString)
                 .collect(Collectors.joining(", ")) + "]");
 
@@ -118,15 +118,15 @@ public class DaxWalker implements Loggable {
         if(bank != null)
             return walkTo(bank.getPosition(), walkingCondition);
 
-        RSItem[] inventory = Inventory.getAll();
-        RSItem[] equipment = Equipment.getItems();
+        List<Item> inventory = Inventory.stream().list();
+        List<Item> equipment = Equipment.stream().list();
         PlayerDetails playerDetails = PlayerDetails.generate(inventory, equipment);
-        boolean isInPvpWorld = InterfaceHelper.getAllInterfaces(90).stream()
-                .anyMatch(i -> i.getTextureID() == 1046 && Interfaces.isInterfaceSubstantiated(i));
+        boolean isInPvpWorld = Components.stream(90)
+                .anyMatch(i -> i.textureId() == 1046 && i.valid());
 
         List<BankPathRequestPair> pathRequestPairs = getInstance().getBankPathTeleports(playerDetails.isMember(), isInPvpWorld, inventory, equipment);
 
-        pathRequestPairs.add(new BankPathRequestPair(Point3D.fromPositionable(Players.local().tile()),null));
+        pathRequestPairs.add(new BankPathRequestPair(Point3D.fromTile(Players.local().tile()),null));
 
         List<PathResult> pathResults = WebWalkerServerApi.getInstance().getBankPaths(new BulkBankPathRequest(
 	        playerDetails,pathRequestPairs));
@@ -140,22 +140,22 @@ public class DaxWalker implements Loggable {
         return WalkerEngine.getInstance().walkPath(pathResult.toRSTilePath(), getGlobalWalkingCondition().combine(walkingCondition));
     }
 
-    public static List<RSTile> getPath(Positionable destination){
+    public static List<Tile> getPath(Locatable destination){
         Tile start = Players.local().tile();
         if (start.equals(destination)) {
             return Collections.emptyList();
         }
 
-        RSItem[] inventory = Inventory.getAll();
-        RSItem[] equipment = Equipment.getItems();
+        List<Item> inventory = Inventory.stream().list();
+        List<Item> equipment = Equipment.stream().list();
         PlayerDetails playerDetails = PlayerDetails.generate(inventory, equipment);
-        boolean isInPvpWorld = InterfaceHelper.getAllInterfaces(90).stream()
-                .anyMatch(i -> i.getTextureID() == 1046 && Interfaces.isInterfaceSubstantiated(i));
+        boolean isInPvpWorld = Components.stream(90)
+                .anyMatch(i -> i.textureId() == 1046 && i.valid());
 
 
         List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(playerDetails.isMember(), isInPvpWorld, destination.getPosition(), inventory, equipment);
 
-        pathRequestPairs.add(new PathRequestPair(Point3D.fromPositionable(start), Point3D.fromPositionable(destination.getPosition())));
+        pathRequestPairs.add(new PathRequestPair(Point3D.fromTile(start), Point3D.fromTile(destination.tile())));
 
         List<PathResult> pathResults = WebWalkerServerApi.getInstance().getPaths(new BulkPathRequest(playerDetails,pathRequestPairs));
 
@@ -186,16 +186,16 @@ public class DaxWalker implements Loggable {
         getBlacklist().clear();
     }
 
-    private List<PathRequestPair> getPathTeleports(boolean members, boolean pvp, Tile start, RSItem[] inventory, RSItem[] equipment) {
+    private List<PathRequestPair> getPathTeleports(boolean members, boolean pvp, Tile start, List<Item> inventory, List<Item> equipment) {
         return Teleport.getValidStartingRSTiles(members, pvp, getBlacklist(), inventory, equipment).stream()
-                .map(t -> new PathRequestPair(Point3D.fromPositionable(t),
-                        Point3D.fromPositionable(start)))
+                .map(t -> new PathRequestPair(Point3D.fromTile(t),
+                        Point3D.fromTile(start)))
                 .collect(Collectors.toList());
     }
 
-    private List<BankPathRequestPair> getBankPathTeleports(boolean members, boolean pvp, RSItem[] inventory, RSItem[] equipment) {
+    private List<BankPathRequestPair> getBankPathTeleports(boolean members, boolean pvp, List<Item> inventory, List<Item> equipment) {
         return Teleport.getValidStartingRSTiles(members, pvp, getBlacklist(), inventory, equipment).stream()
-                .map(t -> new BankPathRequestPair(Point3D.fromPositionable(t), null))
+                .map(t -> new BankPathRequestPair(Point3D.fromTile(t), null))
                 .collect(Collectors.toList());
     }
 
@@ -213,11 +213,11 @@ public class DaxWalker implements Loggable {
     }
 
     private int getPathMoveCost(PathResult pathResult) {
-        if (Players.local().tile().equals(pathResult.getPath().get(0).toPositionable().getPosition())) {
+        if (Players.local().tile().equals(pathResult.getPath().get(0).toTile())) {
 //            System.out.println("Path starts at player current position.  Path cost: " + pathResult.getCost());
             return pathResult.getCost();
         }
-        Tile startTile = pathResult.getPath().get(0).toPositionable().getPosition();
+        Tile startTile = pathResult.getPath().get(0).toTile();
         Teleport teleport = map.get(startTile);
         if (teleport == null) {
 //            System.out.println("Path is not with a teleport. Cost: " + pathResult.getCost());

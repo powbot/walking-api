@@ -1,7 +1,7 @@
 package org.powbot.dax.api.models;
 
 //import com.allatori.annotations.DoNotRename;
-import org.tribot.api2007.types.RSTile;
+import org.powbot.api.Tile;
 
 //@DoNotRename
 public enum RunescapeBank {
