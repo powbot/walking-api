@@ -1,16 +1,8 @@
 package org.powbot.dax.teleports.utils;
 
+import org.powbot.api.Condition;
 import org.powbot.api.Tile;
-import org.powbot.api.rt4.Inventory;
-import org.powbot.api.rt4.Item;
-import org.tribot.api.General;
-import org.tribot.api.Timing;
-import org.tribot.api.interfaces.Clickable07;
-import org.tribot.api2007.*;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSTile;
-import org.powbot.dax.shared.helpers.VarbitHelper.RSVarBit;
+import org.powbot.api.rt4.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -54,8 +46,7 @@ public class MasterScrollBook {
 		
 		//Returns the number of scrolls stored in the book.
 		public int getCount(){
-			RSVarBit var = RSVarBit.get(varbit);
-			return var != null ? var.getValue() : 0;
+			return Varpbits.value(varbit);
 		}
 		
 		//Returns the name of the teleport.
@@ -70,34 +61,32 @@ public class MasterScrollBook {
 		
 		//Sets the teleport as the default left-click option of the book.
 		public boolean setAsDefault(){
-			if(NPCChat.getOptions() != null){
+			if(Chat.stream().isNotEmpty()){
 				String text = getDefaultTeleportText();
 				if(text.contains(this.getName())){
-					return NPCChat.selectOption("Yes", true);
+					return Chat.stream().textContains("Yes").first().select();
 				}
 			}
 			if(!isOpen()){
 				openBook();
 			}
-			RSInterface target = getInterface(this);
-			if(target == null)
-				return false;
-			return click(target,"Set as default") && waitForOptions() && NPCChat.selectOption("Yes", true);
+			Component target = getInterface(this);
+			return target.valid() && target.interact("Set as default") && waitForOptions() && Chat.stream().textContains("Yes").first().select();
 			
 		}
 		
 		//Uses the teleport and waits until you arrive at the destination.
 		public boolean use(){
 			if(this == getDefault()){
-				RSItem[] book = getBook();
-				return book.length > 0 && click(book[0],"Teleport") && waitTillAtDestination(this);
+				Item book = getBook();
+				return book.valid() && book.interact("Teleport") && waitTillAtDestination(this);
 			}
 			if(this == REVENANT_CAVES) // bug where you can't activate it from the interface for whatever reason.
 				return setAsDefault() && use();
 			if(!isOpen() && !openBook())
 				return false;
-			RSInterface target = getInterface(this);
-			return target != null && click(target, "Activate") && waitTillAtDestination(this);
+			Component target = getInterface(this);
+			return target.valid() && target.interact("Activate") && waitTillAtDestination(this);
 		}
 		
 	}
@@ -119,147 +108,82 @@ public class MasterScrollBook {
 	}
 	
 	public static Teleports getDefault(){
-		RSVarBit defaultTeleport = RSVarBit.get(DEFAULT_VARBIT);
 		int value;
-		if(defaultTeleport == null || (value = defaultTeleport.getValue()) == 0)
+		if((value = Varpbits.value(DEFAULT_VARBIT)) == 0)
 			return null;
 		return Teleports.values()[value-1];
 	}
 	
 	//Removes the default left click teleport option.
 	public static boolean removeDefault(){
-		RSItem[] book = getBook();
-		if(Game.isUptext("->")){
-			resetUptext();
+		Item book = getBook();
+		if(Inventory.selectedItem().valid()){
+			Game.closeOpenTab();
+			Game.tab(Game.Tab.INVENTORY);
 		}
-		return book.length > 0 && click(book[0],"Remove default") && waitForOptions() && NPCChat.selectOption("Yes", true);
+		return book.valid() && book.interact("Remove default") && waitForOptions() && Chat.stream().textContains("Yes").first().select();
 	}
 	
 	//Caches the index and returns the RSInterface associated with the selected teleport.
-	private static RSInterface getInterface(Teleports teleport){
+	private static Component getInterface(Teleports teleport){
 		if(cache.containsKey(teleport.getName())){
-			return Interfaces.get(INTERFACE_MASTER,cache.get(teleport.getName()));
+			return Widgets.component(INTERFACE_MASTER, cache.get(teleport.getName()));
 		}
-		RSInterface master = Interfaces.get(INTERFACE_MASTER);
-		if(master == null)
-			return null;
-		for(RSInterface child:master.getChildren()){
-			String name = child.getComponentName();
-			if(name == null){
-				continue;
-			} else if(name.startsWith("<") && General.stripFormatting(name).contains(teleport.getName())){
-				cache.put(teleport.getName(), child.getIndex());
-				return child;
-			}
+		Component comp = Components.stream(INTERFACE_MASTER).filtered(c -> {
+			return c.name().contains(teleport.getName());
+		}).first();
+		if (comp.valid()) {
+			cache.put(teleport.name, comp.index());
 		}
-		return null;
+
+		return comp;
 	}
 	
 	//Returns true if the Master scroll book interface is open.
 	public static boolean isOpen(){
-		return Interfaces.isInterfaceSubstantiated(INTERFACE_MASTER);
+		return Widgets.component(INTERFACE_MASTER, 0).visible();
 	}
 	
 	//Opens the master scroll book interface.
 	public static boolean openBook(){
-		RSItem[] book = getBook();
-		if(Game.isUptext("->")){
-			resetUptext();
-		}
-		return book.length > 0 && click(book[0],"Open") && waitForBookToOpen();
+		Item book = getBook();
+		return book.valid() && book.interact("Open") && waitForBookToOpen();
 	}
 
 
 	public static boolean hasBook(){
-		return getBook().length > 0;
+		return getBook().valid();
 	}
 
 	public static boolean has(){
-		return getBook().length > 0;
+		return getBook().valid();
 	}
 
-	private static List<Item> getBook(){
-		return Inventory.stream().name("Master scroll book").list();
+	private static Item getBook(){
+		return Inventory.stream().name("Master scroll book").first();
 	}
 	
 	private static boolean waitForBookToOpen(){
-		return Timing.waitCondition(new BooleanSupplier(){
-
-			@Override
-			public boolean getAsBoolean() {
-				General.sleep(50,200);
-				return isOpen();
-			}
-			
-		}, 5000);
+		return Condition.wait(MasterScrollBook::isOpen, 250, 20);
 	}
 	
 	private static boolean waitForOptions(){
-		return Timing.waitCondition(new BooleanSupplier(){
-
-			@Override
-			public boolean getAsBoolean() {
-				General.sleep(50,200);
-				return NPCChat.getOptions().length > 0;
-			}
-			
-		}, 5000);
+		return Condition.wait(() -> Chat.stream().isNotEmpty(), 250, 20);
 	}
 	
 	//Checks which scroll we are setting to default currently.
 	private static String getDefaultTeleportText(){
-		RSInterface master = Interfaces.get(SELECT_OPTION_MASTER,SELECT_OPTION_CHILD);
-		if(master == null)
-			return null;
-		RSInterface[] ifaces = master.getChildren();
-		if(ifaces == null)
-			return null;
-		for(RSInterface iface:ifaces){
-			String txt = iface.getText();
-			if(txt == null || !txt.startsWith("Set"))
-				continue;
-			return txt;
+		Component comp = Components.stream(SELECT_OPTION_MASTER, SELECT_OPTION_CHILD)
+				.textContains("Set").first();
+		if (comp.valid()) {
+			return comp.text();
 		}
+
 		return null;
 	}
 	
-	//Resets uptext.
-	private static void resetUptext(){
-		RSInterface master = Interfaces.get(GAMETABS_INTERFACE_MASTER);
-		RSInterface[] children = master.getChildren();
-		if(children == null)
-			return;
-		RSInterface inventory = null;
-		for(RSInterface child:children){
-			String[] actions = child.getActions();
-			if(actions == null || actions.length == 0)
-				continue;
-			if(Arrays.asList(actions).contains("Inventory")){
-				inventory = child;
-				break;
-			}
-		}
-		if(inventory != null)
-			inventory.click();
-	}
-	
 	private static boolean waitTillAtDestination(Teleports location){
-		return Timing.waitCondition(new BooleanSupplier(){
-
-			@Override
-			public boolean getAsBoolean() {
-				General.sleep(50,200);
-				return location.getDestination().distanceTo(Players.local().tile()) < 10;
-			}
-			
-		}, 8000);
-	}
-	
-	private static boolean click(Clickable07 clickable, String action){
-		if(Game.isUptext("->") && !action.contains("->")){
-			resetUptext();
-		}
-		return clickable.click(action);
+		return Condition.wait(() -> location.getDestination().distance() < 10, 800, 10);
 	}
 	
 	

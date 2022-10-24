@@ -1,7 +1,7 @@
 package org.powbot.dax.teleports.utils;
 
-import org.tribot.api2007.Combat;
-import org.powbot.dax.shared.helpers.VarbitHelper.RSVarBit;
+import org.powbot.api.rt4.Combat;
+import org.powbot.api.rt4.Varpbits;
 
 public class TeleportConstants {
 
@@ -14,11 +14,11 @@ public class TeleportConstants {
             GE_TELEPORT_VARBIT = 4585, SPELLBOOK_INTERFACE_MASTER = 218, SCROLL_INTERFACE_MASTER = 187;
 
     private static int getWildernessLevel() {
-        return Combat.getWildernessLevel();
+        return Combat.wildernessLevel();
     }
 
     public static boolean isVarrockTeleportAtGE(){
-        return RSVarBit.get(GE_TELEPORT_VARBIT).getValue() > 0;
+        return Varpbits.value(GE_TELEPORT_VARBIT) > 0;
     }
 
 }
