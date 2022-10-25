@@ -1,32 +1,32 @@
 package org.powbot.dax.shared.helpers;
 
 import org.tribot.api2007.Objects;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSObjectDefinition;
+import org.tribot.api2007.types.GameObject;
+import org.tribot.api2007.types.CacheObjectConfig;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
 
-public class RSObjectHelper {
+public class GameObjectHelper {
 
-    public static RSObject get(Predicate<RSObject> filter){
-        RSObject[] objects = Objects.find(10, filter);
+    public static GameObject get(Predicate<GameObject> filter){
+        GameObject[] objects = Objects.find(10, filter);
         return objects.length > 0 ? objects[0] : null;
     }
 
-    public static boolean exists(Predicate<RSObject> filter){
+    public static boolean exists(Predicate<GameObject> filter){
         return Objects.find(10, filter).length > 0;
     }
 
-    public static List<String> getActionsList(RSObject object){
+    public static List<String> getActionsList(GameObject object){
         return Arrays.asList(getActions(object));
     }
 
-    public static String[] getActions(RSObject object){
+    public static String[] getActions(GameObject object){
         String[] emptyActions = new String[0];
-        RSObjectDefinition definition = object.getDefinition();
+        CacheObjectConfig definition = object.getConfig();
         if (definition == null){
             return emptyActions;
         }
@@ -34,8 +34,8 @@ public class RSObjectHelper {
         return actions != null ? actions : emptyActions;
     }
 
-    public static String getName(RSObject object){
-        RSObjectDefinition definition = object.getDefinition();
+    public static String getName(GameObject object){
+        CacheObjectConfig definition = object.getConfig();
         if (definition == null){
             return "null";
         }

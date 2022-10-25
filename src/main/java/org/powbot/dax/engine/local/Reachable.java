@@ -4,10 +4,10 @@ package org.powbot.dax.engine.local;
 import org.powbot.api.Locatable;
 import org.powbot.api.Tile;
 import org.tribot.api.General;
-import org.tribot.api.interfaces.Positionable;
+import org.tribot.api.interfaces.Locatable;
 import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.Tile;
 import org.powbot.dax.shared.helpers.BankHelper;
 
 import java.util.*;
@@ -23,11 +23,11 @@ public class Reachable {
         this(null);
     }
 
-    public Reachable(RSTile homeTile) {
+    public Reachable(Tile homeTile) {
         map = generateMap(homeTile != null ? homeTile : Players.local().tile());
     }
 
-    public boolean isBlocked(Positionable position){
+    public boolean isBlocked(Locatable position){
         Tile localPosition = position.getPosition().toLocalTile();
         int[][] collisionData = PathFinding.getCollisionData();
         int localX = localPosition.getX(), localY = localPosition.getY();
@@ -36,7 +36,7 @@ public class Reachable {
         return AStarNode.isWalkable(collisionData[localX][localY]);
     }
 
-    public boolean canReach(RSTile position) {
+    public boolean canReach(Tile position) {
 //        System.out.println("Checking if we can reach position: " + position);
         position = position.toWorldTile();
 //        System.out.println("Updated position to world tile: " + position);
@@ -58,11 +58,11 @@ public class Reachable {
         return getParent(position) != null;
     }
 
-    public Tile closestTile(Collection<RSTile> tiles) {
+    public Tile closestTile(Collection<Tile> tiles) {
         Tile closest = null;
         double closestDistance = Integer.MAX_VALUE;
         Tile playerPosition = Players.local().tile();
-        for (RSTile positionable : tiles) {
+        for (Tile positionable : tiles) {
             double distance = playerPosition.distanceToDouble(positionable);
             if (distance < closestDistance) {
                 closestDistance = distance;
@@ -82,7 +82,7 @@ public class Reachable {
         return getParent(position);
     }
 
-    public Tile getParent(Positionable positionable) {
+    public Tile getParent(Locatable positionable) {
         Tile tile = positionable.getPosition();
         if (tile.getType() != Tile.TYPES.LOCAL) {
             tile = tile.toLocalTile();
@@ -114,7 +114,7 @@ public class Reachable {
      * @param positionable
      * @return path to tile. Does not account for positionable behind doors
      */
-    public ArrayList<RSTile> getPath(Positionable positionable) {
+    public ArrayList<Tile> getPath(Locatable positionable) {
         Tile position = convertToLocal(positionable.getPosition().getX(), positionable.getPosition().getY());
         int x = position.getX(), y = position.getY();
         return getPath(x, y);
@@ -125,8 +125,8 @@ public class Reachable {
      * @param y
      * @return null if no path.
      */
-    public ArrayList<RSTile> getPath(int x, int y) {
-        ArrayList<RSTile> path = new ArrayList<>();
+    public ArrayList<Tile> getPath(int x, int y) {
+        ArrayList<Tile> path = new ArrayList<>();
         Tile playerPos = Players.local().tile().toLocalTile();
         if (x == playerPos.getX() && y == playerPos.getY()) {
             return path;
@@ -148,7 +148,7 @@ public class Reachable {
         return path;
     }
 
-    public int getDistance(Positionable positionable) {
+    public int getDistance(Locatable positionable) {
         Tile position = convertToLocal(positionable.getPosition().getX(), positionable.getPosition().getY());
         int x = position.getX(), y = position.getY();
         Tile playerPos = Players.local().tile().toLocalTile();
@@ -185,7 +185,7 @@ public class Reachable {
         Set<Tile> building = BankHelper.getBuilding(positionable);
         boolean[][] traversed = new boolean[104][104];
         Tile[][] parentMap = new Tile[104][104];
-        Queue<RSTile> queue = new LinkedList<>();
+        Queue<Tile> queue = new LinkedList<>();
         int[][] collisionData = PathFinding.getCollisionData();
         if(collisionData == null)
             return null;
@@ -243,18 +243,18 @@ public class Reachable {
         return new Reachable(Players.local().tile());
     }
 
-    public static Reachable getMap(RSTile homeTile) {
+    public static Reachable getMap(Tile homeTile) {
         return new Reachable(homeTile);
     }
 
     /**
      * @return local reachable tiles
      */
-    public static Tile[][] generateMap(RSTile homeTile) {
+    public static Tile[][] generateMap(Tile homeTile) {
         Tile localPlayerPosition = homeTile.toLocalTile();
         boolean[][] traversed = new boolean[104][104];
         Tile[][] parentMap = new Tile[104][104];
-        Queue<RSTile> queue = new LinkedList<>();
+        Queue<Tile> queue = new LinkedList<>();
         int[][] collisionData = PathFinding.getCollisionData();
 
         if(collisionData == null)
@@ -314,7 +314,7 @@ public class Reachable {
             this.y = y;
         }
 
-        public Tile getPointingTile(RSTile tile) {
+        public Tile getPointingTile(Tile tile) {
             return tile.translate(x, y);
         }
 

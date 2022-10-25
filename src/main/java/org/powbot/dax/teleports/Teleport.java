@@ -7,7 +7,7 @@ import org.powbot.api.rt4.*;
 import org.powbot.api.rt4.walking.model.Skill;
 import org.powbot.dax.api.models.Requirement;
 import org.powbot.dax.shared.helpers.Grouping;
-import org.powbot.dax.shared.helpers.RSItemHelper;
+import org.powbot.dax.shared.helpers.ItemHelper;
 import org.powbot.dax.shared.helpers.magic.Spell;
 import org.powbot.dax.shared.helpers.magic.SpellBook;
 import org.powbot.dax.teleports.utils.ItemFilters;
@@ -35,7 +35,7 @@ public enum Teleport {
 	VARROCK_TELEPORT_TAB(
 			35, new Tile(3212, 3424, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Varrock teleport")),
-			() -> RSItemHelper.click("Varrock t.*", "Break")
+			() -> ItemHelper.click("Varrock t.*", "Break")
 	),
 
 	VARROCK_TELEPORT_GRAND_EXCHANGE(
@@ -54,7 +54,7 @@ public enum Teleport {
 	LUMBRIDGE_TELEPORT_TAB(
 			35, new Tile(3225, 3219, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Lumbridge teleport")),
-			() -> RSItemHelper.click("Lumbridge t.*", "Break")
+			() -> ItemHelper.click("Lumbridge t.*", "Break")
 	),
 
 	FALADOR_TELEPORT(
@@ -67,7 +67,7 @@ public enum Teleport {
 	FALADOR_TELEPORT_TAB(
 			35, new Tile(2966, 3379, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Falador teleport")),
-			() -> RSItemHelper.click("Falador t.*", "Break")
+			() -> ItemHelper.click("Falador t.*", "Break")
 	),
 
 	CAMELOT_TELEPORT(
@@ -80,7 +80,7 @@ public enum Teleport {
 	CAMELOT_TELEPORT_TAB(
 			35, new Tile(2757, 3479, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Camelot teleport")),
-			() -> RSItemHelper.click("Camelot t.*", "Break")
+			() -> ItemHelper.click("Camelot t.*", "Break")
 	),
 
 	SEERS_TELEPORT(
@@ -99,7 +99,7 @@ public enum Teleport {
 	ARDOUGNE_TELEPORT_TAB(
 			35, new Tile(2661, 3300, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Ardougne teleport")),
-			() -> RSItemHelper.click("Ardougne t.*", "Break")
+			() -> ItemHelper.click("Ardougne t.*", "Break")
 	),
 
 	NARDAH_TELEPORT(
@@ -387,7 +387,7 @@ public enum Teleport {
 	WEST_ARDOUGNE_TELEPORT_TAB(
 			35, new Tile(2500,3290,0),
 			(i1, i2) -> Inventory.stream().name("West ardougne teleport").count(true) > 0,
-			() -> RSItemHelper.click("West ardougne t.*", "Break")
+			() -> ItemHelper.click("West ardougne t.*", "Break")
 	),
 
 	RADAS_BLESSING_KOUREND_WOODLAND(
@@ -428,43 +428,43 @@ public enum Teleport {
 	RIMMINGTON_TELEPORT_TAB(
 			35, new Tile(2954,3224, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Rimmington teleport")),
-			() -> RSItemHelper.click("Rimmington t.*", "Break")
+			() -> ItemHelper.click("Rimmington t.*", "Break")
 	),
 
 	TAVERLEY_TELEPORT_TAB(
 			35, new Tile(2894, 3465, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Taverly teleport")),
-			() -> RSItemHelper.click("Taverley t.*", "Break")
+			() -> ItemHelper.click("Taverley t.*", "Break")
 	),
 
 	RELLEKKA_TELEPORT_TAB(
 			35, new Tile(2668, 3631, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Rellekka teleport")),
-			() -> RSItemHelper.click("Rellekka t.*", "Break")
+			() -> ItemHelper.click("Rellekka t.*", "Break")
 	),
 
 	BRIMHAVEN_TELEPORT_TAB(
 			35, new Tile(2758, 3178, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Brimhaven teleport")),
-			() -> RSItemHelper.click("Brimhaven t.*", "Break")
+			() -> ItemHelper.click("Brimhaven t.*", "Break")
 	),
 
 //	POLLNIVNEACH_TELEPORT_TAB(
 //			35, new Tile(3340, 3004, 0),
 //			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Pollnivneach teleport")),
-//			() -> RSItemHelper.click("Pollnivneach t.*", "Break")
+//			() -> ItemHelper.click("Pollnivneach t.*", "Break")
 //	),
 //
 //	YANILLE_TELEPORT_TAB(
 //			35, new Tile(2544, 3095, 0),
 //			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Yanille teleport")),
-//			() -> RSItemHelper.click("Yanille t.*", "Break")
+//			() -> ItemHelper.click("Yanille t.*", "Break")
 //	),
 //
 //	HOSIDIUS_TELEPORT_TAB(
 //			35, new Tile(1744, 3517, 0),
 //			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Hosidius teleport")),
-//			() -> RSItemHelper.click("Hosidius t.*", "Break")
+//			() -> ItemHelper.click("Hosidius t.*", "Break")
 //	),
 
 //	CONSTRUCTION_CAPE_RIMMINGTON(
@@ -530,51 +530,51 @@ public enum Teleport {
 	SALVE_GRAVEYARD_TAB(
 			35, new Tile(3432, 3460, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Salve graveyard teleport")),
-			() -> RSItemHelper.click("Salve graveyard t.*", "Break")
+			() -> ItemHelper.click("Salve graveyard t.*", "Break")
 	),
 
 	FENKENSTRAINS_CASTLE_TAB(
 			35, new Tile(3547, 3528, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Fenkenstrain's castle teleport")),
-			() -> RSItemHelper.click("Fenkenstrain's castle t.*", "Break")
+			() -> ItemHelper.click("Fenkenstrain's castle t.*", "Break")
 	),
 
 	BARROWS_TAB(
 			35, new Tile(3565, 3314, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Barrows teleport")),
-			() -> RSItemHelper.click("Barrows t.*", "Break")
+			() -> ItemHelper.click("Barrows t.*", "Break")
 	),
 
 	ARCEUUS_LIBRARY_TAB(
 			35, new Tile(1632, 3838, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Arceuus library teleport")),
-			() -> RSItemHelper.click("Arceuus library t.*", "Break")
+			() -> ItemHelper.click("Arceuus library t.*", "Break")
 	),
 
 	BATTLEFRONT_TAB(
 			35, new Tile(1349,3738,0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Battlefront teleport")),
-			() -> RSItemHelper.click("Battlefront t.*", "Break")
+			() -> ItemHelper.click("Battlefront t.*", "Break")
 	),
 
 	DRAYNOR_MANOR_TAB(
 			35, new Tile(3109,3352,0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Draynor manor teleport")),
-			() -> RSItemHelper.click("Draynor manor t.*", "Break")
+			() -> ItemHelper.click("Draynor manor t.*", "Break")
 	),
 
 //	MIND_ALTAR_TAB(
 //			35, new Tile(2980, 3510, 0),
 //			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Mind altar teleport")),
-//			() -> RSItemHelper.click("Mind altar t.*", "Break")
+//			() -> ItemHelper.click("Mind altar t.*", "Break")
 //	),
 //
 //	ENCHANTED_LYRE_RELLEKA(
 //			35, new Tile(2661, 3465, 0),
 //			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameContains("Enchanted lyre")),
 //			() -> {
-//				RSItem[] lyre = Inventory.find(ItemFilters.nameContains("Enchanted lyre"));
-//				return lyre.length > 0 && RSItemHelper.clickMatch(lyre[0], "Play|Rellekka.*");
+//				Item[] lyre = Inventory.find(ItemFilters.nameContains("Enchanted lyre"));
+//				return lyre.length > 0 && ItemHelper.clickMatch(lyre[0], "Play|Rellekka.*");
 //			}
 //	),
 //
@@ -587,20 +587,20 @@ public enum Teleport {
 //	ROYAL_SEED_POD(
 //			0, new Tile(2465, 3495, 0),
 //			(i1, i2) -> Inventory.getCount("Royal seed pod") > 0,
-//			() -> RSItemHelper.click("Royal seed.*", "Commune")
+//			() -> ItemHelper.click("Royal seed.*", "Commune")
 //	),
 //
 //	DRAKANS_MEDALLION_VER_SINHAZA(
 //			0, new Tile(3649, 3230, 0),
 //			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.DRAKANS_MEDALLION_FILTER, i1, i2),
-//			() -> RSItemHelper.click("Drakan's.*", "Ver Sinhaza")
+//			() -> ItemHelper.click("Drakan's.*", "Ver Sinhaza")
 //
 //	),
 //
 //	DRAKANS_MEDALLION_DARKMEYER(
 //			0, new Tile(3592, 3337, 0),
 //			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.DRAKANS_MEDALLION_FILTER, i1, i2),
-//			() -> RSItemHelper.click("Drakan's.*", "Darkmeyer")
+//			() -> ItemHelper.click("Drakan's.*", "Darkmeyer")
 //
 //	),
 
@@ -686,43 +686,43 @@ public enum Teleport {
 //	MOONCLAN_TELEPORT_TAB(
 //			35, new Tile(2115, 3914, 0),
 //			() -> Quest.LUNAR_DIPLOMACY.getState() == Quest.State.COMPLETE && Inventory.getCount("Moonclan teleport") > 0,
-//			() -> RSItemHelper.click("Moonclan tele.*", "Break")
+//			() -> ItemHelper.click("Moonclan tele.*", "Break")
 //	),
 
 //	OURANIA_TELEPORT_TAB(
 //			35, new Tile(2468, 3246, 0),
 //			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Ourania teleport")),
-//			() -> RSItemHelper.click("Ourania t.*", "Break")
+//			() -> ItemHelper.click("Ourania t.*", "Break")
 //	),
 //
 //	WATERBIRTH_TELEPORT_TAB(
 //			35, new Tile(2546, 3757, 0),
 //			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Waterbirth teleport")),
-//			() -> RSItemHelper.click("Waterbirth t.*", "Break")
+//			() -> ItemHelper.click("Waterbirth t.*", "Break")
 //	),
 //
 //	BARBARIAN_OUTPUT_TELEPORT_TAB(
 //			35, new Tile(2544, 3568, 0),
 //			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Barbarian teleport")),
-//			() -> RSItemHelper.click("Barbarian tele.*", "Break")
+//			() -> ItemHelper.click("Barbarian tele.*", "Break")
 //	),
 //
 //	KHAZARD_TELEPORT_TAB(
 //			35, new Tile(2637, 3167, 0),
 //			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Khazard teleport")),
-//			() -> RSItemHelper.click("Khazard tele.*", "Break")
+//			() -> ItemHelper.click("Khazard tele.*", "Break")
 //	),
 //
 //	FISHING_GUILD_TELEPORT_TAB(
 //			35, new Tile(2612, 3391, 0),
 //			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Fishing guild teleport")),
-//			() -> RSItemHelper.click("Fishing guild t.*", "Break")
+//			() -> ItemHelper.click("Fishing guild t.*", "Break")
 //	),
 //
 //	CATHERBY_TELEPORT_TAB(
 //			35, new Tile(2801, 3449, 0),
 //			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Catherby teleport")),
-//			() -> RSItemHelper.click("Catherby t.*", "Break")
+//			() -> ItemHelper.click("Catherby t.*", "Break")
 //	),
 
 	LUMBRIDGE_HOME_TELEPORT(

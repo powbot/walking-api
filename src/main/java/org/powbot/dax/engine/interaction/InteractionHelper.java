@@ -36,7 +36,7 @@ public class InteractionHelper {
             return clickable.click(actions) && (condition == null || WaitFor.condition(Random.nextInt(7000, 8000), condition) == WaitFor.Return.SUCCESS);
         }
 
-        Tile position = ((Positionable) clickable).getPosition();
+        Tile position = ((Locatable) clickable).getPosition();
 
         if (position != null && !isOnScreenAndClickable(clickable)){
             Walking.blindWalkTo(position);
@@ -70,7 +70,7 @@ public class InteractionHelper {
         return condition == null || WaitFor.condition(Random.nextInt(7000, 8500), condition) == WaitFor.Return.SUCCESS;
     }
 
-    public static Item getRSItem(Predicate<Item> filter){
+    public static Item getItem(Predicate<Item> filter){
         return Inventory.stream().filter(filter).first();
     }
 
@@ -78,11 +78,11 @@ public class InteractionHelper {
         return Npcs.stream().filter(filter).nearest().first();
     }
 
-    public static GameObject getRSObject(Predicate<GameObject> filter){
+    public static GameObject getGameObject(Predicate<GameObject> filter){
         return Objects.stream(15).filter(filter).nearest().first();
     }
 
-    public static GroundItem getRSGroundItem(Predicate<GroundItem> filter) {
+    public static GroundItem getGroundItem(Predicate<GroundItem> filter) {
         return GroundItems.stream().filter(filter).nearest().first();
     }
 

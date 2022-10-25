@@ -6,7 +6,7 @@ import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.NPCChat;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSCharacter;
+import org.tribot.api2007.types.Actor;
 import org.tribot.api2007.types.RSInterface;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSPlayer;
@@ -84,7 +84,7 @@ public class NPCInteraction implements Loggable {
 
     public static boolean waitForConversationWindow(){
         RSPlayer player = Players.local();
-        RSCharacter rsCharacter = null;
+        Actor rsCharacter = null;
         if (player != null){
             rsCharacter = player.getInteractingCharacter();
         }

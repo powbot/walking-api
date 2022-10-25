@@ -5,8 +5,8 @@ import org.tribot.api.Timing;
 import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.GameObject;
+import org.tribot.api2007.types.Tile;
 import org.powbot.dax.shared.helpers.VarbitHelper.RSVarBit;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.InteractionHelper;
@@ -27,7 +27,7 @@ public class FairyRing {
 	private static final int[]
 			DRAMEN_STAFFS = {772,9084};
 
-	private static RSObject[] ring;
+	private static GameObject[] ring;
 
 
 	private static RSInterface getTeleportButton() {
@@ -39,7 +39,7 @@ public class FairyRing {
 		if(location == null)
 			return false;
 		if (RSVarBit.get(ELITE_DIARY_VARBIT).getValue() == 0 && Equipment.getCount(DRAMEN_STAFFS) == 0){
-			if (!InteractionHelper.click(InteractionHelper.getRSItem(Filters.Items.idEquals(DRAMEN_STAFFS)), "Wield")){
+			if (!InteractionHelper.click(InteractionHelper.getItem(ItemFilters.idEquals(DRAMEN_STAFFS)), "Wield")){
 				return false;
 			}
 		}
@@ -154,7 +154,7 @@ public class FairyRing {
 	private static final Tile SINCLAIR_TILE = new Tile(2705, 3576, 0);
 
 	private static void handleSpecialCases(){
-		RSTile myPos = Players.local().tile();
+		Tile myPos = Players.local().tile();
 		if(myPos.distanceTo(SINCLAIR_TILE) < 5 && Players.local().isInCombat() &&
 			NPCs.find(Filters.NPCs.nameEquals("Wolf").and(n -> n.isInteractingWithMe() && n.getPosition().distanceTo(myPos) <= 2)).length > 0){
 			if(myPos.getY() >= 3577){

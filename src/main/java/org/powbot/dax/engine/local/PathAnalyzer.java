@@ -3,7 +3,7 @@ package org.powbot.dax.engine.local;
 import org.tribot.api.General;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Projection;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.Tile;
 import org.powbot.dax.shared.PathFindingNode;
 import org.powbot.dax.engine.bfs.BFS;
 import org.powbot.dax.engine.collision.CollisionDataCollector;
@@ -16,7 +16,7 @@ public class PathAnalyzer {
 
     public static RealTimeCollisionTile closestToPlayer = null, furthestReachable = null;
 
-    public static RealTimeCollisionTile closestTileInPathToPlayer(List<RSTile> path) {
+    public static RealTimeCollisionTile closestTileInPathToPlayer(List<Tile> path) {
         CollisionDataCollector.generateRealTimeCollision();
         final Tile playerPosition = Players.local().tile();
         closestToPlayer = (RealTimeCollisionTile) BFS.bfsClosestToPath(path, RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()));
@@ -24,11 +24,11 @@ public class PathAnalyzer {
     }
 
 
-    public static DestinationDetails furthestReachableTile(List<RSTile> path){
+    public static DestinationDetails furthestReachableTile(List<Tile> path){
         return furthestReachableTile(path, closestTileInPathToPlayer(path));
     }
 
-    public static DestinationDetails furthestReachableTile(List<RSTile> path, PathFindingNode currentPosition){
+    public static DestinationDetails furthestReachableTile(List<Tile> path, PathFindingNode currentPosition){
         if (path == null || currentPosition == null){
             System.out.println("PathAnalyzer attempt to find closest tile in path: " + currentPosition + " " + path);
             return null;
@@ -91,11 +91,11 @@ public class PathAnalyzer {
     }
 
 
-    public static DestinationDetails furthestReachableScreenTile(List<RSTile> path){
+    public static DestinationDetails furthestReachableScreenTile(List<Tile> path){
         return furthestReachableScreenTile(path, closestTileInPathToPlayer(path));
     }
 
-    public static DestinationDetails furthestReachableScreenTile(List<RSTile> path, PathFindingNode currentPosition){
+    public static DestinationDetails furthestReachableScreenTile(List<Tile> path, PathFindingNode currentPosition){
         if (path == null || currentPosition == null){
 //            System.out.println("PathAnalyzer attempt to find closest tile in path: " + currentPosition + " " + path);
             return null;
@@ -151,7 +151,7 @@ public class PathAnalyzer {
         return null;
     }
 
-    public static Direction directionTo(RSTile fromNode, Tile toNode){
+    public static Direction directionTo(Tile fromNode, Tile toNode){
         if (fromNode.getPlane() != toNode.getPlane()){
             return Direction.UNKNOWN;
         }
@@ -286,7 +286,7 @@ public class PathAnalyzer {
         }
     }
 
-    private static boolean isLoaded(RSTile tile){
+    private static boolean isLoaded(Tile tile){
         final Tile local = tile.toLocalTile();
         return local.getX() >= 0 && local.getX() < 104 && local.getY() >= 0 && local.getY() < 104;
     }

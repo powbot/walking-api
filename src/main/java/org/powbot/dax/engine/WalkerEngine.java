@@ -334,7 +334,7 @@ public class WalkerEngine implements Loggable{
         Tile playerPosition = Players.local().tile();
         if(startPosition.equals(playerPosition))
             return true;
-        if(Banking.isBankScreenOpen())
+        if(Bank.opened())
             Banking.close();
         for (Teleport teleport : Teleport.values()) {
             if (!teleport.canUse()) continue;

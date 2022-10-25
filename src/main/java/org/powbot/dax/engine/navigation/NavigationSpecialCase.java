@@ -6,8 +6,8 @@ import org.tribot.api2007.*;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.*;
 import org.tribot.util.Sorting;
-import org.powbot.dax.shared.helpers.RSItemHelper;
-import org.powbot.dax.shared.helpers.RSObjectHelper;
+import org.powbot.dax.shared.helpers.ItemHelper;
+import org.powbot.dax.shared.helpers.GameObjectHelper;
 import org.powbot.dax.shared.helpers.AccurateMouse;
 import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.WaitFor;
@@ -387,18 +387,18 @@ public class NavigationSpecialCase implements Loggable {
 
             case ZANARIS_RING:
                 if (Equipment.getCount(772) == 0){
-                    if (!InteractionHelper.click(InteractionHelper.getRSItem(Filters.Items.idEquals(772)), "Wield")){
+                    if (!InteractionHelper.click(InteractionHelper.getItem(ItemFilters.idEquals(772)), "Wield")){
                         getInstance().log("Could not equip Dramen staff.");
                         break;
                     }
                 }
                 if (InteractionHelper.click(
-		                InteractionHelper.getRSObject(Filters.Objects.nameEquals("Door")), "Open", () -> ZANARIS_RING.getRSTile().distanceTo(Players.local().tile()) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+		                InteractionHelper.getGameObject(Filters.Objects.nameEquals("Door")), "Open", () -> ZANARIS_RING.getRSTile().distanceTo(Players.local().tile()) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 }
                 break;
             case LUMBRIDGE_ZANARIS_SHED:
-                if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Fairy ring")),
+                if (InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.nameEquals("Fairy ring")),
 		                "Use", () -> LUMBRIDGE_ZANARIS_SHED.getRSTile().distanceTo(Players.local().tile()) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 }
@@ -407,11 +407,11 @@ public class NavigationSpecialCase implements Loggable {
             case ROPE_TO_ROCK:
                 break;
             case FINISHED_ROPE_TO_ROCK:
-                if (RSItemHelper.use(954)){
+                if (ItemHelper.use(954)){
                     InteractionHelper.focusCamera(
-		                    InteractionHelper.getRSObject(Filters.Objects.actionsContains("Swim to")));
+		                    InteractionHelper.getGameObject(Filters.Objects.actionsContains("Swim to")));
                     if (InteractionHelper.click(
-		                    InteractionHelper.getRSObject(Filters.Objects.actionsContains("Swim to")), "Use Rope", () -> Players.local().tile().equals(new Tile(2513, 3468, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+		                    InteractionHelper.getGameObject(Filters.Objects.actionsContains("Swim to")), "Use Rope", () -> Players.local().tile().equals(new Tile(2513, 3468, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                         return true;
                     }
                 }
@@ -422,9 +422,9 @@ public class NavigationSpecialCase implements Loggable {
                 break;
             case WATERFALL_DUNGEON_ENTRANCE:
                 if (WATERFALL_DUNGEON.getRSTile().distanceTo(Players.local().tile()) < 500){
-                    return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Door")), "Open", () -> WATERFALL_DUNGEON_ENTRANCE.getRSTile().distanceTo(Players.local().tile()) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
-                } else if (RSItemHelper.use(954)){
-                    if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameContains("Dead tree")), "Use Rope", () -> Players.local().tile().equals(new Tile(2511, 3463, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                    return InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.nameEquals("Door")), "Open", () -> WATERFALL_DUNGEON_ENTRANCE.getRSTile().distanceTo(Players.local().tile()) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                } else if (ItemHelper.use(954)){
+                    if (InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.nameContains("Dead tree")), "Use Rope", () -> Players.local().tile().equals(new Tile(2511, 3463, 0)) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                         return true;
                     }
                 }
@@ -435,25 +435,25 @@ public class NavigationSpecialCase implements Loggable {
                 break;
 
             case AL_KHARID_TOLL_E:
-                InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Gate"))
+                InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.nameEquals("Gate"))
                         , "Pay-toll(10gp)",
                         () -> Players.local().tile().equals(AL_KHARID_TOLL_W.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                 break;
             case AL_KHARID_TOLL_W:
-                InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Gate"))
+                InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.nameEquals("Gate"))
                         , "Pay-toll(10gp)",
                         () -> Players.local().tile().equals(AL_KHARID_TOLL_E.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                 break;
 
             case WATERFALL_DUNGEON:
                 if (InteractionHelper.click(
-		                InteractionHelper.getRSObject(Filters.Objects.idEquals(2010)), "Open", () -> Players.local().tile().getX() == WATERFALL_DUNGEON.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+		                InteractionHelper.getGameObject(Filters.Objects.idEquals(2010)), "Open", () -> Players.local().tile().getX() == WATERFALL_DUNGEON.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 }
                 getInstance().log("Failed to get to waterfall dungeon");
                 break;
             case WATERFALL_FALL_DOWN:
-                if (InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.actionsContains("Get in")), "Get in", () -> Players.local().tile().distanceTo(new Tile(2527, 3413, 0)) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
+                if (InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.actionsContains("Get in")), "Get in", () -> Players.local().tile().distanceTo(new Tile(2527, 3413, 0)) < 5 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 }
                 getInstance().log("Failed to fall down waterfall");
@@ -470,12 +470,12 @@ public class NavigationSpecialCase implements Loggable {
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     return true;
                 } else {
-                    RSObject[] objects = Objects.findNearest(20, "Tunnel entrance");
+                    GameObject[] objects = Objects.findNearest(20, "Tunnel entrance");
                     if (objects.length > 0 && walkToObject(objects[0])){
-                        RSObjectDefinition definition = objects[0].getDefinition();
+                        CacheObjectConfig definition = objects[0].getConfig();
                         String[] actions = definition != null ? definition.getActions() : null;
                         if (actions != null && Arrays.stream(actions).noneMatch(s -> s.startsWith("Climb-down"))){
-                            RSItem[] items = Inventory.find(954);
+                            Item[] items = Inventory.find(954);
                             if (items.length > 0 && items[0].click() && clickObject(Filters.Objects.nameEquals("Tunnel entrance"), "Use", () -> WaitFor.Return.SUCCESS)){
                                 WaitFor.milliseconds(3000, 6000);
                             }
@@ -485,7 +485,7 @@ public class NavigationSpecialCase implements Loggable {
                 getInstance().log("Unable to go inside tunnel.");
                 break;
             case DWARF_CARTS_GE:
-                RSObject[] objects = Objects.find(15, Filters.Objects.nameEquals("Train cart").and(rsObject -> rsObject.getPosition().getY() == 10171));
+                GameObject[] objects = Objects.find(15, Filters.Objects.nameEquals("Train cart").and(rsObject -> rsObject.getPosition().getY() == 10171));
                 Sorting.sortByDistance(objects, new Tile(2935, 10172, 0), true);
                 if (clickObject(objects[0], "Ride", () -> Players.local().tile().getX() == specialLocation.x ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
                     getInstance().log("Rode cart to GE");
@@ -614,7 +614,7 @@ public class NavigationSpecialCase implements Loggable {
 
             case ARDY_LOG_WEST:
             case ARDY_LOG_EAST:
-                RSObject[] logSearch = Objects.findNearest(15, Filters.Objects.nameEquals("Log balance").and(Filters.Objects.actionsContains("Walk-across")));
+                GameObject[] logSearch = Objects.findNearest(15, Filters.Objects.nameEquals("Log balance").and(Filters.Objects.actionsContains("Walk-across")));
                 if (logSearch.length > 0 && AccurateMouse.click(logSearch[0], "Walk-across")){
                     int agilityXP = Skills.getXP(Skills.SKILLS.AGILITY);
                     if (WaitFor.condition(Random.nextInt(7600, 1200), () -> Skills.getXP(Skills.SKILLS.AGILITY) > agilityXP ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
@@ -678,16 +678,16 @@ public class NavigationSpecialCase implements Loggable {
                 break;
 
             case HAM_INSIDE:
-                if (RSObjectHelper.exists(Filters.Objects.actionsContains("Pick-Lock"))){
+                if (GameObjectHelper.exists(Filters.Objects.actionsContains("Pick-Lock"))){
                     if (InteractionHelper
-	                    .click(RSObjectHelper.get(Filters.Objects.actionsContains("Pick-Lock")), "Pick-Lock")){
+	                    .click(GameObjectHelper.get(Filters.Objects.actionsContains("Pick-Lock")), "Pick-Lock")){
                         WaitFor.condition(
-		                        WaitFor.random(6000, 9000), () -> !RSObjectHelper.exists(Filters.Objects.actionsContains("Pick-Lock")) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+		                        WaitFor.random(6000, 9000), () -> !GameObjectHelper.exists(Filters.Objects.actionsContains("Pick-Lock")) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                         return true;
                     }
                 } else {
                     if (InteractionHelper
-	                    .click(RSObjectHelper.get(Filters.Objects.actionsContains("Climb-down")), "Climb-down")){
+	                    .click(GameObjectHelper.get(Filters.Objects.actionsContains("Climb-down")), "Climb-down")){
                         WaitFor.condition(3000, () -> HAM_INSIDE.getRSTile().distanceTo(Players.local().tile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                         return true;
                     }
@@ -893,10 +893,10 @@ public class NavigationSpecialCase implements Loggable {
                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) && WaitFor.milliseconds(600,1800) != null;
 
             case SWAMP_BOATY:
-                return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Swamp Boaty")), "Quick-board") && WaitFor.condition( 15000,  () -> SWAMP_BOATY.getRSTile().distanceTo(Players.local().tile()) < 5
+                return InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.nameEquals("Swamp Boaty")), "Quick-board") && WaitFor.condition( 15000,  () -> SWAMP_BOATY.getRSTile().distanceTo(Players.local().tile()) < 5
                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null && WaitFor.milliseconds(600,1800) != null;
             case SWAMP_BOATY_MORTTON:
-                return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Swamp Boaty")), "Board") && WaitFor.condition( 15000,  () -> SWAMP_BOATY_MORTTON.getRSTile().distanceTo(Players.local().tile()) < 5
+                return InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.nameEquals("Swamp Boaty")), "Board") && WaitFor.condition( 15000,  () -> SWAMP_BOATY_MORTTON.getRSTile().distanceTo(Players.local().tile()) < 5
                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null && WaitFor.milliseconds(600,1800) != null;
 
             case BRINE_RAT_CAVE_TREE:
@@ -908,7 +908,7 @@ public class NavigationSpecialCase implements Loggable {
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                     }
                 }
-                return RSItemHelper.click("Spade","Dig") && WaitFor.condition(10000,
+                return ItemHelper.click("Spade","Dig") && WaitFor.condition(10000,
                     () -> Players.local().tile().distanceTo(BRINE_RAT_CAVE_ENTER.getRSTile()) < 5 ?
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS && WaitFor.milliseconds(1500, 2500) != null;
 
@@ -976,10 +976,10 @@ public class NavigationSpecialCase implements Loggable {
                         () -> Players.local().tile().equals(LIZARDMAN_SHAMANS_CANYON_EAST.getRSTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
 
             case SLEPE_BOAT_FROM_PORT:
-                return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Row boat")), "Travel") && WaitFor.condition( 15000,  () -> SLEPE_BOAT_FROM_SLEPE.getRSTile().distanceTo(Players.local().tile()) < 5
+                return InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.nameEquals("Row boat")), "Travel") && WaitFor.condition( 15000,  () -> SLEPE_BOAT_FROM_SLEPE.getRSTile().distanceTo(Players.local().tile()) < 5
                         ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null && WaitFor.milliseconds(600,1800) != null;
             case SLEPE_BOAT_FROM_SLEPE:
-                return InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.nameEquals("Row boat")), "Travel") && WaitFor.condition( 15000,  () -> SLEPE_BOAT_FROM_PORT.getRSTile().distanceTo(Players.local().tile()) < 5
+                return InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.nameEquals("Row boat")), "Travel") && WaitFor.condition( 15000,  () -> SLEPE_BOAT_FROM_PORT.getRSTile().distanceTo(Players.local().tile()) < 5
                         ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null && WaitFor.milliseconds(600,1800) != null;
 
             case SOUL_WARS_PORTAL:
@@ -1070,7 +1070,7 @@ public class NavigationSpecialCase implements Loggable {
         return false;
     }
 
-    public static boolean walkToObject(RSObject object) {
+    public static boolean walkToObject(GameObject object) {
         if (!object.isOnScreen() || !object.isClickable()){
             Walking.blindWalkTo(object);
             if (WaitFor.isOnScreenAndClickable(object) != WaitFor.Return.SUCCESS){
@@ -1080,16 +1080,16 @@ public class NavigationSpecialCase implements Loggable {
         return object.isOnScreen() && object.isClickable();
     }
 
-    public static boolean clickObject(RSObject object, String action, WaitFor.Condition condition) {
+    public static boolean clickObject(GameObject object, String action, WaitFor.Condition condition) {
         return InteractionHelper.click(object, action, condition);
     }
 
-    public static boolean clickObject(Predicate<RSObject> filter, String action, WaitFor.Condition condition) {
+    public static boolean clickObject(Predicate<GameObject> filter, String action, WaitFor.Condition condition) {
         return clickObject(filter, new String[]{action}, condition);
     }
 
-    public static boolean clickObject(Predicate<RSObject> filter, String[] action, WaitFor.Condition condition){
-        RSObject[] objects = Objects.findNearest(15, filter);
+    public static boolean clickObject(Predicate<GameObject> filter, String[] action, WaitFor.Condition condition){
+        GameObject[] objects = Objects.findNearest(15, filter);
         if (objects.length == 0){
             return false;
         }

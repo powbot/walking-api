@@ -8,8 +8,8 @@ import org.tribot.api2007.Game;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.GameObject;
+import org.tribot.api2007.types.Tile;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.InteractionHelper;
 
@@ -19,7 +19,7 @@ import java.util.function.Predicate;
 
 public class BankHelper {
 
-    private static final Predicate<RSObject> BANK_OBJECT_FILTER = Filters.Objects.nameContains("bank", "Bank", "Exchange booth", "Open chest")
+    private static final Predicate<GameObject> BANK_OBJECT_FILTER = Filters.Objects.nameContains("bank", "Bank", "Exchange booth", "Open chest")
             .and(Filters.Objects.actionsContains("Collect"))
             .and(Filters.Objects.actionsContains("Bank"));
 
@@ -27,13 +27,13 @@ public class BankHelper {
         return isInBank(Players.local().tile());
     }
 
-    public static boolean isInBank(Positionable positionable){
-        RSObject[] bankObjects = Objects.findNearest(15, BANK_OBJECT_FILTER);
+    public static boolean isInBank(Locatable positionable){
+        GameObject[] bankObjects = Objects.findNearest(15, BANK_OBJECT_FILTER);
         if (bankObjects.length == 0){
             return false;
         }
-        RSObject bankObject = bankObjects[0];
-        HashSet<RSTile> building = getBuilding(bankObject);
+        GameObject bankObject = bankObjects[0];
+        HashSet<Tile> building = getBuilding(bankObject);
         return building.contains(positionable.getPosition()) || (building.size() == 0 && positionable.getPosition().distanceTo(bankObject) < 5);
     }
 
@@ -42,8 +42,8 @@ public class BankHelper {
      * @return whether if the action succeeded
      */
     public static boolean openBank() {
-        return Banking.isBankScreenOpen() || InteractionHelper
-	        .click(InteractionHelper.getRSObject(BANK_OBJECT_FILTER), "Bank");
+        return Bank.opened() || InteractionHelper
+	        .click(InteractionHelper.getGameObject(BANK_OBJECT_FILTER), "Bank");
     }
 
     /**
@@ -51,10 +51,10 @@ public class BankHelper {
      * @return bank screen is open
      */
     public static boolean openBankAndWait(){
-        if (Banking.isBankScreenOpen()){
+        if (Bank.opened()){
             return true;
         }
-        RSObject object = InteractionHelper.getRSObject(BANK_OBJECT_FILTER);
+        GameObject object = InteractionHelper.getGameObject(BANK_OBJECT_FILTER);
         return InteractionHelper.click(object, "Bank") && waitForBankScreen(object);
     }
 
@@ -95,9 +95,9 @@ public class BankHelper {
                 && sceneFlags[localRSTile.floor()][localRSTile.getX()][localRSTile.getY()] >= 4;
     }
 
-    private static boolean waitForBankScreen(RSObject object){
+    private static boolean waitForBankScreen(GameObject object){
         return WaitFor.condition(WaitFor
-	        .getMovementRandomSleep(object), ((WaitFor.Condition) () -> Banking.isBankScreenOpen() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE).combine(
+	        .getMovementRandomSleep(object), ((WaitFor.Condition) () -> Bank.opened() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE).combine(
 	        WaitFor.getNotMovingCondition())) == WaitFor.Return.SUCCESS;
     }
 

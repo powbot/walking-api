@@ -5,7 +5,7 @@ import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.RSTile;
+import org.tribot.api2007.types.Tile;
 import org.powbot.dax.shared.helpers.InterfaceHelper;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.InteractionHelper;
@@ -53,7 +53,7 @@ public class SpiritTree {
 
     public static boolean to(Location location){
         if (!Interfaces.isInterfaceValid(SPIRIT_TREE_MASTER_INTERFACE)
-                && !InteractionHelper.click(InteractionHelper.getRSObject(Filters.Objects.actionsContains("Travel")), "Travel", () -> Interfaces.isInterfaceValid(SPIRIT_TREE_MASTER_INTERFACE) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
+                && !InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.actionsContains("Travel")), "Travel", () -> Interfaces.isInterfaceValid(SPIRIT_TREE_MASTER_INTERFACE) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
             return false;
         }
 

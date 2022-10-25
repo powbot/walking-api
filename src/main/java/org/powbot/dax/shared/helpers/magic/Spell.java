@@ -5,7 +5,7 @@ import org.powbot.api.rt4.Inventory;
 import org.powbot.api.rt4.Item;
 import org.powbot.api.rt4.Varpbits;
 import org.tribot.api2007.*;
-import org.tribot.api2007.types.RSItem;
+import org.tribot.api2007.types.Item;
 import org.powbot.dax.shared.Pair;
 
 import java.util.List;
