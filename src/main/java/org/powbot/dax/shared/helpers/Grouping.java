@@ -1,10 +1,9 @@
 package org.powbot.dax.shared.helpers;
 
-import org.powbot.api.Input;
-import org.powbot.api.Point;
-import org.powbot.api.Rectangle;
-import org.powbot.api.Tile;
+import org.powbot.api.*;
+import org.powbot.api.rt4.Component;
 import org.powbot.api.rt4.Players;
+import org.powbot.api.rt4.Widgets;
 
 import java.util.Arrays;
 import java.util.function.BooleanSupplier;
@@ -198,20 +197,19 @@ public class Grouping {
         if (isSelected(name)){
             return true;
         }
-        final RSInterface currentMinigame = Interfaces.get(MAIN_INTERFACE_ID, 7);
-        if(currentMinigame == null)
+        final Component currentMinigame = Widgets.component(MAIN_INTERFACE_ID, 7);
+        if(!currentMinigame.valid())
             return false;
-        RSInterface minigamesBox = Interfaces.get(MAIN_INTERFACE_ID, MINIGAMES_SELECTION_BOX_INDEX);
-        if((minigamesBox == null || minigamesBox.getChildren() == null) && Clicking.click(currentMinigame)) {
-            if (!Timing.waitCondition(() -> {
-                General.sleep(350);
-                RSInterface minigamesBox1 = Interfaces.get(MAIN_INTERFACE_ID, MINIGAMES_SELECTION_BOX_INDEX);
-                return minigamesBox1 != null && minigamesBox1.getChildren() != null;
-            },2000)){
-                General.println("Failed to wait for minigames children to appear.");
+        Component minigamesBox = Widgets.component(MAIN_INTERFACE_ID, MINIGAMES_SELECTION_BOX_INDEX);
+        if((!minigamesBox.valid() || minigamesBox.components().getSize() == 0) && currentMinigame.click()) {
+            if (!Condition.wait(() -> {
+                Component minigamesBox1 = Widgets.component(MAIN_INTERFACE_ID, MINIGAMES_SELECTION_BOX_INDEX);
+                return minigamesBox1.valid() && minigamesBox1.components().getSize() > 0;
+            },200, 10)){
+                System.out.println("Failed to wait for minigames children to appear.");
                 return false;
             }
-            minigamesBox = Interfaces.get(MAIN_INTERFACE_ID, MINIGAMES_SELECTION_BOX_INDEX);
+            minigamesBox = Widgets.component(MAIN_INTERFACE_ID, MINIGAMES_SELECTION_BOX_INDEX);
 
         }
         RSInterface[] children;
