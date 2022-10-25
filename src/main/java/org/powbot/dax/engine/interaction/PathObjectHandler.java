@@ -1,5 +1,9 @@
 package org.powbot.dax.engine.interaction;
 
+import org.powbot.api.Tile;
+import org.powbot.api.rt4.*;
+import org.powbot.api.rt4.Objects;
+import org.powbot.api.Random;
 import org.powbot.dax.shared.helpers.AreaHelper;
 import org.powbot.dax.shared.helpers.Filters;
 import org.powbot.dax.shared.helpers.GameObjectHelper;
@@ -10,6 +14,7 @@ import org.powbot.dax.engine.bfs.BFS;
 import org.powbot.dax.engine.local.PathAnalyzer;
 import org.powbot.dax.engine.local.Reachable;
 import org.powbot.dax.engine.collision.RealTimeCollisionTile;
+import org.powbot.dax.shared.helpers.General;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -62,37 +67,37 @@ public class PathObjectHandler implements Loggable {
         ROOTS("Roots", "Chop", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.find(15,
+                return org.powbot.api.rt4.Objects.stream(15).filter(
                         Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
                                 .and(Filters.Objects.nameEquals("Roots"))
-                                .and(Filters.Objects.actionsContains("Chop"))).length > 0;
+                                .and(Filters.Objects.actionsContains("Chop"))).count() > 0;
             }
         }),
         ROCK_SLIDE("Rockslide", "Climb-over", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.find(15,
+                return org.powbot.api.rt4.Objects.stream(15).filter(
                         Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
                                 .and(Filters.Objects.nameEquals("Rockslide"))
-                                .and(Filters.Objects.actionsContains("Climb-over"))).length > 0;
+                                .and(Filters.Objects.actionsContains("Climb-over"))).count() > 0;
             }
         }),
         ROOT("Root", "Step-over", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.find(15,
+                return org.powbot.api.rt4.Objects.stream(15).filter(
                         Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
                                 .and(Filters.Objects.nameEquals("Root"))
-                                .and(Filters.Objects.actionsContains("Step-over"))).length > 0;
+                                .and(Filters.Objects.actionsContains("Step-over"))).count() > 0;
             }
         }),
         BRIMHAVEN_VINES("Vines", "Chop-down", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.find(15,
+                return org.powbot.api.rt4.Objects.stream(15).filter(
                         Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
                                 .and(Filters.Objects.nameEquals("Vines"))
-                                .and(Filters.Objects.actionsContains("Chop-down"))).length > 0;
+                                .and(Filters.Objects.actionsContains("Chop-down"))).count() > 0;
             }
         }),
         AVA_BOOKCASE ("Bookcase", "Search", new Tile(3097, 3359, 0), new SpecialCondition() {
@@ -167,7 +172,7 @@ public class PathObjectHandler implements Loggable {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getDestination().getTile().equals(new Tile(2690, 10125, 0))
-                    && NPCs.find(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll"))).length > 0;
+                    && Npcs.stream().name("Boulder").action("Roll").count() > 0;
             }
         });
 
@@ -216,12 +221,12 @@ public class PathObjectHandler implements Loggable {
     public static boolean handle(PathAnalyzer.DestinationDetails destinationDetails, List<Tile> path){
         RealTimeCollisionTile start = destinationDetails.getDestination(), end = destinationDetails.getNextTile();
 
-        GameObject[] interactiveObjects = null;
+        List<GameObject> interactiveObjects = null;
 
         String action = null;
         SpecialObject specialObject = SpecialObject.getValidSpecialObjects(destinationDetails);
         if (specialObject == null) {
-            if ((interactiveObjects = getInteractiveObjects(start.getX(), start.getY(), start.getZ(), destinationDetails)).length < 1 && end != null) {
+            if ((interactiveObjects = getInteractiveObjects(start.getX(), start.getY(), start.getZ(), destinationDetails)).size() < 1 && end != null) {
                 interactiveObjects = getInteractiveObjects(end.getX(), end.getY(), end.getZ(), destinationDetails);
             }
         } else {
@@ -229,19 +234,19 @@ public class PathObjectHandler implements Loggable {
             Predicate<GameObject> specialObjectFilter = Filters.Objects.nameEquals(specialObject.getName())
                                                                      .and(Filters.Objects.actionsContains(specialObject.getAction()))
                                                                      .and(Filters.Objects.inArea(AreaHelper.fromCenter(specialObject.getLocation() != null ? specialObject.getLocation() : destinationDetails.getAssumed(), 1)));
-            interactiveObjects = Objects.findNearest(15, specialObjectFilter);
+            interactiveObjects = Objects.stream(15).filter(specialObjectFilter).list();
         }
 
-        if (interactiveObjects.length == 0) {
+        if (interactiveObjects.size() == 0) {
             return false;
         }
 
         StringBuilder stringBuilder = new StringBuilder("Sort Order: ");
-        Arrays.stream(interactiveObjects).forEach(rsObject -> stringBuilder.append(rsObject.getConfig().getName()).append(" ").append(
-		        Arrays.asList(rsObject.getConfig().getActions())).append(", "));
+        interactiveObjects.forEach(rsObject -> stringBuilder.append(rsObject.name()).append(" ").append(
+		       rsObject.actions()).append(", "));
         getInstance().log(stringBuilder);
 
-        return handle(path, interactiveObjects[0], destinationDetails, action, specialObject);
+        return handle(path, interactiveObjects.get(0), destinationDetails, action, specialObject);
     }
 
     private static boolean handle(List<Tile> path, GameObject object, PathAnalyzer.DestinationDetails destinationDetails, String action, SpecialObject specialObject){
@@ -252,12 +257,12 @@ public class PathObjectHandler implements Loggable {
         }
 
         RealTimeCollisionTile currentFurthest = current.getDestination();
-        if (!Player.isMoving() && (!object.isOnScreen() || !object.isClickable())){
+        if (!Players.local().inMotion() && !object.inViewport(true)){
             if (!WalkerEngine.getInstance().clickMinimap(destinationDetails.getDestination())){
                 return false;
             }
         }
-        if (WaitFor.condition(Random.nextInt(5000, 8000), () -> object.isOnScreen() && object.isClickable() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
+        if (WaitFor.condition(Random.nextInt(5000, 8000), () -> object.inViewport(true) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
             return false;
         }
 
@@ -269,26 +274,24 @@ public class PathObjectHandler implements Loggable {
                 case WEB:
                     List<GameObject> webs;
                     int iterations = 0;
-                    while ((webs = Arrays.stream(Objects.getAt(object.getPosition()))
-                            .filter(object1 -> Arrays.stream(GameObjectHelper.getActions(object1))
-                                    .anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() > 0){
+                    while ((webs = Objects.get(object.getTile()).stream()
+                            .filter(object1 -> Arrays.asList(GameObjectHelper.getActions(object1)).contains("Slash")).collect(Collectors.toList())).size() > 0){
                         GameObject web = webs.get(0);
                         if (canLeftclickWeb()) {
                             InteractionHelper.click(web, "Slash");
                         } else {
                             useBladeOnWeb(web);
                         }
-                        if(Game.isUptext("->")){
-                            Walking.blindWalkTo(Players.local().tile());
+                        if(Inventory.selectedItem() != Item.getNil()){
+                            Movement.walkTo(Players.local().tile());
                         }
-                        if (web.getPosition().distanceTo(Players.local().tile()) <= 1) {
-                            WaitFor.milliseconds(Random.nextIntSD(50, 800, 250, 150));
+                        if (web.getTile().distanceTo(Players.local().tile()) <= 1) {
+                            WaitFor.milliseconds(General.randomSD(50, 800, 250, 150));
                         } else {
                             WaitFor.milliseconds(2000, 4000);
                         }
                         if (Reachable.getMap().getParent(destinationDetails.getAssumedX(), destinationDetails.getAssumedY()) != null &&
-                                (webs = Arrays.stream(Objects.getAt(object.getPosition())).filter(object1 -> Arrays.stream(GameObjectHelper.getActions(object1))
-                                        .anyMatch(s -> s.equals("Slash"))).collect(Collectors.toList())).size() == 0){
+                                (webs = Objects.get(object.getTile()).stream().filter(object1 -> Arrays.asList(GameObjectHelper.getActions(object1)).contains("Slash")).collect(Collectors.toList())).size() == 0){
                             successfulClick = true;
                             break;
                         }
@@ -300,7 +303,7 @@ public class PathObjectHandler implements Loggable {
                 case ARDY_DOOR_LOCK_SIDE:
                 case YANILLE_DOOR_LOCK_SIDE:
                     for (int i = 0; i < Random.nextInt(15, 25); i++) {
-                        if (!clickOnObject(object, new String[]{specialObject.getAction()})){
+                        if (!clickOnObject(object, specialObject.getAction())){
                             continue;
                         }
                         if (Players.local().tile().distanceTo(specialObject.getLocation()) > 1){
@@ -336,12 +339,12 @@ public class PathObjectHandler implements Loggable {
                     if(targetTile > path.size()){
                         targetTile = path.size()-1;
                     }
-                    return Walking.blindWalkTo(path.get(targetTile));
+                    return Movement.walkTo(path.get(targetTile));
                 case BRINE_RAT_CAVE_BOULDER:
                     Npc boulder = InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll")));
                     if(InteractionHelper.click(boulder, "Roll")){
                         if(WaitFor.condition(12000,
-                            () -> NPCs.find(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll"))).length == 0 ?
+                            () -> Npcs.stream().name("Boulder").action("Roll").count() == 0 ?
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
                             WaitFor.milliseconds(3500, 6000);
                         }
@@ -353,7 +356,7 @@ public class PathObjectHandler implements Loggable {
         if (!successfulClick){
             try {
                 String[] validOptions = action != null ? new String[]{action} : getViableOption(
-                        Arrays.stream(object.getConfig().getActions()).filter(getInstance().sortedOptions::contains).collect(
+                        object.actions().stream().filter(getInstance().sortedOptions::contains).collect(
                                 Collectors.toList()), destinationDetails);
                 if (!clickOnObject(object, validOptions)) {
                     return false;
@@ -369,7 +372,7 @@ public class PathObjectHandler implements Loggable {
         if (strongholdDoor){
             if (WaitFor.condition(Random.nextInt(6700, 7800), () -> {
                 Tile playerPosition = Players.local().tile();
-                if (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), destinationDetails.getNextTile(), 50)) {
+                if (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.floor()), destinationDetails.getNextTile(), 50)) {
                     WaitFor.milliseconds(500, 1000);
                     return WaitFor.Return.SUCCESS;
                 }
@@ -403,19 +406,19 @@ public class PathObjectHandler implements Loggable {
             return WaitFor.Return.IGNORE;
         });
         if (strongholdDoor){
-            General.sleep(800, 1200);
+            WaitFor.milliseconds(800, 1200);
         }
         return result == WaitFor.Return.SUCCESS;
     }
 
-    public static GameObject[] getInteractiveObjects(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
-        GameObject[] objects = Objects.getAll(15, interactiveObjectFilter(x, y, z, destinationDetails));
+    public static List<GameObject> getInteractiveObjects(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
+        List<GameObject> objects = Objects.stream(15).filter(interactiveObjectFilter(x, y, z, destinationDetails)).list();
         final Tile base = new Tile(x, y, z);
-        Arrays.sort(objects, (o1, o2) -> {
-            int c = Integer.compare(o1.getPosition().distanceTo(base), o2.getPosition().distanceTo(base));
+        objects.sort((o1, o2) -> {
+            int c = Integer.compare((int)o1.getTile().distanceTo(base), (int)o2.getTile().distanceTo(base));
             int assumedZ = destinationDetails.getAssumedZ(), destinationZ = destinationDetails.getDestination().getZ();
-            List<String> actions1 = Arrays.asList(o1.getConfig().getActions());
-            List<String> actions2 = Arrays.asList(o2.getConfig().getActions());
+            List<String> actions1 = o1.actions();
+            List<String> actions2 = o2.actions();
 
             if (assumedZ > destinationZ){
                 if (actions1.contains("Climb-up")){
@@ -456,7 +459,7 @@ public class PathObjectHandler implements Loggable {
             return c;
         });
         StringBuilder a = new StringBuilder("Detected: ");
-        Arrays.stream(objects).forEach(object -> a.append(object.getConfig().getName()).append(" "));
+       objects.forEach(object -> a.append(object.name()).append(" "));
         getInstance().log(a);
 
 
@@ -475,37 +478,29 @@ public class PathObjectHandler implements Loggable {
      */
     private static Predicate<GameObject> interactiveObjectFilter(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
         final Tile position = new Tile(x, y, z);
-        return new Predicate<GameObject>() {
-            @Override
-            public boolean test(GameObject rsObject) {
-                CacheObjectConfig def = rsObject.getConfig();
-                if (def == null){
-                    return false;
-                }
-                String name = def.getName();
-                if (getInstance().sortedBlackList.contains(name)) {
-                    return false;
-                }
-                List<String> actionsList = GameObjectHelper.getActionsList(rsObject);
-                if (actionsList.stream().anyMatch(s -> s != null && getInstance().sortedBlackListOptions.contains(s))){
-                    return false;
-                }
-                if (rsObject.getPosition().distanceTo(destinationDetails.getDestination().getTile()) > 5) {
-                    return false;
-                }
-                if (Arrays.stream(rsObject.getAllTiles()).noneMatch(rsTile -> rsTile.distanceTo(position) <= 3)) {
-                    return false;
-                }
-                List<String> options = Arrays.asList(def.getActions());
-                return options.stream().anyMatch(getInstance().sortedOptions::contains);
+        return rsObject -> {
+            String name = rsObject.getName();
+            if (getInstance().sortedBlackList.contains(name)) {
+                return false;
             }
+            List<String> actionsList = rsObject.actions();
+            if (actionsList.stream().anyMatch(s -> s != null && getInstance().sortedBlackListOptions.contains(s))) {
+                return false;
+            }
+            if (rsObject.getTile().distanceTo(destinationDetails.getDestination().getTile()) > 5) {
+                return false;
+            }
+//            if (Arrays.stream(rsObject.getAllTiles()).noneMatch(rsTile -> rsTile.distanceTo(position) <= 3)) {
+//                return false;
+//            }
+            return actionsList.stream().anyMatch(getInstance().sortedOptions::contains);
         };
     }
 
     private static String[] getViableOption(Collection<String> collection, PathAnalyzer.DestinationDetails destinationDetails){
         Set<String> set = new HashSet<>(collection);
         if (set.retainAll(getInstance().sortedHighPriorityOptions) && set.size() > 0){
-            return set.toArray(new String[set.size()]);
+            return set.toArray(new String[0]);
         }
         if (destinationDetails.getAssumedZ() > destinationDetails.getDestination().getZ()){
             if (collection.contains("Climb-up")){
@@ -534,7 +529,7 @@ public class PathObjectHandler implements Loggable {
             result = handleTrapDoor(object);
         } else {
             result = InteractionHelper.click(object, options);
-            getInstance().log("Interacting with (" + GameObjectHelper.getName(object) + ") at " + object.getPosition() + " with options: " + Arrays.toString(options) + " " + (result ? "SUCCESS" : "FAIL"));
+            getInstance().log("Interacting with (" + GameObjectHelper.getName(object) + ") at " + object.getTile() + " with options: " + Arrays.toString(options) + " " + (result ? "SUCCESS" : "FAIL"));
             WaitFor.milliseconds(250,800);
         }
 
@@ -543,7 +538,7 @@ public class PathObjectHandler implements Loggable {
 
     private static boolean isStrongholdDoor(GameObject object){
         List<String> doorNames = Arrays.asList("Gate of War", "Rickety door", "Oozing barrier", "Portal of Death");
-        return  doorNames.contains(object.getConfig().getName());
+        return  doorNames.contains(object.name());
     }
 
 
@@ -585,42 +580,34 @@ public class PathObjectHandler implements Loggable {
     }
 
     private static boolean isClosedTrapDoor(GameObject object, String[] options){
-        return  (object.getConfig().getName().equals("Trapdoor") && Arrays.asList(options).contains("Open"));
+        return  (object.name().equals("Trapdoor") && Arrays.asList(options).contains("Open"));
     }
 
     private static boolean handleTrapDoor(GameObject object){
         if (getActions(object).contains("Open")){
             if (!InteractionHelper.click(object, "Open") && WaitFor.condition(8000, () -> {
-                GameObject[] objects = Objects.find(15, Filters.Objects.actionsContains("Climb-down").and(Filters.Objects.inArea(AreaHelper.fromCenter(object, 2))));
-                if (objects.length > 0 && getActions(objects[0]).contains("Climb-down")){
+                List<GameObject> objects = Objects.stream(15).action("Climb-down").filter(Filters.Objects.inArea(AreaHelper.fromCenter(object, 2))).list();
+                if (objects.size() > 0 && getActions(objects.get(0)).contains("Climb-down")){
                     return WaitFor.Return.SUCCESS;
                 }
                 return WaitFor.Return.IGNORE;
             }) == WaitFor.Return.SUCCESS){
                 return false;
             } else {
-                GameObject[] objects = Objects.find(15, Filters.Objects.actionsContains("Climb-down").and(Filters.Objects.inArea(AreaHelper.fromCenter(object, 2))));
-                return objects.length > 0 && handleTrapDoor(objects[0]);
+               List<GameObject> objects = Objects.stream(15).action("Climb-down").filter(Filters.Objects.inArea(AreaHelper.fromCenter(object, 2))).list();
+                return objects.size() > 0 && handleTrapDoor(objects.get(0));
             }
         }
-        getInstance().log("Interacting with (" + object.getConfig().getName() + ") at " + object.getPosition() + " with option: Climb-down");
+        getInstance().log("Interacting with (" + object.name() + ") at " + object.getTile() + " with option: Climb-down");
         return InteractionHelper.click(object, "Climb-down");
     }
 
     public static List<String> getActions(GameObject object){
         List<String> list = new ArrayList<>();
-        if (object == null){
+        if (object == GameObject.getNil()){
             return list;
         }
-        CacheObjectConfig objectDefinition = object.getConfig();
-        if (objectDefinition == null){
-            return list;
-        }
-        String[] actions = objectDefinition.getActions();
-        if (actions == null){
-            return list;
-        }
-        return Arrays.asList(actions);
+        return object.actions();
     }
 
     @Override
@@ -631,16 +618,15 @@ public class PathObjectHandler implements Loggable {
     private static List<Integer> SLASH_WEAPONS = new ArrayList<>(Arrays.asList(1,4,9,10,12,17,20,21));
 
     private static boolean canLeftclickWeb(){
-        RSVarBit weaponType = RSVarBit.get(357);
-        return (weaponType != null && SLASH_WEAPONS.contains(weaponType.getValue())) || Inventory.find("Knife").length > 0;
+        return (SLASH_WEAPONS.contains(Varpbits.value(357))) || Inventory.stream().name("Knife").count() > 0;
     }
     private static boolean useBladeOnWeb(GameObject web){
-        if(!Game.isUptext("->")){
-            Item[] slashable = Inventory.find(Filters.Items.nameContains("whip", "sword", "dagger", "claws", "scimitar", " axe", "knife", "halberd", "machete", "rapier"));
-            if(slashable.length == 0 || !slashable[0].click("Use"))
+        if(Inventory.selectedItem() != Item.getNil()){
+            List<Item> slashable = Inventory.stream().name("whip", "sword", "dagger", "claws", "scimitar", " axe", "knife", "halberd", "machete", "rapier").list();
+            if(slashable.size() == 0 || !slashable.get(0).click("Use"))
                 return false;
         }
-        return InteractionHelper.click(web, Game.getUptext());
+        return InteractionHelper.click(web, "Use");
     }
 
 }

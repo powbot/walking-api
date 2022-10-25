@@ -212,7 +212,7 @@ public class WalkerEngine implements Loggable{
                                     log("New destination is available: " + furthestReachable.getDestination().getTile());
                                     return WaitFor.Return.SUCCESS;
                                 }
-                                if (System.currentTimeMillis() > offsetWalkingTimeout && !Player.isMoving()){
+                                if (System.currentTimeMillis() > offsetWalkingTimeout && !Players.local().inMotion()){
                                     log("Player is not moving and we are past the offsetWalkingTimeout");
                                     return WaitFor.Return.FAIL;
                                 }
