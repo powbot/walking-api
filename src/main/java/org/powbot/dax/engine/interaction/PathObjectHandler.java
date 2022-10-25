@@ -1,11 +1,7 @@
 package org.powbot.dax.engine.interaction;
 
 import org.powbot.dax.shared.helpers.AreaHelper;
-import org.tribot.api.General;
-import org.tribot.api2007.Objects;
-import org.tribot.api2007.*;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.*;
+import org.powbot.dax.shared.helpers.Filters;
 import org.powbot.dax.shared.helpers.GameObjectHelper;
 import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.WaitFor;
@@ -48,19 +44,19 @@ public class PathObjectHandler implements Loggable {
         WEB("Web", "Slash", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.find(15,
+                return org.powbot.api.rt4.Objects.stream(15).filter(
                         Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
                                 .and(Filters.Objects.nameEquals("Web"))
-                                .and(Filters.Objects.actionsContains("Slash"))).length > 0;
+                                .and(Filters.Objects.actionsContains("Slash"))).count() > 0;
             }
         }),
         ROCKFALL("Rockfall", "Mine", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.find(15,
+                return  org.powbot.api.rt4.Objects.stream(15).filter(
                         Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
                                 .and(Filters.Objects.nameEquals("Rockfall"))
-                                .and(Filters.Objects.actionsContains("Mine"))).length > 0;
+                                .and(Filters.Objects.actionsContains("Mine"))).count() > 0;
             }
         }),
         ROOTS("Roots", "Chop", null, new SpecialCondition() {

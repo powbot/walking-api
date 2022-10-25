@@ -8,13 +8,20 @@ import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.shared.helpers.AccurateMouse;
 import org.powbot.dax.shared.helpers.Timing;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 
 public class InteractionHelper {
 
-    public static boolean click(Interactive clickable, String action){
+    public static boolean click(Interactive clickable, String... action){
         return click(clickable, action, null);
+    }
+
+    public static boolean click(Interactive clickable, String action, WaitFor.Condition condition){
+        return click(clickable, new String[]{action}, condition);
     }
 
     /**
@@ -26,18 +33,19 @@ public class InteractionHelper {
      * @return if {@code condition} is null, then return the outcome of condition.
      *          Otherwise, return the result of the click action.
      */
-    public static boolean click(Interactive clickable, String action, WaitFor.Condition condition){
+    public static boolean click(Interactive clickable, String[] action, WaitFor.Condition condition){
         if (clickable == null){
             return false;
         }
 
         if (clickable instanceof Item){
-            return clickable.interact(action) && (condition == null || WaitFor.condition(Random.nextInt(7000, 8000), condition) == WaitFor.Return.SUCCESS);
+            List<String> asList = new ArrayList<>(Arrays.asList(action));
+            return clickable.interact(m -> asList.contains(m.getAction())) && (condition == null || WaitFor.condition(Random.nextInt(7000, 8000), condition) == WaitFor.Return.SUCCESS);
         }
 
         Tile position = ((Locatable) clickable).tile();
 
-        if (position != null && !clickable.inViewport()){
+        if (position != Tile.getNil() && !clickable.inViewport()){
             Movement.moveTo(position);
         }
 

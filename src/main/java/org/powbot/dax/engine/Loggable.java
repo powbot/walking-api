@@ -1,6 +1,5 @@
 package org.powbot.dax.engine;
 
-import org.tribot.api.General;
 import org.powbot.dax.api.DaxConfigs;
 
 public interface Loggable {

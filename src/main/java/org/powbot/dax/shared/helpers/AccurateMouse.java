@@ -89,22 +89,6 @@ public class AccurateMouse {
         if (clickable == null) {
             return false;
         }
-        String name = null;
-        Model model = null;
-        if (clickable instanceof Actor rsCharacter) {
-            name = rsCharacter.getName();
-            model = rsCharacter.model();
-        } else if (clickable instanceof GroundItem rsGroundItem) {
-            CacheItemConfig rsItemDefinition = rsGroundItem.getConfig();
-            name = rsItemDefinition.getName();
-            model = rsGroundItem.model();
-        } else if (clickable instanceof GameObject rsObject) {
-            CacheObjectConfig rsObjectDefinition = CacheObjectConfig.load(rsObject.id());
-            name = rsObjectDefinition.getName();
-            model = rsObject.model();
-        } else if (clickable instanceof Item) {
-            name = ItemHelper.getItemName((Item) clickable);
-        }
         return action(clickable, clickActions);
     }
 
