@@ -1,55 +1,54 @@
 package org.powbot.dax.engine.interaction;
 
 import org.powbot.api.Locatable;
+import org.powbot.api.Random;
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.*;
+import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.shared.helpers.AccurateMouse;
+import org.powbot.dax.shared.helpers.Timing;
 
 import java.util.function.Predicate;
 
 
 public class InteractionHelper {
 
-    public static boolean click(Interactive clickable, String... actions){
-        return click(clickable, actions, null);
-    }
-
-    public static boolean click(Interactive clickable, String action, WaitFor.Condition condition){
-        return click(clickable, new String[]{action}, condition);
+    public static boolean click(Interactive clickable, String action){
+        return click(clickable, action, null);
     }
 
     /**
      * Interacts with nearby object and waits for {@code condition}.
      *
      * @param clickable clickable entity
-     * @param actions actions to click
+     * @param action actions to click
      * @param condition condition to wait for after the click action
      * @return if {@code condition} is null, then return the outcome of condition.
      *          Otherwise, return the result of the click action.
      */
-    public static boolean click(Interactive clickable, String[] actions, WaitFor.Condition condition){
+    public static boolean click(Interactive clickable, String action, WaitFor.Condition condition){
         if (clickable == null){
             return false;
         }
 
         if (clickable instanceof Item){
-            return clickable.click(actions) && (condition == null || WaitFor.condition(Random.nextInt(7000, 8000), condition) == WaitFor.Return.SUCCESS);
+            return clickable.interact(action) && (condition == null || WaitFor.condition(Random.nextInt(7000, 8000), condition) == WaitFor.Return.SUCCESS);
         }
 
-        Tile position = ((Locatable) clickable).getPosition();
+        Tile position = ((Locatable) clickable).tile();
 
-        if (position != null && !isOnScreenAndClickable(clickable)){
-            Walking.blindWalkTo(position);
+        if (position != null && !clickable.inViewport()){
+            Movement.moveTo(position);
         }
 
         WaitFor.Return result = WaitFor.condition(WaitFor.getMovementRandomSleep(position), new WaitFor.Condition() {
             final long startTime = System.currentTimeMillis();
             @Override
             public WaitFor.Return active() {
-                if (isOnScreenAndClickable(clickable)){
+                if (clickable.inViewport()){
                     return WaitFor.Return.SUCCESS;
                 }
-                if (Timing.timeFromMark(startTime) > 2000 && !Player.isMoving()){
+                if (Timing.timeFromMark(startTime) > 2000 && !Players.local().inMotion()){
                     return WaitFor.Return.FAIL;
                 }
                 return WaitFor.Return.IGNORE;
@@ -60,7 +59,7 @@ public class InteractionHelper {
             return false;
         }
 
-        if (!AccurateMouse.click(clickable, actions)){
+        if (!AccurateMouse.click(clickable, action)){
             if (Camera.pitch() < 90){
                 Camera.pitch(Random.nextInt(90, 100));
             }

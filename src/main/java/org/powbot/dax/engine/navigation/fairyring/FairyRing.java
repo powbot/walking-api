@@ -1,22 +1,17 @@
 package org.powbot.dax.engine.navigation.fairyring;
 
-import org.tribot.api.General;
-import org.tribot.api.Timing;
-import org.tribot.api2007.*;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.GameObject;
-import org.tribot.api2007.types.Tile;
-import org.powbot.dax.shared.helpers.VarbitHelper.RSVarBit;
+import org.powbot.api.Condition;
+import org.powbot.api.Tile;
+import org.powbot.api.rt4.*;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.InteractionHelper;
 import org.powbot.dax.engine.navigation.fairyring.letters.FirstLetter;
 import org.powbot.dax.engine.navigation.fairyring.letters.SecondLetter;
 import org.powbot.dax.engine.navigation.fairyring.letters.ThirdLetter;
 
-import static scripts.dax_api.walker_engine.navigation_utils.fairyring.letters.FirstLetter.*;
-import static scripts.dax_api.walker_engine.navigation_utils.fairyring.letters.SecondLetter.*;
-import static scripts.dax_api.walker_engine.navigation_utils.fairyring.letters.ThirdLetter.*;
+import static org.powbot.dax.engine.navigation.fairyring.letters.FirstLetter.*;
+import static org.powbot.dax.engine.navigation.fairyring.letters.SecondLetter.*;
+import static org.powbot.dax.engine.navigation.fairyring.letters.ThirdLetter.*;
 
 public class FairyRing {
 
@@ -27,19 +22,19 @@ public class FairyRing {
 	private static final int[]
 			DRAMEN_STAFFS = {772,9084};
 
-	private static GameObject[] ring;
+	private static GameObject ring;
 
 
-	private static RSInterface getTeleportButton() {
-		return Interfaces.get(INTERFACE_MASTER, TELEPORT_CHILD);
+	private static Component getTeleportButton() {
+		return Widgets.component(INTERFACE_MASTER, TELEPORT_CHILD);
 	}
 
 	public static boolean takeFairyRing(Locations location){
 
 		if(location == null)
 			return false;
-		if (RSVarBit.get(ELITE_DIARY_VARBIT).getValue() == 0 && Equipment.getCount(DRAMEN_STAFFS) == 0){
-			if (!InteractionHelper.click(InteractionHelper.getItem(ItemFilters.idEquals(DRAMEN_STAFFS)), "Wield")){
+		if (Varpbits.value(ELITE_DIARY_VARBIT) == 0 && Equipment.stream().id(DRAMEN_STAFFS).isEmpty()){
+			if (!InteractionHelper.click(Inventory.stream().id(DRAMEN_STAFFS).first(), "Wield")){
 				return false;
 			}
 		}
@@ -52,34 +47,32 @@ public class FairyRing {
 			}
 		}
 		final Tile myPos = Players.local().tile();
-		return location.turnTo() && pressTeleport() && Timing.waitCondition(() -> myPos.distanceTo(Players.local().tile()) > 20,8000) && WaitFor.milliseconds(500, 1200) != null;
+		return location.turnTo() && pressTeleport() && Condition.wait(() -> myPos.distanceTo(Players.local().tile()) > 20, 800, 10) && WaitFor.milliseconds(500, 1200) != null;
 	}
 
 	private static boolean hasInterface(){
-		return Interfaces.isInterfaceSubstantiated(INTERFACE_MASTER);
+		return Widgets.component(INTERFACE_MASTER, 0).visible();
 	}
 
 	private static boolean hasCachedLocation(Locations location){
-		ring = Objects.findNearest(25,"Fairy ring");
-		return ring.length > 0 && Filters.Objects.actionsContains(location.toString()).test(ring[0]);
+		ring = Objects.stream(25).name("Fairy ring").nearest().first();
+		return ring.valid() && ring.actions().stream().anyMatch(a -> a.contains(location.toString()));
 	}
 
 	private static boolean takeLastDestination(Locations location){
 		final Tile myPos = Players.local().tile();
-		return InteractionHelper.click(ring[0],"Last-destination (" + location + ")") &&
-				Timing.waitCondition(() -> myPos.distanceTo(Players.local().tile()) > 20,8000);
+		return InteractionHelper.click(ring,"Last-destination (" + location + ")") &&
+				Condition.wait(() -> myPos.distanceTo(Players.local().tile()) > 20,800, 10);
 	}
 
 	private static boolean pressTeleport(){
-		RSInterface iface = getTeleportButton();
-		return iface != null && iface.click();
+		Component iface = getTeleportButton();
+		return iface.valid() && iface.click();
 	}
 
 	private static boolean openFairyRing(){
-		if(ring.length == 0)
-			return false;
-		return InteractionHelper.click(ring[0],"Configure") &&
-				Timing.waitCondition(() -> Interfaces.isInterfaceSubstantiated(INTERFACE_MASTER),10000);
+		return ring.valid() && InteractionHelper.click(ring,"Configure") &&
+				Condition.wait(() -> Widgets.component(INTERFACE_MASTER, 0).visible(),1000, 10);
 	}
 
 	public enum Locations {
@@ -155,12 +148,12 @@ public class FairyRing {
 
 	private static void handleSpecialCases(){
 		Tile myPos = Players.local().tile();
-		if(myPos.distanceTo(SINCLAIR_TILE) < 5 && Players.local().isInCombat() &&
-			NPCs.find(Filters.NPCs.nameEquals("Wolf").and(n -> n.isInteractingWithMe() && n.getPosition().distanceTo(myPos) <= 2)).length > 0){
+		if(myPos.distanceTo(SINCLAIR_TILE) < 5 && Players.local().inCombat() &&
+				Npcs.stream().name("Wolf").interactingWithMe().within(2).isNotEmpty()) {
 			if(myPos.getY() >= 3577){
-				Walking.walkTo(SINCLAIR_TILE.translate(-1, 0));
+				Movement.walkTo(SINCLAIR_TILE.derive(-1, 0));
 			} else {
-				Walking.walkTo(SINCLAIR_TILE.translate(0, 1));
+				Movement.walkTo(SINCLAIR_TILE.derive(0, 1));
 			}
 		}
 	}

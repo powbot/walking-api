@@ -3,12 +3,12 @@ package org.powbot.dax.engine.local;
 
 import org.powbot.api.Locatable;
 import org.powbot.api.Tile;
-import org.tribot.api.General;
-import org.tribot.api.interfaces.Locatable;
-import org.tribot.api2007.PathFinding;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.types.Tile;
+import org.powbot.api.rt4.Game;
+import org.powbot.api.rt4.Movement;
+import org.powbot.api.rt4.Players;
 import org.powbot.dax.shared.helpers.BankHelper;
+import org.powbot.util.TransientGetter;
+import org.powbot.util.TransientGetter2D;
 
 import java.util.*;
 
@@ -27,26 +27,23 @@ public class Reachable {
         map = generateMap(homeTile != null ? homeTile : Players.local().tile());
     }
 
-    public boolean isBlocked(Locatable position){
-        Tile localPosition = position.getPosition().toLocalTile();
-        int[][] collisionData = PathFinding.getCollisionData();
-        int localX = localPosition.getX(), localY = localPosition.getY();
-        if(localX > collisionData.length || localY > collisionData[localX].length)
+    public boolean isBlocked(Locatable position) {
+        TransientGetter2D<Integer> collisionData = Movement.collisionMap(position.tile().floor()).flags();
+        int localX = position.tile().localX(), localY = position.tile().localY();
+        if (localX > collisionData.getSize() || localY > collisionData.get(localX).getSize())
             return true;
-        return AStarNode.isWalkable(collisionData[localX][localY]);
+        return AStarNode.isWalkable(collisionData.get(localX).get(localY));
     }
 
     public boolean canReach(Tile position) {
 //        System.out.println("Checking if we can reach position: " + position);
-        position = position.toWorldTile();
 //        System.out.println("Updated position to world tile: " + position);
         Tile playerPosition = Players.local().tile();
         if (playerPosition.getX() == position.getX() && playerPosition.getY() == position.getY()) {
             return true;
         }
-        Tile localTile = position.toLocalTile();
 //        System.out.println("Updated position to local tile: " + localTile);
-        return getParent(localTile) != null;
+        return getParent(position) != null;
     }
 
     public boolean canReach(int x, int y) {
@@ -54,8 +51,7 @@ public class Reachable {
         if (playerPosition.getX() == x && playerPosition.getY() == y) {
             return true;
         }
-        Tile position = convertToLocal(x, y);
-        return getParent(position) != null;
+        return getParent(new Tile(x, y)) != null;
     }
 
     public Tile closestTile(Collection<Tile> tiles) {
@@ -63,7 +59,7 @@ public class Reachable {
         double closestDistance = Integer.MAX_VALUE;
         Tile playerPosition = Players.local().tile();
         for (Tile positionable : tiles) {
-            double distance = playerPosition.distanceToDouble(positionable);
+            double distance = playerPosition.distanceTo(positionable);
             if (distance < closestDistance) {
                 closestDistance = distance;
                 closest = positionable;
@@ -78,17 +74,13 @@ public class Reachable {
      * @return parent tile of x and y through BFS.
      */
     public Tile getParent(int x, int y) {
-        Tile position = convertToLocal(x, y);
-        return getParent(position);
+        return getParent(new Tile(x, y));
     }
 
     public Tile getParent(Locatable positionable) {
-        Tile tile = positionable.getPosition();
-        if (tile.getType() != Tile.TYPES.LOCAL) {
-            tile = tile.toLocalTile();
-        }
+        Tile tile = positionable.tile();
 //        System.out.println("Checking local tile: " + tile);
-        int x = tile.getX(), y = tile.getY();
+        int x = tile.localX(), y = tile.localY();
         if (x < 0 || y < 0) {
             System.out.println("Tile x or y is below 0");
             return null;
@@ -106,8 +98,7 @@ public class Reachable {
      * @return Distance to tile. Max integer value if unreachable. Does not account for positionable behind doors
      */
     public int getDistance(int x, int y) {
-        Tile position = convertToLocal(x, y);
-        return getDistance(position);
+        return getDistance(new Tile(x, y));
     }
 
     /**
@@ -115,8 +106,7 @@ public class Reachable {
      * @return path to tile. Does not account for positionable behind doors
      */
     public ArrayList<Tile> getPath(Locatable positionable) {
-        Tile position = convertToLocal(positionable.getPosition().getX(), positionable.getPosition().getY());
-        int x = position.getX(), y = position.getY();
+        int x = positionable.tile().localX(), y = positionable.tile().localY();
         return getPath(x, y);
     }
 
@@ -127,8 +117,9 @@ public class Reachable {
      */
     public ArrayList<Tile> getPath(int x, int y) {
         ArrayList<Tile> path = new ArrayList<>();
-        Tile playerPos = Players.local().tile().toLocalTile();
-        if (x == playerPos.getX() && y == playerPos.getY()) {
+        Tile mapOffset = Game.mapOffset();
+        Tile playerPos = Players.local().tile();
+        if (x == playerPos.localX() && y == playerPos.localY()) {
             return path;
         }
         if (x < 0 || y < 0) {
@@ -140,19 +131,18 @@ public class Reachable {
         if (map[x][y] == null) {
             return null;
         }
-        Tile tile = new Tile(x, y, Players.local().tile().getPlane(), Tile.TYPES.LOCAL);
-        while ((tile = map[tile.getX()][tile.getY()]) != null) {
-            path.add(tile.toWorldTile());
+        Tile tile = new Tile(mapOffset.x() + x, mapOffset.y() + y, Players.local().tile().floor());
+        while ((tile = map[tile.localX()][tile.localY()]) != null) {
+            path.add(tile);
         }
         Collections.reverse(path);
         return path;
     }
 
     public int getDistance(Locatable positionable) {
-        Tile position = convertToLocal(positionable.getPosition().getX(), positionable.getPosition().getY());
-        int x = position.getX(), y = position.getY();
-        Tile playerPos = Players.local().tile().toLocalTile();
-        if (x == playerPos.getX() && y == playerPos.getY()) {
+        int x = positionable.tile().localX(), y = positionable.tile().localY();
+        Tile playerPos = Players.local().tile();
+        if (x == playerPos.localX() && y == playerPos.localY()) {
             return 0;
         }
         if (x < 0 || y < 0) {
@@ -165,55 +155,44 @@ public class Reachable {
             return Integer.MAX_VALUE;
         }
         int length = 0;
-        Tile tile = position;
-        while ((tile = map[tile.getX()][tile.getY()]) != null) {
+        Tile tile = positionable.tile();
+        while ((tile = map[tile.localX()][tile.localY()]) != null) {
             length++;
         }
         return length;
     }
 
-    private static Tile convertToLocal(int x, int y) {
-        Tile position = new Tile(x, y, Players.local().tile().getPlane(), x >= 104 || y >= 104 ? Tile.TYPES.WORLD : Tile.TYPES.LOCAL);
-        if (position.getType() != Tile.TYPES.LOCAL) {
-            position = position.toLocalTile();
-        }
-        return position;
-    }
-
     public static Tile getBestWalkableTile(Locatable positionable, Reachable reachable) {
-        Tile localPosition = positionable.getPosition().toLocalTile();
         Set<Tile> building = BankHelper.getBuilding(positionable);
         boolean[][] traversed = new boolean[104][104];
         Tile[][] parentMap = new Tile[104][104];
         Queue<Tile> queue = new LinkedList<>();
-        int[][] collisionData = PathFinding.getCollisionData();
-        if(collisionData == null)
-            return null;
-
-        queue.add(localPosition);
+        TransientGetter2D<Integer> collisionData = Movement.collisionMap(Game.floor()).flags();
+        
+        queue.add(positionable.tile());
         try {
-            traversed[localPosition.getX()][localPosition.getY()] = true;
-            parentMap[localPosition.getX()][localPosition.getY()] = null;
+            traversed[positionable.tile().localX()][positionable.tile().localY()] = true;
+            parentMap[positionable.tile().localX()][positionable.tile().localY()] = null;
         } catch (ArrayIndexOutOfBoundsException e) {
             return null;
         }
 
         while (!queue.isEmpty()) {
-            Tile currentLocal = queue.poll();
-            int x = currentLocal.getX(), y = currentLocal.getY();
+            Tile current = queue.poll();
+            int x = current.localX(), y = current.localY();
 
-            int currentCollisionFlags = collisionData[x][y];
+            int currentCollisionFlags = collisionData.get(x).get(y);
             if (AStarNode.isWalkable(currentCollisionFlags)) {
-                if (reachable != null && !reachable.canReach(currentLocal.toWorldTile().getX(), currentLocal.toWorldTile().getY())) {
+                if (reachable != null && !reachable.canReach(current.getX(), current.getY())) {
                     continue;
                 }
                 if (building != null && building.size() > 0) {
-                    if (building.contains(currentLocal.toWorldTile())) {
-                        return currentLocal.toWorldTile();
+                    if (building.contains(current)) {
+                        return current;
                     }
                     continue; //Next tile because we are now outside of building.
                 } else {
-                    return currentLocal.toWorldTile();
+                    return current;
                 }
             }
 
@@ -222,13 +201,13 @@ public class Reachable {
                     continue; //Cannot traverse to tile from current.
                 }
 
-                Tile neighbor = direction.getPointingTile(currentLocal);
-                int destinationX = neighbor.getX(), destinationY = neighbor.getY();
+                Tile neighbor = direction.getPointingTile(current);
+                int destinationX = neighbor.localX(), destinationY = neighbor.localY();
                 if (traversed[destinationX][destinationY]) {
                     continue; //Traversed already
                 }
                 traversed[destinationX][destinationY] = true;
-                parentMap[destinationX][destinationY] = currentLocal;
+                parentMap[destinationX][destinationY] = current;
                 queue.add(neighbor);
             }
 
@@ -251,28 +230,27 @@ public class Reachable {
      * @return local reachable tiles
      */
     public static Tile[][] generateMap(Tile homeTile) {
-        Tile localPlayerPosition = homeTile.toLocalTile();
         boolean[][] traversed = new boolean[104][104];
         Tile[][] parentMap = new Tile[104][104];
         Queue<Tile> queue = new LinkedList<>();
-        int[][] collisionData = PathFinding.getCollisionData();
+        TransientGetter2D<Integer> collisionData = Movement.collisionMap(Game.floor()).flags();
 
         if(collisionData == null)
             return new Tile[][]{};
 
-        queue.add(localPlayerPosition);
+        queue.add(homeTile);
         try {
-            traversed[localPlayerPosition.getX()][localPlayerPosition.getY()] = true;
-            parentMap[localPlayerPosition.getX()][localPlayerPosition.getY()] = null;
+            traversed[homeTile.localX()][homeTile.localY()] = true;
+            parentMap[homeTile.localX()][homeTile.localY()] = null;
         } catch (Exception e) {
             return parentMap;
         }
 
         while (!queue.isEmpty()) {
             Tile currentLocal = queue.poll();
-            int x = currentLocal.getX(), y = currentLocal.getY();
+            int x = currentLocal.localX(), y = currentLocal.localY();
 
-            int currentCollisionFlags = collisionData[x][y];
+            int currentCollisionFlags = collisionData.get(x).get(y);
             if (!AStarNode.isWalkable(currentCollisionFlags)) {
                 continue;
             }
@@ -283,7 +261,7 @@ public class Reachable {
                 }
 
                 Tile neighbor = direction.getPointingTile(currentLocal);
-                int destinationX = neighbor.getX(), destinationY = neighbor.getY();
+                int destinationX = neighbor.localX(), destinationY = neighbor.localY();
                 if (traversed[destinationX][destinationY]) {
                     continue; //Traversed already
                 }
@@ -315,85 +293,85 @@ public class Reachable {
         }
 
         public Tile getPointingTile(Tile tile) {
-            return tile.translate(x, y);
+            return tile.derive(x, y);
         }
 
-        public boolean isValidDirection(int x, int y, int[][] collisionData) {
+        public boolean isValidDirection(int x, int y, TransientGetter2D<Integer> collisionData) {
             try {
                 switch (this) {
                     case NORTH:
-                        return !AStarNode.blockedNorth(collisionData[x][y]);
+                        return !AStarNode.blockedNorth(collisionData.get(x).get(y));
                     case EAST:
-                        return !AStarNode.blockedEast(collisionData[x][y]);
+                        return !AStarNode.blockedEast(collisionData.get(x).get(y));
                     case SOUTH:
-                        return !AStarNode.blockedSouth(collisionData[x][y]);
+                        return !AStarNode.blockedSouth(collisionData.get(x).get(y));
                     case WEST:
-                        return !AStarNode.blockedWest(collisionData[x][y]);
+                        return !AStarNode.blockedWest(collisionData.get(x).get(y));
                     case NORTH_EAST:
-                        if (AStarNode.blockedNorth(collisionData[x][y]) || AStarNode.blockedEast(collisionData[x][y])) {
+                        if (AStarNode.blockedNorth(collisionData.get(x).get(y)) || AStarNode.blockedEast(collisionData.get(x).get(y))) {
                             return false;
                         }
-                        if (!AStarNode.isWalkable(collisionData[x + 1][y])) {
+                        if (!AStarNode.isWalkable(collisionData.get(x + 1).get(y))) {
                             return false;
                         }
-                        if (!AStarNode.isWalkable(collisionData[x][y + 1])) {
+                        if (!AStarNode.isWalkable(collisionData.get(x).get(y + 1))) {
                             return false;
                         }
-                        if (AStarNode.blockedNorth(collisionData[x + 1][y])) {
+                        if (AStarNode.blockedNorth(collisionData.get(x + 1).get(y))) {
                             return false;
                         }
-                        if (AStarNode.blockedEast(collisionData[x][y + 1])) {
+                        if (AStarNode.blockedEast(collisionData.get(x).get(y + 1))) {
                             return false;
                         }
                         return true;
                     case NORTH_WEST:
-                        if (AStarNode.blockedNorth(collisionData[x][y]) || AStarNode.blockedWest(collisionData[x][y])) {
+                        if (AStarNode.blockedNorth(collisionData.get(x).get(y)) || AStarNode.blockedWest(collisionData.get(x).get(y))) {
                             return false;
                         }
-                        if (!AStarNode.isWalkable(collisionData[x - 1][y])) {
+                        if (!AStarNode.isWalkable(collisionData.get(x - 1).get(y))) {
                             return false;
                         }
-                        if (!AStarNode.isWalkable(collisionData[x][y + 1])) {
+                        if (!AStarNode.isWalkable(collisionData.get(x).get(y + 1))) {
                             return false;
                         }
-                        if (AStarNode.blockedNorth(collisionData[x - 1][y])) {
+                        if (AStarNode.blockedNorth(collisionData.get(x - 1).get(y))) {
                             return false;
                         }
-                        if (AStarNode.blockedWest(collisionData[x][y + 1])) {
+                        if (AStarNode.blockedWest(collisionData.get(x).get(y + 1))) {
                             return false;
                         }
                         return true;
                     case SOUTH_EAST:
-                        if (AStarNode.blockedSouth(collisionData[x][y]) || AStarNode.blockedEast(collisionData[x][y])) {
+                        if (AStarNode.blockedSouth(collisionData.get(x).get(y)) || AStarNode.blockedEast(collisionData.get(x).get(y))) {
                             return false;
                         }
-                        if (!AStarNode.isWalkable(collisionData[x + 1][y])) {
+                        if (!AStarNode.isWalkable(collisionData.get(x + 1).get(y))) {
                             return false;
                         }
-                        if (!AStarNode.isWalkable(collisionData[x][y - 1])) {
+                        if (!AStarNode.isWalkable(collisionData.get(x).get(y - 1))) {
                             return false;
                         }
-                        if (AStarNode.blockedSouth(collisionData[x + 1][y])) {
+                        if (AStarNode.blockedSouth(collisionData.get(x + 1).get(y))) {
                             return false;
                         }
-                        if (AStarNode.blockedEast(collisionData[x][y - 1])) {
+                        if (AStarNode.blockedEast(collisionData.get(x).get(y - 1))) {
                             return false;
                         }
                         return true;
                     case SOUTH_WEST:
-                        if (AStarNode.blockedSouth(collisionData[x][y]) || AStarNode.blockedWest(collisionData[x][y])) {
+                        if (AStarNode.blockedSouth(collisionData.get(x).get(y)) || AStarNode.blockedWest(collisionData.get(x).get(y))) {
                             return false;
                         }
-                        if (!AStarNode.isWalkable(collisionData[x - 1][y])) {
+                        if (!AStarNode.isWalkable(collisionData.get(x - 1).get(y))) {
                             return false;
                         }
-                        if (!AStarNode.isWalkable(collisionData[x][y - 1])) {
+                        if (!AStarNode.isWalkable(collisionData.get(x).get(y - 1))) {
                             return false;
                         }
-                        if (AStarNode.blockedSouth(collisionData[x - 1][y])) {
+                        if (AStarNode.blockedSouth(collisionData.get(x - 1).get(y))) {
                             return false;
                         }
-                        if (AStarNode.blockedWest(collisionData[x][y - 1])) {
+                        if (AStarNode.blockedWest(collisionData.get(x).get(y - 1))) {
                             return false;
                         }
                         return true;

@@ -1,5 +1,7 @@
 package org.powbot.dax.engine.navigation;
 
+import org.powbot.api.Tile;
+import org.powbot.api.rt4.Widgets;
 import org.tribot.api.General;
 import org.tribot.api2007.Interfaces;
 import org.tribot.api2007.Player;
@@ -34,7 +36,7 @@ public class SpiritTree {
         public String getName() {
             return name;
         }
-        public Tile getRSTile(){
+        public Tile getTile(){
             return new Tile(x, y, z);
         }
 
@@ -52,7 +54,7 @@ public class SpiritTree {
     }
 
     public static boolean to(Location location){
-        if (!Interfaces.isInterfaceValid(SPIRIT_TREE_MASTER_INTERFACE)
+        if (!Widgets.component(SPIRIT_TREE_MASTER_INTERFACE, 0).visible()
                 && !InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.actionsContains("Travel")), "Travel", () -> Interfaces.isInterfaceValid(SPIRIT_TREE_MASTER_INTERFACE) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
             return false;
         }
@@ -70,7 +72,7 @@ public class SpiritTree {
             return false;
         }
 
-        if (WaitFor.condition(Random.nextInt(5400, 6500), () -> location.getRSTile().distanceTo(Players.local().tile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+        if (WaitFor.condition(Random.nextInt(5400, 6500), () -> location.getTile().distanceTo(Players.local().tile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
             WaitFor.milliseconds(250, 500);
             return true;
         }

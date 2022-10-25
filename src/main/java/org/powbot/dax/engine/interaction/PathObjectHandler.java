@@ -1,5 +1,6 @@
 package org.powbot.dax.engine.interaction;
 
+import org.powbot.dax.shared.helpers.AreaHelper;
 import org.tribot.api.General;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.*;
@@ -48,7 +49,7 @@ public class PathObjectHandler implements Loggable {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Objects.find(15,
-                        Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
+                        Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
                                 .and(Filters.Objects.nameEquals("Web"))
                                 .and(Filters.Objects.actionsContains("Slash"))).length > 0;
             }
@@ -57,7 +58,7 @@ public class PathObjectHandler implements Loggable {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Objects.find(15,
-                        Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
+                        Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
                                 .and(Filters.Objects.nameEquals("Rockfall"))
                                 .and(Filters.Objects.actionsContains("Mine"))).length > 0;
             }
@@ -66,7 +67,7 @@ public class PathObjectHandler implements Loggable {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Objects.find(15,
-                        Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
+                        Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
                                 .and(Filters.Objects.nameEquals("Roots"))
                                 .and(Filters.Objects.actionsContains("Chop"))).length > 0;
             }
@@ -75,7 +76,7 @@ public class PathObjectHandler implements Loggable {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Objects.find(15,
-                        Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
+                        Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
                                 .and(Filters.Objects.nameEquals("Rockslide"))
                                 .and(Filters.Objects.actionsContains("Climb-over"))).length > 0;
             }
@@ -84,7 +85,7 @@ public class PathObjectHandler implements Loggable {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Objects.find(15,
-                        Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
+                        Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
                                 .and(Filters.Objects.nameEquals("Root"))
                                 .and(Filters.Objects.actionsContains("Step-over"))).length > 0;
             }
@@ -93,7 +94,7 @@ public class PathObjectHandler implements Loggable {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Objects.find(15,
-                        Filters.Objects.inArea(new RSArea(destinationDetails.getAssumed(), 1))
+                        Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
                                 .and(Filters.Objects.nameEquals("Vines"))
                                 .and(Filters.Objects.actionsContains("Chop-down"))).length > 0;
             }
@@ -231,7 +232,7 @@ public class PathObjectHandler implements Loggable {
             action = specialObject.getAction();
             Predicate<GameObject> specialObjectFilter = Filters.Objects.nameEquals(specialObject.getName())
                                                                      .and(Filters.Objects.actionsContains(specialObject.getAction()))
-                                                                     .and(Filters.Objects.inArea(new RSArea(specialObject.getLocation() != null ? specialObject.getLocation() : destinationDetails.getAssumed(), 1)));
+                                                                     .and(Filters.Objects.inArea(AreaHelper.fromCenter(specialObject.getLocation() != null ? specialObject.getLocation() : destinationDetails.getAssumed(), 1)));
             interactiveObjects = Objects.findNearest(15, specialObjectFilter);
         }
 
@@ -594,7 +595,7 @@ public class PathObjectHandler implements Loggable {
     private static boolean handleTrapDoor(GameObject object){
         if (getActions(object).contains("Open")){
             if (!InteractionHelper.click(object, "Open") && WaitFor.condition(8000, () -> {
-                GameObject[] objects = Objects.find(15, Filters.Objects.actionsContains("Climb-down").and(Filters.Objects.inArea(new RSArea(object, 2))));
+                GameObject[] objects = Objects.find(15, Filters.Objects.actionsContains("Climb-down").and(Filters.Objects.inArea(AreaHelper.fromCenter(object, 2))));
                 if (objects.length > 0 && getActions(objects[0]).contains("Climb-down")){
                     return WaitFor.Return.SUCCESS;
                 }
@@ -602,7 +603,7 @@ public class PathObjectHandler implements Loggable {
             }) == WaitFor.Return.SUCCESS){
                 return false;
             } else {
-                GameObject[] objects = Objects.find(15, Filters.Objects.actionsContains("Climb-down").and(Filters.Objects.inArea(new RSArea(object, 2))));
+                GameObject[] objects = Objects.find(15, Filters.Objects.actionsContains("Climb-down").and(Filters.Objects.inArea(AreaHelper.fromCenter(object, 2))));
                 return objects.length > 0 && handleTrapDoor(objects[0]);
             }
         }

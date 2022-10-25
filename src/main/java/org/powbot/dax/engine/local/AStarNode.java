@@ -1,6 +1,6 @@
 package org.powbot.dax.engine.local;
 
-import org.tribot.api2007.types.Tile;
+import org.powbot.api.Tile;
 
 public class AStarNode {
 
@@ -174,12 +174,12 @@ public class AStarNode {
         return x + " " + y + " " + z;
     }
 
-    public Tile toRSTile(){
-        return new Tile(x, y, z, Tile.TYPES.WORLD);
+    public Tile toTile(){
+        return new Tile(x, y, z);
     }
 
     public static String stringID(Tile tile){
-        return tile.getX() + " " + tile.getY() + " " + tile.getPlane();
+        return tile.getX() + " " + tile.getY() + " " + tile.floor();
     }
 
     public boolean isDestination() {

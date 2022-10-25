@@ -9,6 +9,7 @@ import org.powbot.api.rt4.Npcs;
 import org.powbot.api.rt4.Widgets;
 import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.interaction.NPCInteraction;
+import org.powbot.dax.shared.helpers.AreaHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,13 +89,7 @@ public class Charter implements Loggable {
         LocationProperty(String name, Tile center) {
             this.name = name;
             if (center != null) {
-                List<Tile> tiles = new ArrayList<>();
-                for (int x = center.x() - 15; x <= center.x() + 15; x++) {
-                    for (int y = center.y() - 15; y <= center.y() + 15; y++) {
-                        tiles.add(new Tile(x, y, center.floor()));
-                    }
-                }
-                this.area = new Area(tiles.toArray(new Tile[0]));
+                this.area = AreaHelper.fromCenter(center, 15);
             }
         }
 

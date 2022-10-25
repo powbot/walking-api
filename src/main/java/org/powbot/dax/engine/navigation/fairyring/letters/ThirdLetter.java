@@ -1,10 +1,11 @@
 package org.powbot.dax.engine.navigation.fairyring.letters;
 
-import org.tribot.api.General;
-import org.tribot.api.Timing;
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.types.RSInterface;
-import org.powbot.dax.shared.helpers.VarbitHelper.RSVarBit;
+import org.powbot.api.Condition;
+import org.powbot.api.Random;
+import org.powbot.api.rt4.Component;
+import org.powbot.api.rt4.Varpbits;
+import org.powbot.api.rt4.Widget;
+import org.powbot.api.rt4.Widgets;
 import org.powbot.dax.engine.navigation.fairyring.FairyRing;
 
 public enum ThirdLetter {
@@ -28,7 +29,7 @@ public enum ThirdLetter {
     }
 
     private static int get(){
-        return RSVarBit.get(VARBIT).getValue();
+        return Varpbits.value(VARBIT);
     }
 
     public boolean isSelected(){
@@ -43,7 +44,7 @@ public enum ThirdLetter {
         int diff = current - target;
         int abs = Math.abs(diff);
         if(abs == 2){
-            return Random.nextIntBoolean() ? turnClockwise(2) : turnAntiClockwise(2);
+            return Random.nextBoolean() ? turnClockwise(2) : turnAntiClockwise(2);
         } else if(diff == 3 || diff == -1){
             return turnClockwise(1);
         } else {
@@ -54,28 +55,28 @@ public enum ThirdLetter {
     public static boolean turnClockwise(int rotations){
         if(rotations == 0)
             return true;
-        RSInterface iface = getClockwise();
+        Component iface = getClockwise();
         final int value = get();
-        return iface != null && iface.click()
-                && Timing.waitCondition(() -> get() != value ,2500)
+        return iface.valid() && iface.click()
+                && Condition.wait(() -> get() != value ,250, 10)
                 && turnClockwise(--rotations);
     }
 
     public static boolean turnAntiClockwise(int rotations){
         if(rotations == 0)
             return true;
-        RSInterface iface = getAntiClockwise();
+        Component iface = getAntiClockwise();
         final int value = get();
-        return iface != null && iface.click()
-                && Timing.waitCondition(() -> get() != value ,2500)
+        return iface.valid() && iface.click()
+                && Condition.wait(() -> get() != value ,250, 10)
                 && turnAntiClockwise(--rotations);
     }
 
 
-    private static RSInterface getClockwise() {
-        return Interfaces.get(FairyRing.INTERFACE_MASTER, CLOCKWISE_CHILD);
+    private static Component getClockwise() {
+        return Widgets.component(FairyRing.INTERFACE_MASTER, CLOCKWISE_CHILD);
     }
-    private static RSInterface getAntiClockwise() {
-        return Interfaces.get(FairyRing.INTERFACE_MASTER, ANTI_CLOCKWISE_CHILD);
+    private static Component getAntiClockwise() {
+        return Widgets.component(FairyRing.INTERFACE_MASTER, ANTI_CLOCKWISE_CHILD);
     }
 }

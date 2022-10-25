@@ -73,7 +73,10 @@ public class NPCInteraction implements Loggable {
         }
 
         Npc npc = rsnpcs.get(0);
-        return InteractionHelper.click(npc, options);
+        for (String opt : options) {
+            if (InteractionHelper.click(npc, opt)) return true;
+        }
+        return false;
     }
 
     public static boolean waitForConversationWindow(){
@@ -238,17 +241,9 @@ public class NPCInteraction implements Loggable {
     private static List<Component> getAllInterfaces(){
         ArrayList<Component> interfaces = new ArrayList<>();
         for (int window : ALL_WINDOWS) {
-            List<Component> components = Widgets.widget(window).getComponents();
-            for(Component child: components){
-                TransientGetter<Component> childrenOfChild = child.components();
-                if(childrenOfChild.isEmpty()){
-                    interfaces.add(child);
-                } else {
-                    interfaces.add(child);
-                    interfaces.addAll(List.of(childrenOfChild.clone()));
-                }
-            }
+            interfaces.addAll(Components.stream(window).list());
         }
+
         return interfaces;
     }
 

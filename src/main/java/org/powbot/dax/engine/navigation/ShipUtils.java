@@ -1,14 +1,12 @@
 package org.powbot.dax.engine.navigation;
 
-import org.tribot.api.General;
-import org.tribot.api2007.Game;
-import org.tribot.api2007.Objects;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSArea;
-import org.tribot.api2007.types.GameObject;
-import org.tribot.api2007.types.Tile;
+import org.powbot.api.Random;
+import org.powbot.api.Tile;
+import org.powbot.api.rt4.GameObject;
+import org.powbot.api.rt4.Objects;
+import org.powbot.api.rt4.Players;
 import org.powbot.dax.engine.WaitFor;
+import org.powbot.dax.shared.helpers.AreaHelper;
 
 
 public class ShipUtils {
@@ -18,13 +16,13 @@ public class ShipUtils {
     public static boolean isOnShip() {
         Tile playerPos = Players.local().tile();
         for (Tile specialCase : SPECIAL_CASES){
-            if (new RSArea(specialCase, 5).contains(playerPos)){
+            if (AreaHelper.fromCenter(specialCase, 5).contains(playerPos)){
                 return true;
             }
         }
         return getGangplank() != null
-                && Players.local().tile().getPlane() == 1
-                && Objects.getAll(10, Filters.Objects.nameEquals("Ship's wheel", "Ship's ladder", "Anchor")).length > 0;
+                && Players.local().tile().floor() == 1
+                && Objects.stream(10).name("Ship's wheel", "Ship's ladder", "Anchor").isNotEmpty();
     }
 
     public static boolean crossGangplank() {
@@ -44,8 +42,8 @@ public class ShipUtils {
     }
 
     private static GameObject getGangplank(){
-        GameObject[] obj = Objects.findNearest(7, Filters.Objects.nameEquals("Gangplank").and(Filters.Objects.actionsContains("Cross")));
-        return obj.length > 0 ? obj[0] : null;
+        GameObject obj = Objects.stream(7).name("Gangplank").action("Cross").nearest().first();
+        return obj.valid() ? obj : null;
     }
 
 }

@@ -1,9 +1,7 @@
 package org.powbot.dax.engine.local;
 
-import org.tribot.api.General;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.Projection;
-import org.tribot.api2007.types.Tile;
+import org.powbot.api.Tile;
+import org.powbot.api.rt4.Players;
 import org.powbot.dax.shared.PathFindingNode;
 import org.powbot.dax.engine.bfs.BFS;
 import org.powbot.dax.engine.collision.CollisionDataCollector;
@@ -19,7 +17,7 @@ public class PathAnalyzer {
     public static RealTimeCollisionTile closestTileInPathToPlayer(List<Tile> path) {
         CollisionDataCollector.generateRealTimeCollision();
         final Tile playerPosition = Players.local().tile();
-        closestToPlayer = (RealTimeCollisionTile) BFS.bfsClosestToPath(path, RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()));
+        closestToPlayer = (RealTimeCollisionTile) BFS.bfsClosestToPath(path, RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.floor()));
         return closestToPlayer;
     }
 
@@ -36,7 +34,7 @@ public class PathAnalyzer {
         outside:
         for (int i = path.indexOf(currentPosition.getTile()); i < path.size() && i >= 0; i++) {
             Tile currentNode = path.get(i);
-            RealTimeCollisionTile current = RealTimeCollisionTile.get(currentNode.getX(), currentNode.getY(), currentNode.getPlane());
+            RealTimeCollisionTile current = RealTimeCollisionTile.get(currentNode.getX(), currentNode.getY(), currentNode.floor());
             if (current == null){
 //                System.out.println("Current RTCT is null.");
                 return null;
@@ -46,23 +44,23 @@ public class PathAnalyzer {
                 return new DestinationDetails(PathState.END_OF_PATH, current);
             }
             Tile nextNode = path.get(i + 1);
-            if(!isLoaded(nextNode) && nextNode.isOnScreen()){
+            if(!isLoaded(nextNode) && nextNode.matrix().onMap()){
 //                System.out.println("Next node is not loaded and is on screen.");
                 return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current);
             }
-            RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getX(), nextNode.getY(), nextNode.getPlane());
+            RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getX(), nextNode.getY(), nextNode.floor());
             Direction direction = directionTo(current.getTile(), nextNode);
             if (direction == Direction.UNKNOWN){
                 furthestReachable = current;
-                return new DestinationDetails(PathState.DISCONNECTED_PATH, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
+                return new DestinationDetails(PathState.DISCONNECTED_PATH, current, nextNode.getX(), nextNode.getY(), nextNode.floor());
             }
             if (!direction.confirmTileMovable(RealTimeCollisionTile.get(current.getX(), current.getY(), current.getZ()))){
 //                System.out.println("Unable to confirm that the next rtct is movable from the current rtct.");
                 for (int j = 1; j < 5 && j + i < path.size(); j++) {
                     Tile nextInPath = path.get(i + j);
-                    RealTimeCollisionTile nextInPathCollision = RealTimeCollisionTile.get(nextInPath.getX(), nextInPath.getY(), nextInPath.getPlane());
+                    RealTimeCollisionTile nextInPathCollision = RealTimeCollisionTile.get(nextInPath.getX(), nextInPath.getY(), nextInPath.floor());
                     if (nextInPathCollision != null && nextInPathCollision.isWalkable()){
-                        if (BFS.isReachable(current, nextInPathCollision, 150) && Projection.isInMinimap(nextInPathCollision.getTile())) {
+                        if (BFS.isReachable(current, nextInPathCollision, 150) && nextInPathCollision.getTile().matrix().onMap()) {
                             i += j-2;
                             continue outside;
                         }
@@ -73,17 +71,17 @@ public class PathAnalyzer {
                 if (next != null) {
                     return new DestinationDetails(PathState.OBJECT_BLOCKING, current, next);
                 }
-                return new DestinationDetails(PathState.OBJECT_BLOCKING, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
+                return new DestinationDetails(PathState.OBJECT_BLOCKING, current, nextNode.getX(), nextNode.getY(), nextNode.floor());
             }
-            if (!Projection.isInMinimap(new Tile(nextNode.getX(), nextNode.getY(), nextNode.getPlane()))){
+            if (!new Tile(nextNode.getX(), nextNode.getY(), nextNode.floor()).matrix().onMap()){
 //                System.out.println("Next node is not clickable.");
-//            if(new Tile(nextNode.getX(), nextNode.getY(), nextNode.getPlane()).isClickable()) {
+//            if(new Tile(nextNode.getX(), nextNode.getY(), nextNode.floor()).isClickable()) {
                 furthestReachable = current;
                 if (next != null) {
                     return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current, next);
                 }
                 return new DestinationDetails(
-                    PathState.FURTHEST_CLICKABLE_TILE, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
+                    PathState.FURTHEST_CLICKABLE_TILE, current, nextNode.getX(), nextNode.getY(), nextNode.floor());
             }
         }
 //        System.out.println("Reached end of furthestReachableTile method");
@@ -103,7 +101,7 @@ public class PathAnalyzer {
         outside:
         for (int i = path.indexOf(currentPosition.getTile()); i < path.size() && i >= 0; i++) {
             Tile currentNode = path.get(i);
-            RealTimeCollisionTile current = RealTimeCollisionTile.get(currentNode.getX(), currentNode.getY(), currentNode.getPlane());
+            RealTimeCollisionTile current = RealTimeCollisionTile.get(currentNode.getX(), currentNode.getY(), currentNode.floor());
             if (current == null){
                 return null;
             }
@@ -111,20 +109,20 @@ public class PathAnalyzer {
                 return new DestinationDetails(PathState.END_OF_PATH, current);
             }
             Tile nextNode = path.get(i + 1);
-            if(!isLoaded(nextNode) && nextNode.isOnScreen()){
+            if(!isLoaded(nextNode) && nextNode.matrix().inViewport()){
                 return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current);
             }
-            RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getX(), nextNode.getY(), nextNode.getPlane());
+            RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getX(), nextNode.getY(), nextNode.floor());
             Direction direction = directionTo(current.getTile(), nextNode);
             if (direction == Direction.UNKNOWN){
                 furthestReachable = current;
-                return new DestinationDetails(PathState.DISCONNECTED_PATH, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
+                return new DestinationDetails(PathState.DISCONNECTED_PATH, current, nextNode.getX(), nextNode.getY(), nextNode.floor());
             }
             if (!direction.confirmTileMovable(RealTimeCollisionTile.get(current.getX(), current.getY(), current.getZ()))){
 
                 for (int j = 1; j < 5 && j + i < path.size(); j++) {
                     Tile nextInPath = path.get(i + j);
-                    RealTimeCollisionTile nextInPathCollision = RealTimeCollisionTile.get(nextInPath.getX(), nextInPath.getY(), nextInPath.getPlane());
+                    RealTimeCollisionTile nextInPathCollision = RealTimeCollisionTile.get(nextInPath.getX(), nextInPath.getY(), nextInPath.floor());
                     if (nextInPathCollision != null && nextInPathCollision.isWalkable()){
                         if (BFS.isReachable(current, nextInPathCollision, 200)) {
                             i += j-2;
@@ -137,22 +135,22 @@ public class PathAnalyzer {
                 if (next != null) {
                     return new DestinationDetails(PathState.OBJECT_BLOCKING, current, next);
                 }
-                return new DestinationDetails(PathState.OBJECT_BLOCKING, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
+                return new DestinationDetails(PathState.OBJECT_BLOCKING, current, nextNode.getX(), nextNode.getY(), nextNode.floor());
             }
-            if (!new Tile(nextNode.getX(), nextNode.getY(), nextNode.getPlane()).getTile().matrix().inViewport(true)){
+            if (!new Tile(nextNode.getX(), nextNode.getY(), nextNode.floor()).tile().matrix().inViewport(true)){
                 furthestReachable = current;
                 if (next != null) {
                     return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current, next);
                 }
                 return new DestinationDetails(
-                    PathState.FURTHEST_CLICKABLE_TILE, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
+                    PathState.FURTHEST_CLICKABLE_TILE, current, nextNode.getX(), nextNode.getY(), nextNode.floor());
             }
         }
         return null;
     }
 
     public static Direction directionTo(Tile fromNode, Tile toNode){
-        if (fromNode.getPlane() != toNode.getPlane()){
+        if (fromNode.floor() != toNode.floor()){
             return Direction.UNKNOWN;
         }
         for (Direction direction : Direction.values()){
@@ -287,8 +285,7 @@ public class PathAnalyzer {
     }
 
     private static boolean isLoaded(Tile tile){
-        final Tile local = tile.toLocalTile();
-        return local.getX() >= 0 && local.getX() < 104 && local.getY() >= 0 && local.getY() < 104;
+        return tile.localX() >= 0 && tile.localX() < 104 && tile.localY() >= 0 && tile.localY() < 104;
     }
 
 }
