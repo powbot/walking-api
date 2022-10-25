@@ -3,7 +3,7 @@ package org.powbot.dax.api;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSPlayer;
+import org.tribot.api2007.types.Player;
 import org.powbot.dax.api.utils.DaxTrackerProperty;
 import org.powbot.dax.engine.Loggable;
 
@@ -145,7 +145,7 @@ public class DaxTracker implements Loggable {
     }
 
     private static void log(String propertyName, double value) {
-        RSPlayer player = Players.local();
+        Player player = Players.local();
         String accountName = player != null ? player.getName().replaceAll("[^a-zA-Z0-9]", " ") : null;
         DaxTrackerServerApi.getInstance().log(
                 General.getTRiBotUsername(),

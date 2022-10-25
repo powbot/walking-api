@@ -341,7 +341,7 @@ public class PathObjectHandler implements Loggable {
                     }
                     return Walking.blindWalkTo(path.get(targetTile));
                 case BRINE_RAT_CAVE_BOULDER:
-                    RSNPC boulder = InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll")));
+                    Npc boulder = InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll")));
                     if(InteractionHelper.click(boulder, "Roll")){
                         if(WaitFor.condition(12000,
                             () -> NPCs.find(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll"))).length == 0 ?

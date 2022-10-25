@@ -1,11 +1,11 @@
 package org.powbot.dax.engine.navigation;
 
 import org.powbot.api.Tile;
-import org.tribot.api.General;
-import org.tribot.api2007.*;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.*;
-import org.tribot.util.Sorting;
+import org.powbot.api.rt4.GameObject;
+import org.powbot.api.rt4.Npcs;
+import org.powbot.api.rt4.Players;
+import org.powbot.api.rt4.Varpbits;
+import org.powbot.dax.shared.helpers.Filters;
 import org.powbot.dax.shared.helpers.ItemHelper;
 import org.powbot.dax.shared.helpers.GameObjectHelper;
 import org.powbot.dax.shared.helpers.AccurateMouse;
@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static scripts.dax_api.walker_engine.navigation_utils.NavigationSpecialCase.SpecialLocation.*;
+import static org.powbot.dax.engine.navigation.NavigationSpecialCase.SpecialLocation.*;
 
 
 public class NavigationSpecialCase implements Loggable {
@@ -361,8 +361,8 @@ public class NavigationSpecialCase implements Loggable {
                 break;
 
             case WATERBIRTH:
-                String option = NPCs.find(Filters.NPCs.nameContains("Jarvald").and(Filters.NPCs.actionsContains(
-                		"Travel"))).length > 0 ? "Travel" : "Talk-to";
+                String option = Npcs.get(Filters.NPCs.nameContains("Jarvald").and(Filters.NPCs.actionsContains(
+                		"Travel"))).size() > 0 ? "Travel" : "Talk-to";
                 if (NPCInteraction.talkTo(Filters.NPCs.nameEquals("Jarvald"), new String[]{option}, new String[]{
                         "What Jarvald is doing.",
                         "Can I come?",
@@ -1004,7 +1004,7 @@ public class NavigationSpecialCase implements Loggable {
     }
     public static boolean handleZeahBoats(String locationOption){
         String travelOption = "Travel";
-        RSNPC[] npcs = NPCs.find("Veos","Captain Magoro");
+        Npc[] npcs = NPCs.find("Veos","Captain Magoro");
         if(npcs.length > 0){
             String[] actions = npcs[0].getActions();
             if(actions != null){
@@ -1097,7 +1097,7 @@ public class NavigationSpecialCase implements Loggable {
     }
 
     private static boolean handleFishingPlatform(){
-        RSNPC[] jeb = NPCs.find(Filters.NPCs.nameEquals("Jeb").and(Filters.NPCs.actionsEquals("Travel")));
+        Npc[] jeb = NPCs.find(Filters.NPCs.nameEquals("Jeb").and(Filters.NPCs.actionsEquals("Travel")));
         if(jeb.length > 0){
             return InteractionHelper.click(jeb[0],"Travel") &&
                     WaitFor.condition(20000, () -> NPCChat.getMessage() != null ?

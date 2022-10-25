@@ -1,18 +1,12 @@
 package org.powbot.dax.engine.interaction;
 
-import org.tribot.api.General;
-import org.tribot.api.input.Keyboard;
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.NPCChat;
-import org.tribot.api2007.NPCs;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.types.Actor;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.RSNPC;
-import org.tribot.api2007.types.RSPlayer;
-import org.powbot.dax.shared.helpers.InterfaceHelper;
+import org.powbot.api.Random;
+import org.powbot.api.rt4.*;
 import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.WaitFor;
+import org.powbot.dax.shared.helpers.General;
+import org.powbot.mobile.input.Keyboard;
+import org.powbot.util.TransientGetter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +47,7 @@ public class NPCInteraction implements Loggable {
      * @param replyAnswers
      * @return
      */
-    public static boolean talkTo(Predicate<RSNPC> rsnpcFilter, String[] talkOptions, String[] replyAnswers) {
+    public static boolean talkTo(Predicate<Npc> rsnpcFilter, String[] talkOptions, String[] replyAnswers) {
         if (!clickNpcAndWaitChat(rsnpcFilter, talkOptions)){
             return false;
         }
@@ -67,26 +61,26 @@ public class NPCInteraction implements Loggable {
      * @param options
      * @return
      */
-    public static boolean clickNpcAndWaitChat(Predicate<RSNPC> rsnpcFilter, String... options) {
+    public static boolean clickNpcAndWaitChat(Predicate<Npc> rsnpcFilter, String... options) {
         return clickNpc(rsnpcFilter, options) && waitForConversationWindow();
     }
 
-    public static boolean clickNpc(Predicate<RSNPC> rsnpcFilter, String... options) {
-        RSNPC[] rsnpcs = NPCs.findNearest(rsnpcFilter);
-        if (rsnpcs.length < 1) {
+    public static boolean clickNpc(Predicate<Npc> rsnpcFilter, String... options) {
+       List<Npc> rsnpcs = Npcs.stream().filter(rsnpcFilter).nearest().list();
+        if (rsnpcs.size() < 1) {
             getInstance().log("Cannot find NPC.");
             return false;
         }
 
-        RSNPC npc = rsnpcs[0];
+        Npc npc = rsnpcs.get(0);
         return InteractionHelper.click(npc, options);
     }
 
     public static boolean waitForConversationWindow(){
-        RSPlayer player = Players.local();
+        Player player = Players.local();
         Actor rsCharacter = null;
-        if (player != null){
-            rsCharacter = player.getInteractingCharacter();
+        if (player != Player.getNil()){
+            rsCharacter = player.interacting();
         }
         return WaitFor.condition(rsCharacter != null ? WaitFor.getMovementRandomSleep(rsCharacter) : 10000, () -> {
             if (isConversationWindowUp()) {
@@ -99,13 +93,13 @@ public class NPCInteraction implements Loggable {
     public static boolean isConversationWindowUp(){
         return Arrays.stream(ALL_WINDOWS).anyMatch(i -> {
             if(i == SINGLE_OPTION_DIALOGUE_WINDOW){
-                RSInterface iface = Interfaces.get(i, t -> {
-                    String txt = t.getText();
-                    return txt != null && txt.length() > 0 && t.getComponent().valid() && t.getComponent().visible();
-                });
-                return iface != null;
-            }
-           if(Interfaces.isInterfaceSubstantiated(i)){
+                Component curr = Widgets.widget(i).getComponents().stream().filter(t -> {
+                    String txt = t.text();
+                    return txt.length() > 0 && t.valid() && t.visible();
+                }).findFirst().orElse(null);
+                return curr != null;
+           }
+           if(Widgets.widget(i).valid()){
                System.out.println("Interface root: " + i + " is up.");
                return true;
            }
@@ -124,14 +118,14 @@ public class NPCInteraction implements Loggable {
                 continue;
             }
 
-            List<RSInterface> selectableOptions = getAllOptions(regex);
+            List<Component> selectableOptions = getAllOptions(regex);
             if (selectableOptions == null || selectableOptions.size() == 0){
                 WaitFor.milliseconds(100);
                 continue;
             }
 
-            General.sleep(Random.nextIntSD(350, 2250, 775, 350));
-            getInstance().log("Replying with option: " + selectableOptions.get(0).getText());
+            WaitFor.milliseconds(General.randomSD(350, 2250, 775, 350));
+            getInstance().log("Replying with option: " + selectableOptions.get(0).text());
 //            Keyboard.typeString(selectableOptions.get(0).getIndex() + "");
             selectableOptions.get(0).click();
             waitForNextOption();
@@ -154,25 +148,25 @@ public class NPCInteraction implements Loggable {
                 continue;
             }
 
-            List<RSInterface> selectableOptions = getAllOptions(options);
+            List<Component> selectableOptions = getAllOptions(options);
             if (selectableOptions == null || selectableOptions.size() == 0){
                 WaitFor.milliseconds(150);
                 continue;
             }
 
-            for (RSInterface selected : selectableOptions){
-                if(blackList.contains(selected.getText())){
+            for (Component selected : selectableOptions){
+                if(blackList.contains(selected.text())){
                     continue;
                 }
-                General.sleep(Random.nextIntSD(350, 2250, 775, 350));
-                getInstance().log("Replying with option: " + selected.getText());
-                blackList.add(selected.getText());
-                Keyboard.typeString(selected.getIndex() + "");
+                WaitFor.milliseconds(General.randomSD(350, 2250, 775, 350));
+                getInstance().log("Replying with option: " + selected.text());
+                blackList.add(selected.text());
+                Keyboard.INSTANCE.type(selected.index() + "");
                 waitForNextOption();
                 limit = 0;
                 break;
             }
-            General.sleep(20,40);
+            WaitFor.milliseconds(20,40);
         }
         if(limit > 50){
             getInstance().log("Reached conversation limit.");
@@ -183,13 +177,13 @@ public class NPCInteraction implements Loggable {
      *
      * @return Click here to continue conversation interface
      */
-    private static RSInterface getClickHereToContinue(){
-        List<RSInterface> list = getConversationDetails();
+    private static Component getClickHereToContinue(){
+        List<Component> list = getConversationDetails();
         if (list == null){
             return null;
         }
-        Optional<RSInterface> optional = list.stream().filter(rsInterface -> rsInterface.getText().equals("Tap here to continue")).findAny();
-        return optional.isPresent() ? optional.get() : null;
+        Optional<Component> optional = list.stream().filter(comp -> comp.text().equals("Tap here to continue")).findAny();
+        return optional.orElse(null);
     }
 
     /**
@@ -197,7 +191,7 @@ public class NPCInteraction implements Loggable {
      */
     private static void clickHereToContinue(){
         getInstance().log("Clicking continue.");
-        NPCChat.clickContinue(false);
+        Chat.clickContinue();
         waitForNextOption();
     }
 
@@ -205,9 +199,9 @@ public class NPCInteraction implements Loggable {
      * Waits for chat conversation text change.
      */
     private static void waitForNextOption(){
-        List<String> interfaces = getAllInterfaces().stream().map(RSInterface::getText).collect(Collectors.toList());
+        List<String> interfaces = getAllInterfaces().stream().map(Component::text).collect(Collectors.toList());
         WaitFor.condition(5000, () -> {
-            if (!interfaces.equals(getAllInterfaces().stream().map(RSInterface::getText).collect(Collectors.toList()))){
+            if (!interfaces.equals(getAllInterfaces().stream().map(Component::text).collect(Collectors.toList()))){
                return WaitFor.Return.SUCCESS;
             }
             return WaitFor.Return.IGNORE;
@@ -218,18 +212,18 @@ public class NPCInteraction implements Loggable {
      *
      * @return List of all reply-able interfaces that has valid text.
      */
-    private static List<RSInterface> getConversationDetails(){
+    private static List<Component> getConversationDetails(){
         for (int window : ALL_WINDOWS){
-            List<RSInterface> details = InterfaceHelper.getAllInterfaces(window).stream().filter(rsInterfaceChild -> {
-//                if (rsInterfaceChild.getTextureID() != -1) {
+            List<Component> details = Widgets.widget(window).getComponents().stream().filter(child -> {
+//                if (ComponentChild.getTextureID() != -1) {
 //                    return false;
 //                }
-                String text = rsInterfaceChild.getText();
-                return text != null && text.length() > 0;
+                String text = child.text();
+                return text.length() > 0 && child.valid();
             }).collect(Collectors.toList());
 //            System.out.println("Grabbing interfaces for window: " + window + ", list size: " + details.size());
             if (details.size() > 0) {
-                getInstance().log("Conversation Options: [" + details.stream().map(RSInterface::getText).collect(
+                getInstance().log("Conversation Options: [" + details.stream().map(Component::text).collect(
 		                Collectors.joining(", ")) + "]");
                 return details;
             }
@@ -241,10 +235,19 @@ public class NPCInteraction implements Loggable {
      *
      * @return List of all Chat interfaces
      */
-    private static List<RSInterface> getAllInterfaces(){
-        ArrayList<RSInterface> interfaces = new ArrayList<>();
+    private static List<Component> getAllInterfaces(){
+        ArrayList<Component> interfaces = new ArrayList<>();
         for (int window : ALL_WINDOWS) {
-            interfaces.addAll(InterfaceHelper.getAllInterfaces(window));
+            List<Component> components = Widgets.widget(window).getComponents();
+            for(Component child: components){
+                TransientGetter<Component> childrenOfChild = child.components();
+                if(childrenOfChild.isEmpty()){
+                    interfaces.add(child);
+                } else {
+                    interfaces.add(child);
+                    interfaces.addAll(List.of(childrenOfChild.clone()));
+                }
+            }
         }
         return interfaces;
     }
@@ -254,9 +257,9 @@ public class NPCInteraction implements Loggable {
      * @param regex
      * @return list of conversation clickable options that matches {@code regex}
      */
-    private static List<RSInterface> getAllOptions(String regex){
-        List<RSInterface> list = getConversationDetails();
-        return list != null ? list.stream().filter(rsInterface -> rsInterface.getText().matches(regex)).collect(
+    private static List<Component> getAllOptions(String regex){
+        List<Component> list = getConversationDetails();
+        return list != null ? list.stream().filter(Component -> Component.text().matches(regex)).collect(
 		        Collectors.toList()) : null;
     }
 
@@ -265,10 +268,10 @@ public class NPCInteraction implements Loggable {
      * @param options
      * @return list of conversation clickable options that is contained in options.
      */
-    private static List<RSInterface> getAllOptions(String... options){
+    private static List<Component> getAllOptions(String... options){
         final List<String> optionList = Arrays.stream(options).map(String::toLowerCase).collect(Collectors.toList());
-        List<RSInterface> list = getConversationDetails();
-        return list != null ? list.stream().filter(rsInterface -> optionList.contains(rsInterface.getText().trim().toLowerCase())).collect(
+        List<Component> list = getConversationDetails();
+        return list != null ? list.stream().filter(comp -> optionList.contains(comp.text().trim().toLowerCase())).collect(
 		        Collectors.toList()) : null;
     }
 
