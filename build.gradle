@@ -1,10 +1,11 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.5.32'
+    id 'maven-publish'
 }
 
 group 'org.powbot'
-version '1.0-SNAPSHOT'
+version '1.0.2-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -14,8 +15,8 @@ repositories {
 
 dependencies {
     compileOnly 'com.google.code.gson:gson:2.8.6'
-    compileOnly('org.powbot:client-sdk:1.0.6-SNAPSHOT')
-    implementation('com.google.guava:guava:31.1-jre')
+    compileOnly 'org.powbot:client-sdk:1.0.6-SNAPSHOT'
+    implementation 'com.google.guava:guava:31.1-jre'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
@@ -27,8 +28,46 @@ compileKotlin {
         jvmTarget = "1.8"
     }
 }
+
 compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+tasks.withType(PublishToMavenRepository) { task ->
+    dependsOn(jar)
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = "org.powbot"
+            artifactId = "walking-api"
+            version = "1.0.2-SNAPSHOT"
+
+            artifact("$buildDir/libs/pow-${version}.jar")
+
+            pom {
+                name = 'walking-api'
+                url = 'https://repo.repsy.io/mvn/const/pow'
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url = "https://repo.repsy.io/mvn/const/pow"
+            credentials {
+                username = System.getenv('REPSY_USER')
+                password = System.getenv('REPSY_PASSWORD')
+            }
+        }
+    }
+}
+
+generatePomFileForMavenJavaPublication { pom.packaging = "pom" }
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
