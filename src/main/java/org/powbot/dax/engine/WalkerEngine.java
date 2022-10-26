@@ -4,6 +4,8 @@ package org.powbot.dax.engine;
 import org.powbot.api.Point;
 import org.powbot.api.Random;
 import org.powbot.api.Tile;
+import org.powbot.api.rt4.Bank;
+import org.powbot.api.rt4.Game;
 import org.powbot.api.rt4.Players;
 import org.powbot.dax.shared.PathFindingNode;
 import org.powbot.dax.teleports.Teleport;
@@ -17,6 +19,7 @@ import org.powbot.dax.engine.navigation.NavigationSpecialCase;
 import org.powbot.dax.engine.navigation.ShipUtils;
 import org.powbot.dax.engine.collision.CollisionDataCollector;
 import org.powbot.dax.engine.collision.RealTimeCollisionTile;
+import org.powbot.mobile.script.ScriptManager;
 
 import java.util.List;
 
@@ -77,15 +80,15 @@ public class WalkerEngine implements Loggable{
 
             while (true) {
 
-                if(Context.isStopped()){
+                if(ScriptManager.INSTANCE.isStopping()){
                     return false;
                 }
-                if(Context.isPaused()){
+                if(ScriptManager.INSTANCE.isPaused()){
                     WaitFor.milliseconds(1000);
                     continue;
                 }
 
-                if (Login.getLoginState() != Login.STATE.INGAME){
+                if (!Game.loggedIn()){
                     log("We are not logged in.");
                     return false;
                 }
@@ -335,7 +338,7 @@ public class WalkerEngine implements Loggable{
         if(startPosition.equals(playerPosition))
             return true;
         if(Bank.opened())
-            Banking.close();
+            Bank.close();
         for (Teleport teleport : Teleport.values()) {
             if (!teleport.canUse()) continue;
             if(teleport.isAtTeleportSpot(startPosition) && !teleport.isAtTeleportSpot(playerPosition)){
