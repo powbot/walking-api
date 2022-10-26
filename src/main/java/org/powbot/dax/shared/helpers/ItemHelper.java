@@ -5,7 +5,6 @@ import org.powbot.api.Rectangle;
 import org.powbot.api.rt4.*;
 import org.powbot.dax.teleports.utils.ItemFilters;
 
-import java.awt.*;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;

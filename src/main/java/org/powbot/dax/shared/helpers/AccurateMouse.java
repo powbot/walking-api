@@ -7,7 +7,6 @@ import org.powbot.api.Rectangle;
 import org.powbot.api.rt4.*;
 import org.powbot.dax.engine.WaitFor;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
