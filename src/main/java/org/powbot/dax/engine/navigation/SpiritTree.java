@@ -1,16 +1,14 @@
 package org.powbot.dax.engine.navigation;
 
+import org.powbot.api.Random;
 import org.powbot.api.Tile;
+import org.powbot.api.rt4.Component;
+import org.powbot.api.rt4.Components;
+import org.powbot.api.rt4.Players;
 import org.powbot.api.rt4.Widgets;
-import org.tribot.api.General;
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.ext.Filters;
-import org.tribot.api2007.types.RSInterface;
-import org.tribot.api2007.types.Tile;
-import org.powbot.dax.shared.helpers.InterfaceHelper;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.InteractionHelper;
+import org.powbot.dax.shared.helpers.Filters;
 
 /**
  * Created by Me on 3/13/2017.
@@ -55,14 +53,11 @@ public class SpiritTree {
 
     public static boolean to(Location location){
         if (!Widgets.component(SPIRIT_TREE_MASTER_INTERFACE, 0).visible()
-                && !InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.actionsContains("Travel")), "Travel", () -> Interfaces.isInterfaceValid(SPIRIT_TREE_MASTER_INTERFACE) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
+                && !InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.actionsContains("Travel")), "Travel", () -> Components.stream(SPIRIT_TREE_MASTER_INTERFACE).anyMatch(Component::valid) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
             return false;
         }
 
-        RSInterface option = InterfaceHelper.getAllInterfaces(SPIRIT_TREE_MASTER_INTERFACE).stream().filter(rsInterface -> {
-            String text = rsInterface.getText();
-            return text != null && text.contains(location.getName());
-        }).findAny().orElse(null);
+        Component option = Components.stream(SPIRIT_TREE_MASTER_INTERFACE).text(location.getName()).findAny().orElse(null);
 
         if (option == null){
             return false;

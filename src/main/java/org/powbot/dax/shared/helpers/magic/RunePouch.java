@@ -2,9 +2,7 @@ package org.powbot.dax.shared.helpers.magic;
 
 import org.powbot.api.rt4.Inventory;
 import org.powbot.api.rt4.Varpbits;
-import org.tribot.api2007.Inventory;
-import org.tribot.api2007.WorldHopper;
-import org.powbot.dax.shared.helpers.VarbitHelper.RSVarBit;
+import org.powbot.api.rt4.Worlds;
 
 import java.util.Arrays;
 
@@ -52,7 +50,7 @@ public class RunePouch{
         }
 
         public int getQuantity(){
-            return RSVarBit.get(quantityVarbitIndex).getValue();
+            return Varpbits.value(quantityVarbitIndex);
         }
 
     }
@@ -74,7 +72,7 @@ public class RunePouch{
     }
 
     private static boolean hasPouch(){
-        return Inventory.stream().name("Rune pouch").isNotEmpty() && WorldHopper.isCurrentWorldMembers().orElse(false);
+        return Inventory.stream().name("Rune pouch").isNotEmpty() && Worlds.isCurrentWorldMembers();
     }
 
 

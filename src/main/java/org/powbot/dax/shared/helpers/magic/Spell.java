@@ -1,11 +1,7 @@
 package org.powbot.dax.shared.helpers.magic;
 
-import org.powbot.api.rt4.Equipment;
-import org.powbot.api.rt4.Inventory;
-import org.powbot.api.rt4.Item;
-import org.powbot.api.rt4.Varpbits;
-import org.tribot.api2007.*;
-import org.tribot.api2007.types.Item;
+import org.powbot.api.rt4.*;
+import org.powbot.api.rt4.walking.model.Skill;
 import org.powbot.dax.shared.Pair;
 
 import java.util.List;
@@ -14,30 +10,30 @@ import java.util.List;
 public enum Spell {
 
     VARROCK_TELEPORT    (
-	    SpellBook.Type.STANDARD, 25, "Varrock Teleport",    new Pair<>(1, RuneElement.LAW), new Pair<>(3, RuneElement.AIR),     new Pair<>(1, RuneElement.FIRE)),
+	    SpellBook.Type.STANDARD, 25, Magic.Spell.VARROCK_TELEPORT,    new Pair<>(1, RuneElement.LAW), new Pair<>(3, RuneElement.AIR),     new Pair<>(1, RuneElement.FIRE)),
     LUMBRIDGE_TELEPORT  (
-	    SpellBook.Type.STANDARD, 31, "Lumbridge Teleport",  new Pair<>(1, RuneElement.LAW), new Pair<>(3, RuneElement.AIR),     new Pair<>(1, RuneElement.EARTH)),
+	    SpellBook.Type.STANDARD, 31, Magic.Spell.LUMBRIDGE_TELEPORT,  new Pair<>(1, RuneElement.LAW), new Pair<>(3, RuneElement.AIR),     new Pair<>(1, RuneElement.EARTH)),
     FALADOR_TELEPORT    (
-	    SpellBook.Type.STANDARD, 37, "Falador Teleport",    new Pair<>(1, RuneElement.LAW), new Pair<>(3, RuneElement.AIR),     new Pair<>(1, RuneElement.WATER)),
+	    SpellBook.Type.STANDARD, 37, Magic.Spell.FALADOR_TELEPORT,    new Pair<>(1, RuneElement.LAW), new Pair<>(3, RuneElement.AIR),     new Pair<>(1, RuneElement.WATER)),
     CAMELOT_TELEPORT    (
-	    SpellBook.Type.STANDARD, 45, "Camelot Teleport",    new Pair<>(1, RuneElement.LAW), new Pair<>(5, RuneElement.AIR)),
+	    SpellBook.Type.STANDARD, 45, Magic.Spell.CAMELOT_TELEPORT,    new Pair<>(1, RuneElement.LAW), new Pair<>(5, RuneElement.AIR)),
     ARDOUGNE_TELEPORT   (
-	    SpellBook.Type.STANDARD, 51, "Ardougne Teleport",   new Pair<>(2, RuneElement.LAW), new Pair<>(2, RuneElement.WATER)),
+	    SpellBook.Type.STANDARD, 51, Magic.Spell.ARDOUGNE_TELEPORT,   new Pair<>(2, RuneElement.LAW), new Pair<>(2, RuneElement.WATER)),
     KOUREND_TELEPORT	(
-	    SpellBook.Type.STANDARD, 69, "Kourend Castle Teleport",new Pair<>(2, RuneElement.LAW), new Pair<>(2, RuneElement.SOUL),new Pair<>(4, RuneElement.WATER), new Pair<>(5, RuneElement.FIRE)),
+	    SpellBook.Type.STANDARD, 69, Magic.Spell.TELEPORT_KOUREND,new Pair<>(2, RuneElement.LAW), new Pair<>(2, RuneElement.SOUL),new Pair<>(4, RuneElement.WATER), new Pair<>(5, RuneElement.FIRE)),
     TELEPORT_TO_HOUSE   (
-        SpellBook.Type.STANDARD, 69, "Kourend Castle Teleport",new Pair<>(1, RuneElement.LAW), new Pair<>(1, RuneElement.AIR), new Pair<>(1, RuneElement.EARTH))
+        SpellBook.Type.STANDARD, 69, Magic.Spell.TELEPORT_TO_HOUSE,new Pair<>(1, RuneElement.LAW), new Pair<>(1, RuneElement.AIR), new Pair<>(1, RuneElement.EARTH))
     ;
 
-    private SpellBook.Type spellBookType;
-    private int requiredLevel;
-    private String spellName;
-    private Pair<Integer, RuneElement>[] recipe;
+    private final SpellBook.Type spellBookType;
+    private final int requiredLevel;
+    private final Magic.Spell spell;
+    private final Pair<Integer, RuneElement>[] recipe;
 
-    Spell(SpellBook.Type spellBookType, int level, String spellName, Pair<Integer, RuneElement>... recipe){
+    Spell(SpellBook.Type spellBookType, int level, Magic.Spell spellName, Pair<Integer, RuneElement>... recipe){
         this.spellBookType = spellBookType;
         this.requiredLevel = level;
-        this.spellName = spellName;
+        this.spell = spellName;
         this.recipe = recipe;
     }
 
@@ -45,12 +41,12 @@ public enum Spell {
         return recipe;
     }
 
-    public String getSpellName() {
-        return spellName;
+    public Magic.Spell getSpell() {
+        return spell;
     }
 
     public boolean cast() {
-        return canUse(Inventory.stream().list(), Equipment.stream().list()) && Magic.selectSpell(getSpellName());
+        return canUse(Inventory.stream().list(), Equipment.stream().list()) && spell.cast();
     }
 
     public boolean canUse(){
@@ -61,7 +57,7 @@ public enum Spell {
         if (SpellBook.getCurrentSpellBook() != spellBookType){
             return false;
         }
-        if (requiredLevel > Skills.SKILLS.MAGIC.getCurrentLevel()){
+        if (requiredLevel > Skills.level(Skill.Magic)){
             return false;
         }
         if (this == ARDOUGNE_TELEPORT && Varpbits.varpbit(165) < 30){

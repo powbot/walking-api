@@ -1,11 +1,11 @@
 package org.powbot.dax.shared.helpers;
 
 import org.powbot.api.*;
-import org.powbot.api.rt4.Component;
-import org.powbot.api.rt4.Players;
-import org.powbot.api.rt4.Widgets;
+import org.powbot.api.rt4.*;
+import org.powbot.dax.engine.WaitFor;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.BooleanSupplier;
 
 public class Grouping {
@@ -56,7 +56,6 @@ public class Grouping {
                 openMinigameTab();
             }
             if (!isSelected()) {
-                General.println("Selecting minigame: " + this.getName());
                 if (!selectMinigame(this.getName()))
                     return false;
             }
@@ -78,13 +77,13 @@ public class Grouping {
     }
 
     public static boolean isMinigameTabOpen(){ //Checks if Minigame Tab is open. Returns false if not.
-        return GameTab.TABS.CLAN.isOpen() && Interfaces.isInterfaceSubstantiated(MAIN_INTERFACE_ID);
+        return Game.tab() == Game.Tab.CLAN_CHAT && Widgets.widget(MAIN_INTERFACE_ID).valid();
     }
 
 //    public static boolean inMinigameChat(){ //CHECKS IF YOU ARE IN A MINIGAME CHAT. Returns false if not.
-//        RSInterface clan = Interfaces.get(clanInterfaceID);
+//        Component clan = Interfaces.get(clanInterfaceID);
 //        if (clan != null){
-//            for (RSInterface x : clan.getChildren()){
+//            for (Component x : clan.getChildren()){
 //                if (x != null && x.getText().contains("Osrs")){
 //                    return true;
 //                }
@@ -94,23 +93,24 @@ public class Grouping {
 //    }
 
     public static boolean openMinigameTab(){ //Opens the Minigame tab inside the Clan tab. Returns false if failed to open.
-        if (GameTab.getOpen() != GameTab.TABS.CLAN){
-            if(GameTab.TABS.CLAN.open()){
-                if(!Timing.waitCondition(GameTab.TABS.CLAN::isOpen, 1500))
+        if (Game.tab() != Game.Tab.CLAN_CHAT){
+            if(Game.tab(Game.Tab.CLAN_CHAT)){
+                if(WaitFor.condition(1500, () -> Game.tab() == Game.Tab.CLAN_CHAT ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)
+                 != WaitFor.Return.SUCCESS)
                     return false;
             }
         }
 
-//        RSInterface master = Interfaces.get(399);
+//        Component master = Interfaces.get(399);
 
 //        if (master != null){
         if(isMinigameTabOpen())
             return true;
-        RSInterface[] button = Entities.find(InterfaceEntity::new).inMaster(707).actionEquals("Grouping").getResults();
-        if(button.length == 0)
+        List<Component> button = Components.stream(707).action("Grouping").list();
+        if(button.size() == 0)
             return false;
-        if(Clicking.click(button[0]))
-            General.sleep(400,900);
+        if(button.get(0).click())
+            WaitFor.milliseconds(400,900);
         return isMinigameTabOpen();
 //        }
 
@@ -125,10 +125,10 @@ public class Grouping {
 //            openMinigameTab();
 //        }
 //
-//        RSInterface mini = Interfaces.get(mainInterfaceID);
+//        Component mini = Interfaces.get(mainInterfaceID);
 //
 //        if (mini!= null){
-//            RSInterface button = mini.getChild(26);
+//            Component button = mini.getChild(26);
 //            String text;
 //            if (button != null){
 //                if ((text = button.getText()) != null && text.contains("Leave")){
@@ -138,7 +138,7 @@ public class Grouping {
 //                return (Timing.waitCondition(new BooleanSupplier() {
 //                    @Override
 //                    public boolean getAsBoolean() {
-//                        General.sleep(350);
+//                        WaitFor.milliseconds(350);
 //                        return inMinigameChat();
 //                    }
 //                },3000));
@@ -153,22 +153,22 @@ public class Grouping {
             openMinigameTab();
         }
 
-        RSInterface button = Interfaces.get(MAIN_INTERFACE_ID, TELEPORT_BUTTON_INDEX);
+        Component button = Widgets.widget(MAIN_INTERFACE_ID).component(TELEPORT_BUTTON_INDEX);
 
-        if (button != null){
+        if (button != Component.Companion.getNil()){
 
             final Tile TILE = Players.local().tile();
             if (Clicking.click(button) && Timing.waitCondition( new BooleanSupplier() {
                 @Override
                 public boolean getAsBoolean() {
-                    General.sleep(350);
+                    WaitFor.milliseconds(350);
                     return Player.getAnimation() != -1;
                 }
             },4000))
                 return Timing.waitCondition(new BooleanSupplier() {
                     @Override
                     public boolean getAsBoolean() {
-                        General.sleep(350);
+                        WaitFor.milliseconds(350);
                         return Player.getPosition().distanceTo(TILE) > 10;
                     }
                 },20000);
@@ -179,7 +179,7 @@ public class Grouping {
 
     public static boolean isSelected(String name){
 
-        final RSInterface mini = Interfaces.get(MAIN_INTERFACE_ID, SELECTED_MINIGAME_INDEX);
+        final Component mini = Interfaces.get(MAIN_INTERFACE_ID, SELECTED_MINIGAME_INDEX);
         String minigame;
 
         return(mini != null
@@ -212,12 +212,12 @@ public class Grouping {
             minigamesBox = Widgets.component(MAIN_INTERFACE_ID, MINIGAMES_SELECTION_BOX_INDEX);
 
         }
-        RSInterface[] children;
+        Component[] children;
         if(minigamesBox == null || (children = minigamesBox.getChildren()) == null) {
             General.println("Unable to detect minigames children.");
             return false;
         }
-        RSInterface ourMinigame = Arrays.stream(children).filter(i -> {
+        Component ourMinigame = Arrays.stream(children).filter(i -> {
             String txt = i.getText();
             return txt != null && txt.toLowerCase().contains(name.toLowerCase());
         }).findFirst().orElse(null);
@@ -235,11 +235,11 @@ public class Grouping {
             if(Context.isStopped())
                 break;
             if(Context.isPaused()){
-                General.sleep(1000);
+                WaitFor.milliseconds(1000);
                 continue;
             }
 
-            RSInterface arrowDown = Entities.find(InterfaceEntity::new).inMasterAndChild(MAIN_INTERFACE_ID, 23).textureIdEquals(773).getFirstResult();
+            Component arrowDown = Entities.find(InterfaceEntity::new).inMasterAndChild(MAIN_INTERFACE_ID, 23).textureIdEquals(773).getFirstResult();
             if(arrowDown == null) {
                 General.println("Failed to find arrowDown button.");
                 return false;
@@ -259,7 +259,7 @@ public class Grouping {
                 General.println("Randomized start: " + randomizedStart + ", randomized end: " + randomizedEnd);
                 Input.drag(randomizedStart, randomizedEnd);
             }
-            General.sleep(400,800);
+            WaitFor.milliseconds(400,800);
 
 
             minigamesBox = Interfaces.get(MAIN_INTERFACE_ID, 22);
@@ -270,8 +270,9 @@ public class Grouping {
 
         }
 
-        if(isMinigameVisible(minigamePoint) && Clicking.click(ourMinigame)){
-            return Timing.waitCondition(() -> isSelected(name), 2500);
+        if(isMinigameVisible(minigamePoint) && ourMinigame.click()){
+            return WaitFor.condition(2500, () -> isSelected(name) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)
+                    == WaitFor.Return.SUCCESS;
         }
 
         return isSelected(name);
@@ -279,13 +280,12 @@ public class Grouping {
     }
 
     private static boolean isMinigameVisible(Point p){
-        General.println("Checking if point is visible: " + p);
         return p.getY() > 275 && p.getY() < 400;
     }
 
     public static boolean canMinigameTeleport(){
-        return WorldHopper.isCurrentWorldMembers().orElse(false) && !Player.getRSPlayer().isInCombat() &&
-                ((long) Game.getSetting(888) * 60 * 1000) + (20 * 60 * 1000) < Timing.currentTimeMillis();
+        return Worlds.isCurrentWorldMembers() && !Players.local().inCombat() &&
+                ((long) Varpbits.varpbit(888) * 60 * 1000) + (20 * 60 * 1000) < Timing.currentTimeMillis();
     }
 
 

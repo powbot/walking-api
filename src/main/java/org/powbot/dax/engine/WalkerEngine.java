@@ -5,9 +5,12 @@ import org.powbot.api.Point;
 import org.powbot.api.Random;
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.Bank;
+import org.powbot.api.rt4.Camera;
 import org.powbot.api.rt4.Game;
 import org.powbot.api.rt4.Players;
+import org.powbot.dax.engine.navigation.PathUtils;
 import org.powbot.dax.shared.PathFindingNode;
+import org.powbot.dax.shared.helpers.Projection;
 import org.powbot.dax.teleports.Teleport;
 import org.powbot.dax.shared.helpers.AccurateMouse;
 import org.powbot.dax.engine.bfs.BFS;
@@ -256,9 +259,9 @@ public class WalkerEngine implements Loggable{
 
     boolean isDestinationClose(PathFindingNode pathFindingNode){
         final Tile playerPosition = Players.local().tile();
-        return new Tile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()).isClickable()
+        return Projection.isInMinimap(new Tile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()))
             && playerPosition.distanceTo(new Tile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())) <= 12
-            && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.getPlane()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 250));
+            && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.floor()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 250));
     }
 
     public boolean clickMinimap(PathFindingNode pathFindingNode){
@@ -283,7 +286,7 @@ public class WalkerEngine implements Loggable{
             return;
         }
         Point point = Projection.tileToMinimap(new Tile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()));
-        Mouse.move(point);
+//        Mouse.move(point);
     }
 
     private boolean resetAttempts(){
@@ -296,11 +299,11 @@ public class WalkerEngine implements Loggable{
     }
 
     private void failedAttempt(){
-        if (Camera.getCameraAngle() < 90) {
-            Camera.setCameraAngle(Random.nextInt(90, 100));
+        if (Camera.pitch() < 90) {
+            Camera.pitch(Random.nextInt(90, 100));
         }
         if (++attemptsForAction > 1) {
-            Camera.setCameraRotation(Random.nextInt(0, 360));
+            Camera.angle(Random.nextInt(0, 360));
         }
         log("Failed attempt on action.");
         WaitFor.milliseconds(450 * (attemptsForAction + 1), 850 * (attemptsForAction + 1));
@@ -311,8 +314,8 @@ public class WalkerEngine implements Loggable{
         return attemptsForAction >= failThreshold;
     }
 
-    private class CustomConditionContainer {
-        private WalkingCondition walkingCondition;
+    private static class CustomConditionContainer {
+        private final WalkingCondition walkingCondition;
         private WalkingCondition.State result;
         CustomConditionContainer(WalkingCondition walkingCondition){
             this.walkingCondition = walkingCondition;
