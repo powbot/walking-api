@@ -48,10 +48,6 @@ public class DaxWalker implements Loggable {
         getInstance().globalWalkingCondition = walkingCondition;
     }
 
-    public static void setCredentials(DaxCredentialsProvider daxCredentialsProvider) {
-        WebWalkerServerApi.getInstance().setDaxCredentialsProvider(daxCredentialsProvider);
-    }
-
     public static boolean walkTo(Locatable positionable) {
         return walkTo(positionable, null);
     }

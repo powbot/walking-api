@@ -1,9 +1,8 @@
 package org.powbot.dax.api.utils;
 
 import com.google.gson.JsonObject;
-import org.powbot.dax.api.models.DaxCredentials;
-import org.powbot.dax.api.models.DaxCredentialsProvider;
 import org.powbot.dax.api.models.ServerResponse;
+import org.powbot.mobile.service.DaxProxyService;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -14,70 +13,23 @@ import java.util.stream.Collectors;
 
 public class IOHelper {
 
-    public static String readInputStream(InputStream inputStream) {
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            return bufferedReader.lines().collect(Collectors.joining());
-        } catch (IOException e) {
-            return null;
+    public static ServerResponse get(String endpoint) throws IOException {
+        String resp = DaxProxyService.INSTANCE.executeGetRequest(endpoint);
+        if (resp == null) {
+            return new ServerResponse(false, -1, null);
         }
+
+        return new ServerResponse(true, HttpURLConnection.HTTP_OK, resp);
     }
 
-    public static ServerResponse get(String endpoint, DaxCredentialsProvider daxCredentialsProvider) throws IOException {
-        URL myurl = new URL(endpoint);
-        HttpURLConnection connection = (HttpsURLConnection) myurl.openConnection();
-        connection.setDoOutput(true);
-        connection.setDoInput(true);
+    public static ServerResponse post(JsonObject jsonObject, String endpoint) throws IOException {
+        String resp = DaxProxyService.INSTANCE.executePostRequest(endpoint, jsonObject.toString());
 
-        connection.setRequestProperty("Method", "GET");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Accept", "application/json");
-
-        if (daxCredentialsProvider != null) {
-            appendAuth(connection, daxCredentialsProvider);
+        if (resp == null) {
+            return new ServerResponse(false, -1, null);
         }
 
-        int responseCode = connection.getResponseCode();
-        if (responseCode != HttpURLConnection.HTTP_OK) {
-            return new ServerResponse(false, connection.getResponseCode(), IOHelper.readInputStream(connection.getErrorStream()));
-        }
-
-        String contents = IOHelper.readInputStream(connection.getInputStream());
-        return new ServerResponse(true, HttpURLConnection.HTTP_OK, contents);
-    }
-
-    public static ServerResponse post(JsonObject jsonObject, String endpoint, DaxCredentialsProvider daxCredentialsProvider) throws IOException {
-        URL myurl = new URL(endpoint);
-        HttpURLConnection connection = (HttpsURLConnection) myurl.openConnection();
-        connection.setDoOutput(true);
-        connection.setDoInput(true);
-
-        connection.setRequestProperty("Method", "POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Accept", "application/json");
-
-        if (daxCredentialsProvider != null) {
-            appendAuth(connection, daxCredentialsProvider);
-        }
-
-        try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
-            outputStream.write(jsonObject.toString().getBytes(StandardCharsets.UTF_8));
-        }
-
-        int responseCode = connection.getResponseCode();
-        if (responseCode != HttpURLConnection.HTTP_OK) {
-            return new ServerResponse(false, connection.getResponseCode(), IOHelper.readInputStream(connection.getErrorStream()));
-        }
-
-        String contents = IOHelper.readInputStream(connection.getInputStream());
-        return new ServerResponse(true, HttpURLConnection.HTTP_OK, contents);
-    }
-
-    public static void appendAuth(HttpURLConnection connection, DaxCredentialsProvider daxCredentialsProvider) {
-        if (daxCredentialsProvider != null && daxCredentialsProvider.getDaxCredentials() != null) {
-            DaxCredentials daxCredentials = daxCredentialsProvider.getDaxCredentials();
-            connection.setRequestProperty("key", daxCredentials.getApiKey());
-            connection.setRequestProperty("secret", daxCredentials.getSecretKey());
-        }
+        return new ServerResponse(true, HttpURLConnection.HTTP_OK, resp);
     }
 
 }

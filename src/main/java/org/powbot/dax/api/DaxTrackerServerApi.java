@@ -22,14 +22,8 @@ public class DaxTrackerServerApi implements Loggable {
     private static final String TRACKER_ENDPOINT = "https://api.dax.cloud";
 
 
-    private DaxCredentialsProvider daxCredentialsProvider;
-
     private DaxTrackerServerApi() {
 
-    }
-
-    public void setDaxCredentialsProvider(DaxCredentialsProvider daxCredentialsProvider) {
-        this.daxCredentialsProvider = daxCredentialsProvider;
     }
 
     public ListSearch sourcesOnline(String propertyName, String user, Period period) {
@@ -39,8 +33,7 @@ public class DaxTrackerServerApi implements Loggable {
             serverResponse = IOHelper.get(
                     TRACKER_ENDPOINT + "/tracker/sources/online?propertyName=" + escaper.escape(propertyName)
                             + "&user=" + escaper.escape(user)
-                            + (period != null ? "&period=" + period : ""),
-                    daxCredentialsProvider
+                            + (period != null ? "&period=" + period : "")
             );
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,8 +55,7 @@ public class DaxTrackerServerApi implements Loggable {
             serverResponse = IOHelper.get(
                     TRACKER_ENDPOINT + "/tracker/users/online?"
                             + (propertyName != null ? "&propertyName=" + escaper.escape(propertyName) : "")
-                            + (period != null ? "&period=" + period : ""),
-                    daxCredentialsProvider
+                            + (period != null ? "&period=" + period : "")
             );
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,8 +77,7 @@ public class DaxTrackerServerApi implements Loggable {
             serverResponse = IOHelper.get(
                     TRACKER_ENDPOINT + "/tracker/sources/top?propertyName=" + escaper.escape(propertyName)
                             + "&user=" + user
-                            + (period != null ? "&period=" + period : ""),
-                    daxCredentialsProvider
+                            + (period != null ? "&period=" + period : "")
             );
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,8 +98,7 @@ public class DaxTrackerServerApi implements Loggable {
         try {
             serverResponse = IOHelper.get(
                     TRACKER_ENDPOINT + "/tracker/users/top?propertyName=" + escaper.escape(propertyName)
-                            + (period != null ? "&period=" + period : ""),
-                    daxCredentialsProvider
+                            + (period != null ? "&period=" + period : "")
             );
         } catch (IOException e) {
             e.printStackTrace();
@@ -130,8 +120,7 @@ public class DaxTrackerServerApi implements Loggable {
             serverResponse = IOHelper.get(
                     TRACKER_ENDPOINT + "/tracker/data?user=" + escaper.escape(user)
                             + "&propertyName=" + escaper.escape(propertyName)
-                            + (source != null ? "&source=" + escaper.escape(source) : ""),
-                    daxCredentialsProvider
+                            + (source != null ? "&source=" + escaper.escape(source) : "")
             );
         } catch (IOException e) {
             return null;
@@ -150,8 +139,7 @@ public class DaxTrackerServerApi implements Loggable {
         try {
             serverResponse = IOHelper.post(
                     new JsonParser().parse(new Gson().toJson(new DataLogRequest(user, source, propertyName, value))).getAsJsonObject(),
-                    TRACKER_ENDPOINT + "/tracker/data",
-                    daxCredentialsProvider
+                    TRACKER_ENDPOINT + "/tracker/data"
             );
         } catch (IOException e) {
             return null;

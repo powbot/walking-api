@@ -11,6 +11,7 @@ import org.powbot.dax.api.json.ParseException;
 import org.powbot.dax.api.models.*;
 import org.powbot.dax.api.utils.IOHelper;
 import org.powbot.dax.engine.Loggable;
+import org.powbot.mobile.service.DaxProxyService;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.DataOutputStream;
@@ -39,16 +40,11 @@ public class WebWalkerServerApi implements Loggable {
             GENERATE_BANK_PATH = "/walker/generateBankPath";
 
 
-    private DaxCredentialsProvider daxCredentialsProvider;
     private HashMap<String, String> cache;
     private boolean isTestMode;
 
     private WebWalkerServerApi() {
         cache = new HashMap<>();
-    }
-
-    public void setDaxCredentialsProvider(DaxCredentialsProvider daxCredentialsProvider) {
-        this.daxCredentialsProvider = daxCredentialsProvider;
     }
 
     public List<PathResult> getPaths(BulkPathRequest bulkPathRequest) {
@@ -200,34 +196,15 @@ public class WebWalkerServerApi implements Loggable {
             return new ServerResponse(true, HttpURLConnection.HTTP_OK, cache.get(json.toString()));
         }
 
-        URL myurl = new URL(endpoint);
-        HttpURLConnection connection = (isTestMode ? (HttpURLConnection) myurl.openConnection() : (HttpsURLConnection) myurl.openConnection());
-        connection.setDoOutput(true);
-        connection.setDoInput(true);
+       String resp = DaxProxyService.INSTANCE.executePostRequest(endpoint, json);
 
-        connection.setRequestProperty("Method", "POST");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Accept", "application/json");
-
-        connection.setReadTimeout(5000);
-        connection.setConnectTimeout(5000);
-
-        IOHelper.appendAuth(connection, daxCredentialsProvider);
-
-        try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
-            outputStream.write(json.getBytes(StandardCharsets.UTF_8));
+        if (resp == null) {
+            return new ServerResponse(false, -1, null);
         }
 
-        int responseCode = connection.getResponseCode();
-        log("Response code: " + responseCode);
-        if (responseCode != HttpURLConnection.HTTP_OK) {
-            return new ServerResponse(false, connection.getResponseCode(), IOHelper.readInputStream(connection.getErrorStream()));
-        }
+        cache.put(json, resp);
 
-        String contents = IOHelper.readInputStream(connection.getInputStream());
-        cache.put(json, contents);
-
-        return new ServerResponse(true, HttpURLConnection.HTTP_OK, contents);
+        return new ServerResponse(true, HttpURLConnection.HTTP_OK, resp);
     }
 
 
