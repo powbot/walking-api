@@ -3,6 +3,7 @@ package org.powbot.dax.shared.helpers;
 import org.powbot.api.*;
 import org.powbot.api.rt4.*;
 import org.powbot.dax.engine.WaitFor;
+import org.powbot.mobile.script.ScriptManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -155,23 +156,12 @@ public class Grouping {
 
         Component button = Widgets.widget(MAIN_INTERFACE_ID).component(TELEPORT_BUTTON_INDEX);
 
-        if (button != Component.Companion.getNil()){
+        if (button.valid()){
 
             final Tile TILE = Players.local().tile();
-            if (Clicking.click(button) && Timing.waitCondition( new BooleanSupplier() {
-                @Override
-                public boolean getAsBoolean() {
-                    WaitFor.milliseconds(350);
-                    return Player.getAnimation() != -1;
-                }
-            },4000))
-                return Timing.waitCondition(new BooleanSupplier() {
-                    @Override
-                    public boolean getAsBoolean() {
-                        WaitFor.milliseconds(350);
-                        return Player.getPosition().distanceTo(TILE) > 10;
-                    }
-                },20000);
+            if (button.click() && Condition.wait(() -> Players.local().animation() != -1, 200, 20)) {
+                return Condition.wait(() -> TILE.distance() > 10, 2000, 10);
+            }
         }
 
         return false;
@@ -179,17 +169,16 @@ public class Grouping {
 
     public static boolean isSelected(String name){
 
-        final Component mini = Interfaces.get(MAIN_INTERFACE_ID, SELECTED_MINIGAME_INDEX);
-        String minigame;
+        final Component mini = Widgets.component(MAIN_INTERFACE_ID, SELECTED_MINIGAME_INDEX);
+        String minigame = mini.text();
 
-        return(mini != null
-                && (minigame = mini.getText()) != null && minigame.toLowerCase().contains(name.toLowerCase()));
+        return(mini.valid() && minigame.toLowerCase().contains(name.toLowerCase()));
     }
 
     private static boolean selectMinigame(String name){
 
         if(!isMinigameTabOpen() && !openMinigameTab()) {
-            General.println("failed to open minigame tab.");
+            System.out.println("failed to open minigame tab.");
             return false;
         }
 
@@ -212,61 +201,62 @@ public class Grouping {
             minigamesBox = Widgets.component(MAIN_INTERFACE_ID, MINIGAMES_SELECTION_BOX_INDEX);
 
         }
-        Component[] children;
-        if(minigamesBox == null || (children = minigamesBox.getChildren()) == null) {
-            General.println("Unable to detect minigames children.");
+
+        if(!minigamesBox.valid()) {
+            System.out.println("Unable to detect minigames children.");
             return false;
         }
-        Component ourMinigame = Arrays.stream(children).filter(i -> {
-            String txt = i.getText();
-            return txt != null && txt.toLowerCase().contains(name.toLowerCase());
+
+        Component ourMinigame = Arrays.stream(minigamesBox.components().clone()).filter(i -> {
+            String txt = i.text();
+            return txt.toLowerCase().contains(name.toLowerCase());
         }).findFirst().orElse(null);
 
-        Rectangle rec = minigamesBox.getAbsoluteBounds();
-        Point minigamePoint = ourMinigame != null ? ourMinigame.getHumanHoverPoint() : null;
+        Rectangle rec = minigamesBox.boundingRect();
+        Point minigamePoint = ourMinigame != null ? ourMinigame.nextPoint() : null;
 
         if(minigamePoint == null) {
-            General.println("Our clicking point for the minigame is null.");
+            System.out.println("Our clicking point for the minigame is null.");
             return false;
         }
 
         long timeout = Timing.currentTimeMillis() + 10000;
         while (!isMinigameVisible(minigamePoint) && Timing.currentTimeMillis() < timeout) {
-            if(Context.isStopped())
+            if(ScriptManager.INSTANCE.isStopping())
                 break;
-            if(Context.isPaused()){
+            if(ScriptManager.INSTANCE.isPaused()) {
                 WaitFor.milliseconds(1000);
                 continue;
             }
 
-            Component arrowDown = Entities.find(InterfaceEntity::new).inMasterAndChild(MAIN_INTERFACE_ID, 23).textureIdEquals(773).getFirstResult();
-            if(arrowDown == null) {
-                General.println("Failed to find arrowDown button.");
+            Component arrowDown = Components.stream(MAIN_INTERFACE_ID, 23).texture(773).first();
+            if(!arrowDown.valid()) {
+                System.out.println("Failed to find arrowDown button.");
                 return false;
             }
-            Point scroll = arrowDown.getAbsolutePosition();
+            Point scroll = arrowDown.screenPoint();
 
             if(minigamePoint.getY() < rec.getY()){//scroll up
-                General.println("Scrolling up");
-                Point randomizedStart = new Point(scroll.getX() - Random.nextIntSD(2, 30, 10, 5), scroll.getY() + Random.nextIntSD(10, 150, 80, 40) );
-                Point randomizedEnd = new Point(randomizedStart.getX() + Random.nextInt(-5, 5), randomizedStart.getY() + Random.nextIntSD(30, 120, 60, 30));
-                General.println("Randomized start: " + randomizedStart + ", randomized end: " + randomizedEnd);
+                System.out.println("Scrolling up");
+                Point randomizedStart = new Point(scroll.getX() - Random.nextGaussian(2, 30, 10, 5), scroll.getY() + Random.nextGaussian(10, 150, 80, 40) );
+                Point randomizedEnd = new Point(randomizedStart.getX() + Random.nextInt(-5, 5), randomizedStart.getY() + Random.nextGaussian(30, 120, 60, 30));
+                System.out.println("Randomized start: " + randomizedStart + ", randomized end: " + randomizedEnd);
                 Input.drag(randomizedStart, randomizedEnd);
             } else {
-                General.println("Scrolling down");
-                Point randomizedStart = new Point(scroll.getX() - Random.nextIntSD(2, 30, 10, 5), scroll.getY() + Random.nextIntSD(2, 40, 15, 20) );
-                Point randomizedEnd = new Point(randomizedStart.getX() - Random.nextInt(-5, 5), randomizedStart.getY() - Random.nextIntSD(30, 120, 60, 30));
-                General.println("Randomized start: " + randomizedStart + ", randomized end: " + randomizedEnd);
+                System.out.println("Scrolling down");
+                Point randomizedStart = new Point(scroll.getX() - Random.nextGaussian(2, 30, 10, 5), scroll.getY() + Random.nextGaussian(2, 40, 15, 20) );
+                Point randomizedEnd = new Point(randomizedStart.getX() - Random.nextInt(-5, 5), randomizedStart.getY() - Random.nextGaussian(30, 120, 60, 30));
+                System.out.println("Randomized start: " + randomizedStart + ", randomized end: " + randomizedEnd);
                 Input.drag(randomizedStart, randomizedEnd);
             }
             WaitFor.milliseconds(400,800);
 
 
-            minigamesBox = Interfaces.get(MAIN_INTERFACE_ID, 22);
-            if(minigamesBox == null || minigamesBox.getChildren() == null)
+            minigamesBox = Widgets.component(MAIN_INTERFACE_ID, 22);
+            if(!minigamesBox.valid() || minigamesBox.components().isEmpty())
                 break;
-            rec = minigamesBox.getAbsoluteBounds();
-            minigamePoint = ourMinigame.getHumanHoverPoint();
+            rec = minigamesBox.boundingRect();
+            minigamePoint = ourMinigame.nextPoint();
 
         }
 
