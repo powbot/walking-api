@@ -14,8 +14,7 @@ repositories {
 
 dependencies {
     compileOnly 'com.google.code.gson:gson:2.8.6'
-    implementation('org.powbot:client-sdk:1.0.6-SNAPSHOT')
-    implementation('org.powbot:client-sdk-loader:1.0.6-SNAPSHOT')
+    compileOnly('org.powbot:client-sdk:1.0.6-SNAPSHOT')
     implementation('com.google.guava:guava:31.1-jre')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
