@@ -872,7 +872,6 @@ public enum Teleport {
 
 	public boolean canUse(List<Item> inventory, List<Item> equipment){
 		boolean canUse = getRequirement().satisfies(inventory, equipment);
-		System.out.println("[TELEPORTS] " + this + " is available: " + canUse);
 		return canUse;
 	}
 

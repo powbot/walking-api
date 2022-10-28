@@ -8,12 +8,12 @@ import org.powbot.api.rt4.walking.model.Skill;
 import org.powbot.dax.shared.helpers.Filters;
 import org.powbot.dax.shared.helpers.ItemHelper;
 import org.powbot.dax.shared.helpers.GameObjectHelper;
+import org.powbot.dax.engine.navigation.fairyring.FairyRing;
 import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.DoomsToggle;
 import org.powbot.dax.engine.interaction.InteractionHelper;
 import org.powbot.dax.engine.interaction.NPCInteraction;
-import org.powbot.dax.engine.navigation.fairyring.FairyRing;
 
 import java.util.Arrays;
 import java.util.List;
