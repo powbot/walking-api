@@ -6,7 +6,6 @@ import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.shared.helpers.General;
 import org.powbot.mobile.input.Keyboard;
-import org.powbot.util.TransientGetter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -217,14 +216,7 @@ public class NPCInteraction implements Loggable {
      */
     private static List<Component> getConversationDetails(){
         for (int window : ALL_WINDOWS){
-            List<Component> details = Widgets.widget(window).getComponents().stream().filter(child -> {
-//                if (ComponentChild.getTextureID() != -1) {
-//                    return false;
-//                }
-                String text = child.text();
-                return text.length() > 0 && child.valid();
-            }).collect(Collectors.toList());
-//            System.out.println("Grabbing interfaces for window: " + window + ", list size: " + details.size());
+            List<Component> details = Components.stream(window).filter(c -> c.text().length() > 0 && c.valid()).list();
             if (details.size() > 0) {
                 getInstance().log("Conversation Options: [" + details.stream().map(Component::text).collect(
 		                Collectors.joining(", ")) + "]");
@@ -254,7 +246,7 @@ public class NPCInteraction implements Loggable {
      */
     private static List<Component> getAllOptions(String regex){
         List<Component> list = getConversationDetails();
-        return list != null ? list.stream().filter(Component -> Component.text().matches(regex)).collect(
+        return list != null ? list.stream().filter(c -> c.text().matches(regex)).collect(
 		        Collectors.toList()) : null;
     }
 

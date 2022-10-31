@@ -2,8 +2,6 @@ package org.powbot.dax.shared.helpers;
 
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.BooleanSupplier;
 
 public class Timing {
 

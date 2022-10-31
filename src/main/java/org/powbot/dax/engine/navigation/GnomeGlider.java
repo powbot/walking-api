@@ -5,7 +5,6 @@ import org.powbot.api.Random;
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 

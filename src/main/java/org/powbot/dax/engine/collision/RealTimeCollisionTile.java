@@ -1,5 +1,6 @@
 package org.powbot.dax.engine.collision;
 
+import org.powbot.api.Tile;
 import org.powbot.dax.shared.PathFindingNode;
 import org.powbot.dax.shared.RSRegion;
 
@@ -17,6 +18,10 @@ public class RealTimeCollisionTile extends PathFindingNode {
         this.y = y;
         this.z = z;
         this.collisionData = collisionData;
+    }
+
+    public int getCollisionData() {
+        return collisionData;
     }
 
     public void setCollisionData(int collisionData) {
@@ -64,8 +69,6 @@ public class RealTimeCollisionTile extends PathFindingNode {
     }
 
     public static boolean isWalkable(int collisionData){
-//        if(!isInitialized(collisionData))
-//            return true;
         return !(CollisionFlags.check(collisionData, CollisionFlags.OCCUPIED)
                 || CollisionFlags.check(collisionData, CollisionFlags.SOLID)
                 || CollisionFlags.check(collisionData, CollisionFlags.BLOCKED)
@@ -73,11 +76,8 @@ public class RealTimeCollisionTile extends PathFindingNode {
     }
 
     public static boolean isInitialized(int collisionData){
-//        System.out.println("Collision data: " + collisionData + ", blockedNorth: " + blockedNorth(collisionData) + ", blockedEast: " + blockedEast(collisionData) + ", blockedSouth: " + blockedSouth(collisionData) + ", blockedWest: " + blockedWest(collisionData) + ", isWalkable: " + isWalkable(collisionData
-//        ) + ", initialized: " + !CollisionFlags
-//                .check(collisionData, CollisionFlags.INITIALIZED));
-        return !(blockedNorth(collisionData) && blockedEast(collisionData) && blockedSouth(collisionData) && blockedWest(collisionData) && !isWalkable(collisionData)) || !CollisionFlags
-	        .check(collisionData, CollisionFlags.INITIALIZED);
+        return !(blockedNorth(collisionData) && blockedEast(collisionData) &&
+                blockedSouth(collisionData) && blockedWest(collisionData) && !isWalkable(collisionData)) || !CollisionFlags.check(collisionData, CollisionFlags.INITIALIZED);
     }
 
     @Override
@@ -208,4 +208,9 @@ public class RealTimeCollisionTile extends PathFindingNode {
         allCached = new HashSet<>();
     }
 
+    @Override
+    public String toString(){
+        Tile t = getTile();
+        return "[(" + x  + "," + t.localX() + "), (" + y  + "," + t.localY() + "), " + z + ", " + collisionData + "]";
+    }
 }

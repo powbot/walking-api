@@ -6,6 +6,8 @@ import org.powbot.api.Tile;
 import org.powbot.api.rt4.*;
 import org.powbot.api.rt4.walking.model.Skill;
 import org.powbot.dax.api.models.Requirement;
+import org.powbot.dax.engine.WaitFor;
+import org.powbot.dax.engine.interaction.NPCInteraction;
 import org.powbot.dax.shared.helpers.Grouping;
 import org.powbot.dax.shared.helpers.ItemHelper;
 import org.powbot.dax.shared.helpers.magic.Spell;
@@ -14,10 +16,7 @@ import org.powbot.dax.teleports.utils.ItemFilters;
 import org.powbot.dax.teleports.utils.TeleportConstants;
 import org.powbot.dax.teleports.utils.TeleportLimit;
 import org.powbot.dax.teleports.utils.TeleportScrolls;
-import org.powbot.dax.engine.WaitFor;
-import org.powbot.dax.engine.interaction.NPCInteraction;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
@@ -28,7 +27,7 @@ public enum Teleport {
 	VARROCK_TELEPORT(
 			35, new Tile(3212, 3424, 0),
 			Spell.VARROCK_TELEPORT::canUse,
-			() -> selectSpell(org.powbot.api.rt4.Magic.Spell.VARROCK_TELEPORT,"Cast"),
+			() -> selectSpell(Magic.Spell.VARROCK_TELEPORT,"Cast"),
 			false
 	),
 
@@ -41,13 +40,13 @@ public enum Teleport {
 	VARROCK_TELEPORT_GRAND_EXCHANGE(
 			35, new Tile(3161, 3478, 0),
 			(i1, i2) -> Spell.VARROCK_TELEPORT.canUse(i1, i2) && TeleportConstants.isVarrockTeleportAtGE(),
-			() -> selectSpell(org.powbot.api.rt4.Magic.Spell.VARROCK_TELEPORT,"Grand Exchange")
+			() -> selectSpell(Magic.Spell.VARROCK_TELEPORT,"Grand Exchange")
 	),
 
 	LUMBRIDGE_TELEPORT(
 			35, new Tile(3225, 3219, 0),
 			Spell.LUMBRIDGE_TELEPORT::canUse,
-			() -> selectSpell(org.powbot.api.rt4.Magic.Spell.LUMBRIDGE_TELEPORT,"Cast"),
+			() -> selectSpell(Magic.Spell.LUMBRIDGE_TELEPORT,"Cast"),
 			false
 	),
 
@@ -60,7 +59,7 @@ public enum Teleport {
 	FALADOR_TELEPORT(
 			35, new Tile(2966, 3379, 0),
 			Spell.FALADOR_TELEPORT::canUse,
-			() -> selectSpell(org.powbot.api.rt4.Magic.Spell.FALADOR_TELEPORT,"Cast"),
+			() -> selectSpell(Magic.Spell.FALADOR_TELEPORT,"Cast"),
 			false
 	),
 
@@ -73,7 +72,7 @@ public enum Teleport {
 	CAMELOT_TELEPORT(
 			35, new Tile(2757, 3479, 0),
 			Spell.CAMELOT_TELEPORT::canUse,
-			() -> selectSpell(org.powbot.api.rt4.Magic.Spell.CAMELOT_TELEPORT,"Cast")
+			() -> selectSpell(Magic.Spell.CAMELOT_TELEPORT,"Cast")
 
 	),
 
@@ -86,13 +85,13 @@ public enum Teleport {
 	SEERS_TELEPORT(
 			35, new Tile(2757, 3479, 0),
 			(i1, i2) -> Spell.CAMELOT_TELEPORT.canUse(i1, i2) && Varpbits.value(4560) == 1,
-			() -> selectSpell(org.powbot.api.rt4.Magic.Spell.CAMELOT_TELEPORT,"Seers'")
+			() -> selectSpell(Magic.Spell.CAMELOT_TELEPORT,"Seers'")
 	),
 
 	ARDOUGNE_TELEPORT(
 			35, new Tile(2661, 3300, 0),
 			Spell.ARDOUGNE_TELEPORT::canUse,
-			() -> selectSpell(org.powbot.api.rt4.Magic.Spell.ARDOUGNE_TELEPORT,"Cast")
+			() -> selectSpell(Magic.Spell.ARDOUGNE_TELEPORT,"Cast")
 
 	),
 
@@ -730,7 +729,7 @@ public enum Teleport {
 			(i1, i2) -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.STANDARD,
 			() -> {
 				final Tile myPos = Players.local().tile();
-				return selectSpell(org.powbot.api.rt4.Magic.Spell.HOME_TELEPORT, "Cast") && Condition.wait(() ->  !Players.local().inCombat() &&
+				return selectSpell(Magic.Spell.HOME_TELEPORT, "Cast") && Condition.wait(() ->  !Players.local().inCombat() &&
 						!Players.local().tile().equals(myPos), 1500, 10);
 			},
 			false
@@ -872,6 +871,7 @@ public enum Teleport {
 
 	public boolean canUse(List<Item> inventory, List<Item> equipment){
 		boolean canUse = getRequirement().satisfies(inventory, equipment);
+		System.out.println("[TELEPORTS] " + this + " is available: " + canUse);
 		return canUse;
 	}
 
@@ -898,7 +898,7 @@ public enum Teleport {
 				.collect(Collectors.toList());
 	}
 
-	private interface Action {
+	public interface Action {
 		boolean trigger();
 	}
 
@@ -936,7 +936,7 @@ public enum Teleport {
 		return false;
 	}
 
-	private static boolean selectSpell(org.powbot.api.rt4.Magic.Spell spell, String action){
+	private static boolean selectSpell(Magic.Spell spell, String action){
 		if(!Game.tab(Game.Tab.MAGIC)){
 			return false;
 		}

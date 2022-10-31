@@ -4,7 +4,6 @@ import org.powbot.api.Condition;
 import org.powbot.api.Random;
 import org.powbot.api.rt4.Component;
 import org.powbot.api.rt4.Varpbits;
-import org.powbot.api.rt4.Widget;
 import org.powbot.api.rt4.Widgets;
 import org.powbot.dax.engine.navigation.fairyring.FairyRing;
 

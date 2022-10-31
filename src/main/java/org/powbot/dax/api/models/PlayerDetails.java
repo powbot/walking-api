@@ -2,7 +2,10 @@ package org.powbot.dax.api.models;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import org.powbot.api.rt4.*;
+import org.powbot.api.rt4.Item;
+import org.powbot.api.rt4.Skills;
+import org.powbot.api.rt4.Varpbits;
+import org.powbot.api.rt4.Worlds;
 import org.powbot.api.rt4.walking.model.Skill;
 
 import java.util.Arrays;

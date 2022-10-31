@@ -2,10 +2,11 @@ package org.powbot.dax.engine.local;
 
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.Players;
-import org.powbot.dax.shared.PathFindingNode;
 import org.powbot.dax.engine.bfs.BFS;
 import org.powbot.dax.engine.collision.CollisionDataCollector;
+import org.powbot.dax.engine.collision.CollisionFlags;
 import org.powbot.dax.engine.collision.RealTimeCollisionTile;
+import org.powbot.dax.shared.PathFindingNode;
 
 import java.util.List;
 
@@ -44,11 +45,11 @@ public class PathAnalyzer {
                 return new DestinationDetails(PathState.END_OF_PATH, current);
             }
             Tile nextNode = path.get(i + 1);
-            if(!isLoaded(nextNode) && nextNode.matrix().onMap()){
+            RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getX(), nextNode.getY(), nextNode.floor());
+            if(next != null && !isLoaded(next) && nextNode.matrix().onMap()){
 //                System.out.println("Next node is not loaded and is on screen.");
                 return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current);
             }
-            RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getX(), nextNode.getY(), nextNode.floor());
             Direction direction = directionTo(current.getTile(), nextNode);
             if (direction == Direction.UNKNOWN){
                 furthestReachable = current;
@@ -109,10 +110,10 @@ public class PathAnalyzer {
                 return new DestinationDetails(PathState.END_OF_PATH, current);
             }
             Tile nextNode = path.get(i + 1);
-            if(!isLoaded(nextNode) && nextNode.matrix().inViewport()){
+            RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getX(), nextNode.getY(), nextNode.floor());
+            if(!isLoaded(next) && nextNode.matrix().inViewport()){
                 return new DestinationDetails(PathState.FURTHEST_CLICKABLE_TILE, current);
             }
-            RealTimeCollisionTile next = RealTimeCollisionTile.get(nextNode.getX(), nextNode.getY(), nextNode.floor());
             Direction direction = directionTo(current.getTile(), nextNode);
             if (direction == Direction.UNKNOWN){
                 furthestReachable = current;
@@ -284,8 +285,11 @@ public class PathAnalyzer {
         }
     }
 
-    private static boolean isLoaded(Tile tile){
-        return tile.localX() >= 0 && tile.localX() < 104 && tile.localY() >= 0 && tile.localY() < 104;
+    private static boolean isLoaded(RealTimeCollisionTile rtc){
+        Tile tile = rtc.getTile();
+        int localX = tile.localX(), localY = tile.localY();
+        return !(CollisionFlags.check(rtc.getCollisionData(), CollisionFlags.CLOSED) && ((localX < 5 || localX > 98) || (localY
+         < 5 || localY > 98)));
     }
 
 }

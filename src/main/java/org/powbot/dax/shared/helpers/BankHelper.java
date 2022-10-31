@@ -3,7 +3,6 @@ package org.powbot.dax.shared.helpers;
 import org.powbot.api.Locatable;
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.*;
-import org.powbot.client.scene.RSTile;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.InteractionHelper;
 import org.powbot.util.TransientGetter3D;

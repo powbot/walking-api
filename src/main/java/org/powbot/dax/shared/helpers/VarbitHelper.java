@@ -1,6 +1,5 @@
 package org.powbot.dax.shared.helpers;
 
-import org.powbot.api.rt4.CacheVarbitConfig;
 import org.powbot.api.rt4.Varpbits;
 
 public class VarbitHelper {

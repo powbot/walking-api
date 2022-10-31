@@ -4,12 +4,12 @@ import org.powbot.api.Locatable;
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.*;
 import org.powbot.dax.api.models.*;
-import org.powbot.dax.teleports.Teleport;
 import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.WalkerEngine;
 import org.powbot.dax.engine.WalkingCondition;
 import org.powbot.dax.engine.navigation.ShipUtils;
+import org.powbot.dax.teleports.Teleport;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

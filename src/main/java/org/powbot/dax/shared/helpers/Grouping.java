@@ -7,7 +7,6 @@ import org.powbot.mobile.script.ScriptManager;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BooleanSupplier;
 
 public class Grouping {
 

@@ -9,17 +9,12 @@ import org.powbot.dax.api.json.Json;
 import org.powbot.dax.api.json.JsonValue;
 import org.powbot.dax.api.json.ParseException;
 import org.powbot.dax.api.models.*;
-import org.powbot.dax.api.utils.IOHelper;
 import org.powbot.dax.engine.Loggable;
 import org.powbot.mobile.service.DaxProxyService;
 
-import javax.net.ssl.HttpsURLConnection;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;

@@ -2,7 +2,6 @@ package org.powbot.dax.teleports.utils;
 
 import org.powbot.api.rt4.Item;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;

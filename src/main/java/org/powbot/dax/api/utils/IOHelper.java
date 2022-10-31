@@ -4,12 +4,8 @@ import com.google.gson.JsonObject;
 import org.powbot.dax.api.models.ServerResponse;
 import org.powbot.mobile.service.DaxProxyService;
 
-import javax.net.ssl.HttpsURLConnection;
-import java.io.*;
+import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
 
 public class IOHelper {
 
