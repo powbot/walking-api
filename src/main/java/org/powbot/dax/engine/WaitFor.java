@@ -1,7 +1,10 @@
 package org.powbot.dax.engine;
 
-import org.powbot.api.*;
-import org.powbot.api.rt4.*;
+import org.powbot.api.InteractableEntity;
+import org.powbot.api.Locatable;
+import org.powbot.api.Tile;
+import org.powbot.api.rt4.Movement;
+import org.powbot.api.rt4.Players;
 import org.powbot.dax.shared.helpers.General;
 import org.powbot.dax.shared.helpers.Timing;
 

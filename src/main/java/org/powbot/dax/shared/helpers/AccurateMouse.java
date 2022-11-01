@@ -1,16 +1,12 @@
 package org.powbot.dax.shared.helpers;
 
 import org.powbot.api.*;
-import org.powbot.api.Point;
-import org.powbot.api.Polygon;
-import org.powbot.api.Rectangle;
-import org.powbot.api.rt4.*;
+import org.powbot.api.rt4.Movement;
 import org.powbot.dax.engine.WaitFor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This class does NOT examine objects.
@@ -33,9 +29,9 @@ public class AccurateMouse {
 
     public static void click(Point point, int button) {
         if(button == 3){
-            Input.press(new org.powbot.api.Point(point.getX(), point.getY()));
+            Input.press(new Point(point.getX(), point.getY()));
         } else if(button == 1){
-            Input.tap(new org.powbot.api.Point(point.getX(), point.getY()));
+            Input.tap(new Point(point.getX(), point.getY()));
         }
     }
 
@@ -52,35 +48,26 @@ public class AccurateMouse {
         if (tile == null) {
             return false;
         }
-        for (int i = 0; i < Random.nextInt(7, 10); i++) {
-            Tile currentDestination = Movement.destination();
-            if (currentDestination != Tile.getNil() && currentDestination.equals(tile)) {
+        Tile currentDestination = Movement.destination();
+        if (currentDestination != Tile.getNil() && currentDestination.equals(tile)) {
+            return true;
+        }
+
+        if (!Projection.isInMinimap(tile)) {
+            return false;
+        }
+
+        Movement.step(tile.tile());
+        Tile newDestination = WaitFor.getValue(250, () -> {
+            Tile destination = Movement.destination();
+            return destination == Tile.getNil() || destination.equals(currentDestination) ? null : destination;
+        });
+        if(newDestination != null){
+            if(newDestination.equals(tile) || newDestination.distanceTo(tile) <= 3) {
                 return true;
             }
-
-            if (!Projection.isInMinimap(tile)) {
-                return false;
-            }
-
-            Movement.step(tile.tile());
-//            Point point = Projection.tileToMinimap(tile);
-////            if (!Mouse.getPos().equals(point)){
-////                AccurateMouse.move(point);
-////                continue;
-////            } else {
-//                AccurateMouse.click(point);
-////            }
-
-            Tile newDestination = WaitFor.getValue(250, () -> {
-                Tile destination = Movement.destination();
-                return destination == Tile.getNil() || destination.equals(currentDestination) ? null : destination;
-            });
-            if(newDestination != null){
-                if(newDestination.equals(tile) || newDestination.distanceTo(tile) <= 3) {
-                    return true;
-                }
-            }
         }
+
         return false;
     }
 

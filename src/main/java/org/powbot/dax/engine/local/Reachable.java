@@ -7,7 +7,6 @@ import org.powbot.api.rt4.Game;
 import org.powbot.api.rt4.Movement;
 import org.powbot.api.rt4.Players;
 import org.powbot.dax.shared.helpers.BankHelper;
-import org.powbot.util.TransientGetter;
 import org.powbot.util.TransientGetter2D;
 
 import java.util.*;
@@ -262,6 +261,8 @@ public class Reachable {
 
                 Tile neighbor = direction.getPointingTile(currentLocal);
                 int destinationX = neighbor.localX(), destinationY = neighbor.localY();
+                if(destinationX < 0 || destinationY < 0 || destinationX > 104 || destinationY > 104)
+                    continue;
                 if (traversed[destinationX][destinationY]) {
                     continue; //Traversed already
                 }

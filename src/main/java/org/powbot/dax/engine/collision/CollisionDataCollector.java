@@ -5,7 +5,6 @@ import org.powbot.api.Tile;
 import org.powbot.api.rt4.Game;
 import org.powbot.api.rt4.Movement;
 import org.powbot.api.rt4.Players;
-import org.powbot.util.TransientGetter;
 import org.powbot.util.TransientGetter2D;
 
 public class CollisionDataCollector {

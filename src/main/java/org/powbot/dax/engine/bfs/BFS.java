@@ -2,9 +2,9 @@ package org.powbot.dax.engine.bfs;
 
 
 import org.powbot.api.Tile;
+import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.shared.NodeInfo;
 import org.powbot.dax.shared.PathFindingNode;
-import org.powbot.dax.engine.WaitFor;
 
 import java.util.LinkedList;
 import java.util.List;

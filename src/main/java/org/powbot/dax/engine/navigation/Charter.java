@@ -11,11 +11,8 @@ import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.interaction.NPCInteraction;
 import org.powbot.dax.shared.helpers.AreaHelper;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Charter implements Loggable {
 

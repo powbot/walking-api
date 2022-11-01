@@ -6,8 +6,6 @@ import org.powbot.api.rt4.Inventory;
 import org.powbot.api.rt4.Item;
 import org.powbot.api.rt4.Players;
 
-import java.util.concurrent.Callable;
-
 public enum TeleportScrolls {
 	NARDAH("Nardah teleport",new Tile(3419, 2916, 0)),
 	DIGSITE("Digsite teleport",new Tile(3325, 3411, 0)),

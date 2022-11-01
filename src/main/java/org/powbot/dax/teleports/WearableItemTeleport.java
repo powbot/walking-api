@@ -10,8 +10,6 @@ import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.NPCInteraction;
 import org.powbot.dax.teleports.utils.ItemFilters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -70,7 +68,8 @@ public class WearableItemTeleport {
 
 		final Tile startingPosition = Players.local().tile();
 
-		boolean interact = teleportItem.interact("(Rub|Teleport|" + regex + ")");
+
+		boolean interact = teleportItem.interact(c -> c.getAction().matches("(Rub|Teleport|" + regex + ")"));
 		System.out.println("Interaction return value: " + interact);
 		return interact && WaitFor.condition(
 				Random.nextInt(3800, 4600), () -> {

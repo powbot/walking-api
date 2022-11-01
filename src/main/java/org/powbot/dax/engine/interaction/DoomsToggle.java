@@ -4,11 +4,9 @@ import org.powbot.api.rt4.Component;
 import org.powbot.api.rt4.Components;
 import org.powbot.api.rt4.Widgets;
 import org.powbot.dax.engine.Loggable;
-import org.powbot.dax.engine.WaitFor;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 
 public class DoomsToggle implements Loggable {
@@ -37,15 +35,8 @@ public class DoomsToggle implements Loggable {
             return;
         }
         getInstance().log("Handling Interface: " + parentInterface);
-        for (Component component : Components.stream(parentInterface)) {
-            List<String> actions = component.actions();
-            String option = Arrays.stream(options).filter(actions::contains).findFirst().orElse(null);
-            if (option != null) {
-                component.click(option);
-                WaitFor.milliseconds(500, 1500);
-                return;
-            }
-        }
+        List<String> asList = Arrays.asList(options);
+        Components.stream(parentInterface).filter(c -> asList.contains(c.text())).anyMatch(Component::click);
     }
 
     @Override

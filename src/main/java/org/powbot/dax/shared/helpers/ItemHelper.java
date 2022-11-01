@@ -6,10 +6,8 @@ import org.powbot.api.rt4.*;
 import org.powbot.dax.teleports.utils.ItemFilters;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class ItemHelper {
 
@@ -47,6 +45,9 @@ public class ItemHelper {
     public static boolean click(Predicate<Item> filter, String action, boolean one){
         if (action == null){
             action = "";
+        }
+        if(Game.tab() != Game.Tab.INVENTORY && !Game.tab(Game.Tab.INVENTORY)){
+            return false;
         }
         List<Item> list = Inventory.get(filter);
         if (one) {
@@ -111,12 +112,12 @@ public class ItemHelper {
 
 
     public static String[] getItemActions(Item rsItem){
-        return getItemActions(rsItem.getConfig());
+        return rsItem.actions().toArray(new String[0]);
     }
 
 
     public static String getItemName(Item rsItem){
-        return getItemName(rsItem.getConfig());
+        return rsItem.name();
     }
 
 
