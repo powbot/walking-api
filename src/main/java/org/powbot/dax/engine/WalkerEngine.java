@@ -136,6 +136,7 @@ public class WalkerEngine implements Loggable{
 
 
                 CustomConditionContainer conditionContainer = new CustomConditionContainer(walkingCondition);
+                log(destinationDetails.getState().toString());
                 switch (destinationDetails.getState()) {
                     case DISCONNECTED_PATH:
                         if (currentNode.getTile().distanceTo(Players.local().tile()) > 10){
