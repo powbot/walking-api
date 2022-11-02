@@ -448,83 +448,83 @@ public enum Teleport {
 			() -> ItemHelper.click("Brimhaven t.*", "Break")
 	),
 
-//	POLLNIVNEACH_TELEPORT_TAB(
-//			35, new Tile(3340, 3004, 0),
-//			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Pollnivneach teleport")),
-//			() -> ItemHelper.click("Pollnivneach t.*", "Break")
-//	),
-//
-//	YANILLE_TELEPORT_TAB(
-//			35, new Tile(2544, 3095, 0),
-//			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Yanille teleport")),
-//			() -> ItemHelper.click("Yanille t.*", "Break")
-//	),
-//
-//	HOSIDIUS_TELEPORT_TAB(
-//			35, new Tile(1744, 3517, 0),
-//			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Hosidius teleport")),
-//			() -> ItemHelper.click("Hosidius t.*", "Break")
-//	),
+	POLLNIVNEACH_TELEPORT_TAB(
+			35, new Tile(3340, 3004, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Pollnivneach teleport")),
+			() -> ItemHelper.click("Pollnivneach t.*", "Break")
+	),
 
-//	CONSTRUCTION_CAPE_RIMMINGTON(
-//			0, new Tile(2954,3224, 0),
-//			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
-//			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Rimmington")
-//	),
-//
-//	CONSTRUCTION_CAPE_TAVERLEY(
-//			0, new Tile(2894, 3465, 0),
-//			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
-//			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Taverley")
-//	),
-//
-//	CONSTRUCTION_CAPE_RELLEKKA(
-//			0, new Tile(2668, 3631, 0),
-//			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
-//			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Rellekka")
-//	),
-//
-//	CONSTRUCTION_CAPE_BRIMHAVEN(
-//			0, new Tile(2758, 3178, 0),
-//			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
-//			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Brimhaven")
-//	),
-//
-//	CONSTRUCTION_CAPE_POLLNIVNEACH(
-//			0, new Tile(3340, 3004, 0),
-//			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
-//			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Pollnivneach")
-//	),
-//
-//	CONSTRUCTION_CAPE_YANILLE(
-//			0, new Tile(2544, 3095, 0),
-//			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
-//			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Yanille")
-//	),
-//
-//	CONSTRUCTION_CAPE_HOSIDIUS(
-//			0, new Tile(1744, 3517, 0),
-//			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
-//			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Hosidius")
-//	),
-//
-//	SLAYER_RING_GNOME_STRONGHOLD(
-//			35, new Tile(2433, 3424, 0),
-//			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.SLAYER_RING, i1, i2),
-//			() -> WearableItemTeleport.teleport(WearableItemTeleport.SLAYER_RING, ".*Stronghold")
-//	),
-//
-//	SLAYER_RING_MORYTANIA(
-//			35, new Tile(3422, 3537, 0),
-//			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.SLAYER_RING, i1, i2),
-//			() -> WearableItemTeleport.teleport(WearableItemTeleport.SLAYER_RING, ".*Tower")
-//	),
-//
-//	SLAYER_RING_RELLEKKA_CAVE(
-//			35, new Tile(2801, 9999, 0),
-//			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.SLAYER_RING, i1 , i2),
-//			() -> WearableItemTeleport.teleport(WearableItemTeleport.SLAYER_RING, ".*Rellekka")
-//	),
+	YANILLE_TELEPORT_TAB(
+			35, new Tile(2544, 3095, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Yanille teleport")),
+			() -> ItemHelper.click("Yanille t.*", "Break")
+	),
+
+	HOSIDIUS_TELEPORT_TAB(
+			35, new Tile(1744, 3517, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Hosidius teleport")),
+			() -> ItemHelper.click("Hosidius t.*", "Break")
+	),
+
+	CONSTRUCTION_CAPE_RIMMINGTON(
+			0, new Tile(2954,3224, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Rimmington")
+	),
+
+	CONSTRUCTION_CAPE_TAVERLEY(
+			0, new Tile(2894, 3465, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Taverley")
+	),
+
+	CONSTRUCTION_CAPE_RELLEKKA(
+			0, new Tile(2668, 3631, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Rellekka")
+	),
+
+	CONSTRUCTION_CAPE_BRIMHAVEN(
+			0, new Tile(2758, 3178, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Brimhaven")
+	),
+
+	CONSTRUCTION_CAPE_POLLNIVNEACH(
+			0, new Tile(3340, 3004, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Pollnivneach")
+	),
+
+	CONSTRUCTION_CAPE_YANILLE(
+			0, new Tile(2544, 3095, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Yanille")
+	),
+
+	CONSTRUCTION_CAPE_HOSIDIUS(
+			0, new Tile(1744, 3517, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER, i1, i2),
+			() -> teleportWithScrollInterface(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER,".*Hosidius")
+	),
+
+	SLAYER_RING_GNOME_STRONGHOLD(
+			35, new Tile(2433, 3424, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.SLAYER_RING, i1, i2),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.SLAYER_RING, ".*Stronghold")
+	),
+
+	SLAYER_RING_MORYTANIA(
+			35, new Tile(3422, 3537, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.SLAYER_RING, i1, i2),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.SLAYER_RING, ".*Tower")
+	),
+
+	SLAYER_RING_RELLEKKA_CAVE(
+			35, new Tile(2801, 9999, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.SLAYER_RING, i1 , i2),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.SLAYER_RING, ".*Rellekka")
+	),
 
 	SALVE_GRAVEYARD_TAB(
 			35, new Tile(3432, 3460, 0),
@@ -562,46 +562,46 @@ public enum Teleport {
 			() -> ItemHelper.click("Draynor manor t.*", "Break")
 	),
 
-//	MIND_ALTAR_TAB(
-//			35, new Tile(2980, 3510, 0),
-//			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Mind altar teleport")),
-//			() -> ItemHelper.click("Mind altar t.*", "Break")
-//	),
-//
-//	ENCHANTED_LYRE_RELLEKA(
-//			35, new Tile(2661, 3465, 0),
-//			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameContains("Enchanted lyre")),
-//			() -> {
-//				Item[] lyre = Inventory.find(ItemFilters.nameContains("Enchanted lyre"));
-//				return lyre.length > 0 && ItemHelper.clickMatch(lyre[0], "Play|Rellekka.*");
-//			}
-//	),
-//
-//	FARMING_CAPE_TELEPORT(
-//			0, new Tile(1248, 3726, 0),
-//			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.FARMING_CAPE_FILTER, i1, i2),
-//			() -> WearableItemTeleport.teleport(WearableItemTeleport.FARMING_CAPE_FILTER, "Teleport")
-//	),
-//
-//	ROYAL_SEED_POD(
-//			0, new Tile(2465, 3495, 0),
-//			(i1, i2) -> Inventory.getCount("Royal seed pod") > 0,
-//			() -> ItemHelper.click("Royal seed.*", "Commune")
-//	),
-//
-//	DRAKANS_MEDALLION_VER_SINHAZA(
-//			0, new Tile(3649, 3230, 0),
-//			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.DRAKANS_MEDALLION_FILTER, i1, i2),
-//			() -> ItemHelper.click("Drakan's.*", "Ver Sinhaza")
-//
-//	),
-//
-//	DRAKANS_MEDALLION_DARKMEYER(
-//			0, new Tile(3592, 3337, 0),
-//			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.DRAKANS_MEDALLION_FILTER, i1, i2),
-//			() -> ItemHelper.click("Drakan's.*", "Darkmeyer")
-//
-//	),
+	MIND_ALTAR_TAB(
+			35, new Tile(2980, 3510, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Mind altar teleport")),
+			() -> ItemHelper.click("Mind altar t.*", "Break")
+	),
+
+	ENCHANTED_LYRE_RELLEKA(
+			35, new Tile(2661, 3465, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameContains("Enchanted lyre")),
+			() -> {
+				Item lyre = Inventory.stream().filter(ItemFilters.nameContains("Enchanted lyre")).firstOrNull();
+				return lyre != null && ItemHelper.clickMatch(lyre, "Play|Rellekka.*");
+			}
+	),
+
+	FARMING_CAPE_TELEPORT(
+			0, new Tile(1248, 3726, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.FARMING_CAPE_FILTER, i1, i2),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.FARMING_CAPE_FILTER, "Teleport")
+	),
+
+	ROYAL_SEED_POD(
+			0, new Tile(2465, 3495, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Royal seed pod")),
+			() -> ItemHelper.click("Royal seed.*", "Commune")
+	),
+
+	DRAKANS_MEDALLION_VER_SINHAZA(
+			0, new Tile(3649, 3230, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.DRAKANS_MEDALLION_FILTER, i1, i2),
+			() -> ItemHelper.click("Drakan's.*", "Ver Sinhaza")
+
+	),
+
+	DRAKANS_MEDALLION_DARKMEYER(
+			0, new Tile(3592, 3337, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.DRAKANS_MEDALLION_FILTER, i1, i2),
+			() -> ItemHelper.click("Drakan's.*", "Darkmeyer")
+
+	),
 
 	BARBARIAN_ASSAULT_MINIGAME(
 			Grouping.MINIGAMES.BARBARIAN_ASSAULT,
@@ -688,41 +688,41 @@ public enum Teleport {
 //			() -> ItemHelper.click("Moonclan tele.*", "Break")
 //	),
 
-//	OURANIA_TELEPORT_TAB(
-//			35, new Tile(2468, 3246, 0),
-//			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Ourania teleport")),
-//			() -> ItemHelper.click("Ourania t.*", "Break")
-//	),
-//
-//	WATERBIRTH_TELEPORT_TAB(
-//			35, new Tile(2546, 3757, 0),
-//			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Waterbirth teleport")),
-//			() -> ItemHelper.click("Waterbirth t.*", "Break")
-//	),
-//
-//	BARBARIAN_OUTPUT_TELEPORT_TAB(
-//			35, new Tile(2544, 3568, 0),
-//			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Barbarian teleport")),
-//			() -> ItemHelper.click("Barbarian tele.*", "Break")
-//	),
-//
-//	KHAZARD_TELEPORT_TAB(
-//			35, new Tile(2637, 3167, 0),
-//			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Khazard teleport")),
-//			() -> ItemHelper.click("Khazard tele.*", "Break")
-//	),
-//
-//	FISHING_GUILD_TELEPORT_TAB(
-//			35, new Tile(2612, 3391, 0),
-//			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Fishing guild teleport")),
-//			() -> ItemHelper.click("Fishing guild t.*", "Break")
-//	),
-//
-//	CATHERBY_TELEPORT_TAB(
-//			35, new Tile(2801, 3449, 0),
-//			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Catherby teleport")),
-//			() -> ItemHelper.click("Catherby t.*", "Break")
-//	),
+	OURANIA_TELEPORT_TAB(
+			35, new Tile(2468, 3246, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Ourania teleport")),
+			() -> ItemHelper.click("Ourania t.*", "Break")
+	),
+
+	WATERBIRTH_TELEPORT_TAB(
+			35, new Tile(2546, 3757, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Waterbirth teleport")),
+			() -> ItemHelper.click("Waterbirth t.*", "Break")
+	),
+
+	BARBARIAN_OUTPOST_TELEPORT_TAB(
+			35, new Tile(2544, 3568, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Barbarian teleport")),
+			() -> ItemHelper.click("Barbarian tele.*", "Break")
+	),
+
+	KHAZARD_TELEPORT_TAB(
+			35, new Tile(2637, 3167, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Khazard teleport")),
+			() -> ItemHelper.click("Khazard tele.*", "Break")
+	),
+
+	FISHING_GUILD_TELEPORT_TAB(
+			35, new Tile(2612, 3391, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Fishing guild teleport")),
+			() -> ItemHelper.click("Fishing guild t.*", "Break")
+	),
+
+	CATHERBY_TELEPORT_TAB(
+			35, new Tile(2801, 3449, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Catherby teleport")),
+			() -> ItemHelper.click("Catherby t.*", "Break")
+	),
 
 	LUMBRIDGE_HOME_TELEPORT(
 			150, new Tile(3225, 3219, 0),

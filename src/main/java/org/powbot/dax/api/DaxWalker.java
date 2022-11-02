@@ -34,6 +34,45 @@ public class DaxWalker implements Loggable {
         for (Teleport teleport : Teleport.values()) {
             map.put(teleport.getLocation(), teleport);
         }
+        blacklist.addAll(Arrays.asList(
+                Teleport.NARDAH_TELEPORT, Teleport.DIGSITE_TELEPORT, Teleport.FELDIP_HILLS_TELEPORT,
+                Teleport.LUNAR_ISLE_TELEPORT, Teleport.MORTTON_TELEPORT, Teleport.PEST_CONTROL_TELEPORT, Teleport.TAI_BWO_WANNAI_TELEPORT,
+                Teleport.ELF_CAMP_TELEPORT, Teleport.MOS_LE_HARMLESS_TELEPORT, Teleport.LUMBERYARD_TELEPORT, Teleport.ZULLANDRA_TELEPORT,
+                Teleport.KEY_MASTER_TELEPORT, Teleport.REVENANT_CAVES_TELEPORT, Teleport.WATSON_TELEPORT,
+                Teleport.BURNING_AMULET_BANDIT_CAMP, Teleport.BURNING_AMULET_CHAOS_TEMPLE, Teleport.BURNING_AMULET_LAVA_MAZE,
+                Teleport.ECTOPHIAL, Teleport.LLETYA, Teleport.XERICS_GLADE, Teleport.XERICS_INFERNO, Teleport.XERICS_LOOKOUT,
+                Teleport.WEST_ARDOUGNE_TELEPORT_TAB, Teleport.RADAS_BLESSING_KOUREND_WOODLAND, Teleport.RADAS_BLESSING_MOUNT_KARUULM,
+                Teleport.CRAFTING_CAPE_TELEPORT, Teleport.CABBAGE_PATCH_TELEPORT, Teleport.LEGENDS_GUILD_TELEPORT,
+                Teleport.RIMMINGTON_TELEPORT_TAB, Teleport.TAVERLEY_TELEPORT_TAB, Teleport.RELLEKKA_TELEPORT_TAB, Teleport.BRIMHAVEN_TELEPORT_TAB,
+                Teleport.POLLNIVNEACH_TELEPORT_TAB, Teleport.YANILLE_TELEPORT_TAB, Teleport.HOSIDIUS_TELEPORT_TAB, Teleport.CONSTRUCTION_CAPE_RELLEKKA,
+                Teleport.CONSTRUCTION_CAPE_BRIMHAVEN, Teleport.CONSTRUCTION_CAPE_HOSIDIUS, Teleport.CONSTRUCTION_CAPE_RIMMINGTON,
+                Teleport.CONSTRUCTION_CAPE_TAVERLEY, Teleport.CONSTRUCTION_CAPE_POLLNIVNEACH, Teleport.CONSTRUCTION_CAPE_YANILLE,
+                Teleport.SLAYER_RING_MORYTANIA, Teleport.SLAYER_RING_GNOME_STRONGHOLD, Teleport.SLAYER_RING_RELLEKKA_CAVE,
+                Teleport.SALVE_GRAVEYARD_TAB, Teleport.FENKENSTRAINS_CASTLE_TAB, Teleport.BARROWS_TAB, Teleport.ARCEUUS_LIBRARY_TAB,
+                Teleport.BATTLEFRONT_TAB, Teleport.DRAYNOR_MANOR_TAB, Teleport.MIND_ALTAR_TAB, Teleport.ENCHANTED_LYRE_RELLEKA,
+                Teleport.FARMING_CAPE_TELEPORT, Teleport.ROYAL_SEED_POD, Teleport.DRAKANS_MEDALLION_VER_SINHAZA, Teleport.DRAKANS_MEDALLION_DARKMEYER,
+                Teleport.OURANIA_TELEPORT_TAB, Teleport.WATERBIRTH_TELEPORT_TAB, Teleport.BARBARIAN_OUTPOST_TELEPORT_TAB,
+                Teleport.KHAZARD_TELEPORT_TAB, Teleport.FISHING_GUILD_TELEPORT_TAB, Teleport.CATHERBY_TELEPORT_TAB
+
+        ));
+    }
+
+    private static final List<Teleport> blacklist = new ArrayList<>();
+
+    private static List<Teleport> getBlacklist() {
+        return blacklist;
+    }
+
+    public static void blacklistTeleports(Teleport... teleports){
+        getBlacklist().addAll(Arrays.asList(teleports));
+    }
+
+    public static void removeBlacklistTeleports(Teleport... teleports){
+        getBlacklist().removeAll(Arrays.asList(teleports));
+    }
+
+    public static void clearTeleportBlacklist(){
+        getBlacklist().clear();
     }
 
     public static WalkingCondition getGlobalWalkingCondition() {
@@ -165,20 +204,6 @@ public class DaxWalker implements Loggable {
         getInstance().log("Got valid path.");
 
         return pathResult.toRSTilePath();
-    }
-
-    private static final List<Teleport> blacklist = new ArrayList<>();
-
-    private static List<Teleport> getBlacklist() {
-        return blacklist;
-    }
-
-    public static void blacklistTeleports(Teleport... teleports){
-        getBlacklist().addAll(Arrays.asList(teleports));
-    }
-
-    public static void clearTeleportBlacklist(){
-        getBlacklist().clear();
     }
 
     private List<PathRequestPair> getPathTeleports(boolean members, boolean pvp, Tile start, List<Item> inventory, List<Item> equipment) {
