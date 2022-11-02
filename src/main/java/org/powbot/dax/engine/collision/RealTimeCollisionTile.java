@@ -175,12 +175,10 @@ public class RealTimeCollisionTile extends PathFindingNode {
     public static RealTimeCollisionTile get(int x, int y, int z){
         HashMap<Integer, HashMap<Integer, RealTimeCollisionTile>> yMap = xMap.get(x);
         if (yMap == null){
-            System.out.println("Y map is null.");
             return null;
         }
         HashMap<Integer, RealTimeCollisionTile> zMap = yMap.get(y);
         if (zMap == null){
-            System.out.println("Z map is null.");
             return null;
         }
         return zMap.get(z);
