@@ -59,7 +59,7 @@ public class DaxWalker implements Loggable {
 
     private static final List<Teleport> blacklist = new ArrayList<>();
 
-    private static List<Teleport> getBlacklist() {
+    public static List<Teleport> getBlacklist() {
         return blacklist;
     }
 
