@@ -16,7 +16,6 @@ public class ItemHelper {
     }
 
     public static boolean clickMatch(Item item, String regex){
-        System.out.println("Using regex: " + regex);
         return item.click(rsMenuNode -> {
             String action = rsMenuNode.getAction();
             return action.matches(regex);

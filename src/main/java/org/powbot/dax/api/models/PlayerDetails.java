@@ -28,7 +28,7 @@ public class PlayerDetails {
         List<IntPair> settings = Stream.of(10, 11, 17, 32, 63, 68, 71, 101, 111, 116, 131, 144, 145, 150, 165, 176,
             179, 273, 299, 302, 307, 314, 335, 347, 351, 365, 371, 387, 399, 425, 437, 440, 482, 622, 655, 671, 705, 794, 810,
             869, 896, 964, 1630, 1671, 1672)
-                                       .map(value -> new IntPair(value, Varpbits.varpbit(value))).distinct().collect(Collectors.toList());
+                                       .map(value -> new IntPair(value, Varpbits.varpbit(value, true))).distinct().collect(Collectors.toList());
 
         List<IntPair> varbit = Arrays.stream(new int[]{
             192,
@@ -50,7 +50,7 @@ public class PlayerDetails {
             5810,
             9016
         })
-                .mapToObj(value -> new IntPair(value, Varpbits.value(value))).distinct().collect(
+                .mapToObj(value -> new IntPair(value, Varpbits.value(value, true))).distinct().collect(
 				        Collectors.toList());
 
         boolean[] plantedSpiritTrees = {false, false, false, false, false};

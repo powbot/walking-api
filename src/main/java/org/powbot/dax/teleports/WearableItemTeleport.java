@@ -70,7 +70,6 @@ public class WearableItemTeleport {
 
 
 		boolean interact = teleportItem.interact(c -> c.getAction().matches("(Rub|Teleport|" + regex + ")"));
-		System.out.println("Interaction return value: " + interact);
 		return interact && WaitFor.condition(
 				Random.nextInt(3800, 4600), () -> {
 					NPCInteraction.handleConversationRegex("(Teleport|"+regex+")");

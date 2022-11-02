@@ -4,5 +4,5 @@ package org.powbot.dax.teleports.utils;
  * Check limits of a teleport, e.g. wilderness level under 20 or 30.
  */
 public interface TeleportLimit {
-    boolean canCast();
+    boolean canCast(int wildernessLevel);
 }

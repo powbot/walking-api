@@ -84,7 +84,7 @@ public enum Teleport {
 
 	SEERS_TELEPORT(
 			35, new Tile(2757, 3479, 0),
-			(i1, i2) -> Spell.CAMELOT_TELEPORT.canUse(i1, i2) && Varpbits.value(4560) == 1,
+			(i1, i2) -> Spell.CAMELOT_TELEPORT.canUse(i1, i2) && Varpbits.value(4560, true) == 1,
 			() -> selectSpell(Magic.Spell.CAMELOT_TELEPORT,"Seers'")
 	),
 
@@ -164,7 +164,7 @@ public enum Teleport {
 
 	RING_OF_WEALTH_MISCELLANIA(
 			35, new Tile(2535, 3861, 0),
-			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.RING_OF_WEALTH_FILTER, i1, i2) && Varpbits.varpbit(359) >= 100,
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.RING_OF_WEALTH_FILTER, i1, i2) && Varpbits.varpbit(359, true) >= 100,
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_WEALTH_FILTER, "(?i)misc.*"),
 			TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
@@ -318,7 +318,7 @@ public enum Teleport {
 
 	SKILLS_FARMING_GUILD_OUTSIDE (
 			35, new Tile(1248, 3719, 0),
-			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER, i1, i2) && (Varpbits.value(4895) < 600 || Skills.realLevel(Skill.Farming) < 45),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER, i1, i2) && (Varpbits.value(4895, true) < 600 || Skills.realLevel(Skill.Farming) < 45),
 			() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Farming.*"),
 			TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
@@ -326,7 +326,7 @@ public enum Teleport {
 	SKILLS_FARMING_GUILD_INSIDE (
 			35, new Tile(1249, 3727, 0),
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER, i1, i2)
-					&& Varpbits.value(4895) >= 600 && Skills.realLevel(Skill.Farming) >= 45,
+					&& Varpbits.value(4895, true) >= 600 && Skills.realLevel(Skill.Farming) >= 45,
 			() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Farming.*"),
 			TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
@@ -603,15 +603,15 @@ public enum Teleport {
 //
 //	),
 
-	BARBARIAN_ASSASULT_MINIGAME(
+	BARBARIAN_ASSAULT_MINIGAME(
 			Grouping.MINIGAMES.BARBARIAN_ASSAULT,
 			new Tile(2532, 3577, 0),
-			(i1, i2) -> Varpbits.value(3251) > 0
+			(i1, i2) -> Varpbits.value(3251, true) > 0
 	),
 	BLAST_FURNACE_MINIGAME(
 			Grouping.MINIGAMES.BLAST_FURNACE,
 			new Tile(0, 0 ,0),
-			(i1, i2) -> Varpbits.value(575) >= 1
+			(i1, i2) -> Varpbits.value(575, true) >= 1
 	),
 	BURTHROPE_GAMES_ROOM_MINIGAME(
 			Grouping.MINIGAMES.BURTHORPE_GAMES_ROOM,
@@ -870,9 +870,7 @@ public enum Teleport {
 	}
 
 	public boolean canUse(List<Item> inventory, List<Item> equipment){
-		boolean canUse = getRequirement().satisfies(inventory, equipment);
-		System.out.println("[TELEPORTS] " + this + " is available: " + canUse);
-		return canUse;
+		return getRequirement().satisfies(inventory, equipment);
 	}
 
 	public boolean trigger() {
@@ -888,11 +886,12 @@ public enum Teleport {
 	}
 
 	public static List<Tile> getValidStartingRSTiles(boolean membersWorld, boolean pvpWorld, List<Teleport> blacklist, List<Item> inventory, List<Item> equipment) {
+		final int wildernessLevel = Combat.wildernessLevel();
 		return Arrays.stream(values())
 				.filter(t -> {
 					if((!membersWorld && t.requiresMembers) || (pvpWorld && !t.canBeUsedInPvpWorlds))
 						return false;
-					return !blacklist.contains(t) && t.teleportLimit.canCast() && t.canUse(inventory, equipment);
+					return !blacklist.contains(t) && t.teleportLimit.canCast(wildernessLevel) && t.canUse(inventory, equipment);
 				})
 				.map(Teleport::getLocation)
 				.collect(Collectors.toList());
@@ -914,7 +913,7 @@ public enum Teleport {
 		}
 
 		if(!Widgets.component(TeleportConstants.SCROLL_INTERFACE_MASTER, 0).valid()){
-			if (!teleportItem.interact("(Rub|Teleport|" + regex + ")") ||
+			if (!ItemHelper.clickMatch(teleportItem, "(Rub|Teleport|" + regex + ")") ||
 					!Condition.wait(() -> Widgets.component(TeleportConstants.SCROLL_INTERFACE_MASTER, 0).valid(), 250, 10)) {
 				return false;
 			}
@@ -944,17 +943,17 @@ public enum Teleport {
 	}
 
 	private static boolean hasBeenToZeah(){
-		return Varpbits.value(4897) > 0;
+		return Varpbits.value(4897, true) > 0;
 	}
 
 	private static boolean canUseHomeTeleport(){
 		return !Players.local().inCombat() &&
-				((long) Varpbits.varpbit(892) * 60 * 1000) + (30 * 60 * 1000) < System.currentTimeMillis();
+				((long) Varpbits.varpbit(892, true) * 60 * 1000) + (30 * 60 * 1000) < System.currentTimeMillis();
 	}
 
 	private static boolean canUseMinigameTeleport(){
 		return !Players.local().inCombat() &&
-				((long) Varpbits.varpbit(888) * 60 * 1000) + (20 * 60 * 1000) < System.currentTimeMillis();
+				((long) Varpbits.varpbit(888, true) * 60 * 1000) + (20 * 60 * 1000) < System.currentTimeMillis();
 	}
 
 }

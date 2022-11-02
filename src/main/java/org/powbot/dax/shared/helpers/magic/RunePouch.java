@@ -24,7 +24,7 @@ public class RunePouch{
         }
 
         public String getRuneName(){
-            switch(Varpbits.value(type)){
+            switch(Varpbits.value(type, true)){
                 case 1: return "Air rune";
                 case 2: return "Water rune";
                 case 3: return "Earth rune";
@@ -50,7 +50,7 @@ public class RunePouch{
         }
 
         public int getQuantity(){
-            return Varpbits.value(quantityVarbitIndex);
+            return Varpbits.value(quantityVarbitIndex, true);
         }
 
     }

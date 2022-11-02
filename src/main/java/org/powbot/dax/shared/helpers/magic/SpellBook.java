@@ -20,7 +20,7 @@ public class SpellBook {
         }
 
         public boolean isInUse() {
-            return Varpbits.value(SPELLBOOK_VARBIT) == varbit;
+            return Varpbits.value(SPELLBOOK_VARBIT, true) == varbit;
         }
     }
 

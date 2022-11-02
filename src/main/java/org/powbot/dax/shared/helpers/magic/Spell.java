@@ -60,7 +60,7 @@ public enum Spell {
         if (requiredLevel > Skills.level(Skill.Magic)){
             return false;
         }
-        if (this == ARDOUGNE_TELEPORT && Varpbits.varpbit(165) < 30){
+        if (this == ARDOUGNE_TELEPORT && Varpbits.varpbit(165, true) < 30){
             return false;
         }
 

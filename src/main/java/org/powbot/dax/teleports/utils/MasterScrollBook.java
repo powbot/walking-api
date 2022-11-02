@@ -43,7 +43,7 @@ public class MasterScrollBook {
 		
 		//Returns the number of scrolls stored in the book.
 		public int getCount(){
-			return Varpbits.value(varbit);
+			return Varpbits.value(varbit, true);
 		}
 		
 		//Returns the name of the teleport.
@@ -106,7 +106,7 @@ public class MasterScrollBook {
 	
 	public static Teleports getDefault(){
 		int value;
-		if((value = Varpbits.value(DEFAULT_VARBIT)) == 0)
+		if((value = Varpbits.value(DEFAULT_VARBIT, true)) == 0)
 			return null;
 		return Teleports.values()[value-1];
 	}

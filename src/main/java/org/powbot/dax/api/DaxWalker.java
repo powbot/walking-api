@@ -67,7 +67,7 @@ public class DaxWalker implements Loggable {
         PlayerDetails playerDetails = PlayerDetails.generate(inventory, equipment);
         boolean isInPvpWorld = Components.stream(90)
                 .anyMatch(i -> i.textureId() == 1046 && i.valid());
-
+        Varpbits.cache();
 
         List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(playerDetails.isMember(), isInPvpWorld, destination.tile(), inventory, equipment);
 

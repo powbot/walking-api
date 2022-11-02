@@ -21,7 +21,6 @@ public class BFS {
 
     public static PathFindingNode bfsClosestToPath(List<Tile> path, PathFindingNode start, int limit){
         if (path == null || start == null){
-            System.out.println("BFS: path or start is null");
             return null;
         }
         if (path.contains(start.getTile())) {
@@ -36,7 +35,6 @@ public class BFS {
 
         while (!queue.isEmpty()){
             if (iteration != -1 && iteration++ == limit){
-                System.out.println("Reached iteration limit");
                 break;
             }
             PathFindingNode current = queue.remove();
@@ -52,7 +50,6 @@ public class BFS {
                 queue.add(neighbor);
             }
         }
-        System.out.println("Reached end of BFS Closest to Path method");
         return null;
     }
 
@@ -65,11 +62,9 @@ public class BFS {
      */
     public static boolean isReachable(PathFindingNode start, PathFindingNode end, int limit){
         if (start == null || end == null){
-            System.out.println("BFS is reachable: start or end is null");
             return false;
         }
         if (start.equals(end)) {
-            System.out.println("BFS is reachable: start equals end");
             return true;
         }
         NodeInfo.clearMemory(start.getClass());
@@ -93,7 +88,6 @@ public class BFS {
                 nodeInfo.traversed = true;
 
                 if (neighbor.equals(end)){
-                    System.out.println("BFS is reachable: neighbor is accessible, returning true.");
                     return true;
                 }
 
@@ -101,7 +95,6 @@ public class BFS {
                 queue.add(neighbor);
             }
         }
-        System.out.println("BFS is reachable: reached end of method, returning false.");
         return false;
     }
 
