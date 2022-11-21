@@ -1,8 +1,9 @@
-package org.powbot.dax.shared.helpers;
+package org.powbot.dax.teleports.utils;
 
 import org.powbot.api.*;
 import org.powbot.api.rt4.*;
 import org.powbot.dax.engine.WaitFor;
+import org.powbot.dax.shared.helpers.Timing;
 import org.powbot.mobile.script.ScriptManager;
 
 import java.util.Arrays;
@@ -199,15 +200,6 @@ public class Grouping {
     public static boolean canMinigameTeleport(){
         return Worlds.isCurrentWorldMembers() && !Players.local().inCombat() &&
                 ((long) Varpbits.varpbit(888) * 60 * 1000) + (20 * 60 * 1000) < Timing.currentTimeMillis();
-    }
-
-
-    public static void receiveServerMessage(String message){
-//        if(message.startsWith("You must wait") && message.contains("minigame teleports")){
-//            String[] split = message.split(" ");
-//            int minutes = Integer.parseInt(split[4]);
-//            lastTeleport = Timing.currentTimeMillis() - (TimeUnit.MINUTES.toMillis(20 - minutes));
-//        }
     }
 
 }
