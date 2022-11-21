@@ -8,14 +8,10 @@ import org.powbot.api.rt4.walking.model.Skill;
 import org.powbot.dax.api.models.Requirement;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.NPCInteraction;
-import org.powbot.dax.shared.helpers.Grouping;
 import org.powbot.dax.shared.helpers.ItemHelper;
 import org.powbot.dax.shared.helpers.magic.Spell;
 import org.powbot.dax.shared.helpers.magic.SpellBook;
-import org.powbot.dax.teleports.utils.ItemFilters;
-import org.powbot.dax.teleports.utils.TeleportConstants;
-import org.powbot.dax.teleports.utils.TeleportLimit;
-import org.powbot.dax.teleports.utils.TeleportScrolls;
+import org.powbot.dax.teleports.utils.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -824,7 +820,7 @@ public enum Teleport {
 		this(minigame, location, requirement, true, chatOptions);
 	}
 	Teleport(Grouping.MINIGAMES minigame, Tile location, Requirement requirement, boolean requiresMembers, String... chatOptions){
-		setMoveCost(150);
+		setMoveCost(75);
 		this.location = location;
 		if(requirement != null){
 			this.requirement = (i1, i2) -> canUseMinigameTeleport() && requirement.satisfies(i1, i2);
