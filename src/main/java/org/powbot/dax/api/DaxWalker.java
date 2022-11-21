@@ -155,6 +155,7 @@ public class DaxWalker implements Loggable {
         List<Item> equipment = Equipment.stream().list();
         PlayerDetails playerDetails = PlayerDetails.generate(inventory, equipment);
         boolean isInPvpWorld = Worlds.current().getSpecialty() == World.Specialty.PVP;
+        Varpbits.cache();
 
         List<BankPathRequestPair> pathRequestPairs = getInstance().getBankPathTeleports(playerDetails.isMember(), isInPvpWorld, inventory, equipment);
 
@@ -182,6 +183,7 @@ public class DaxWalker implements Loggable {
         List<Item> equipment = Equipment.stream().list();
         PlayerDetails playerDetails = PlayerDetails.generate(inventory, equipment);
         boolean isInPvpWorld = Worlds.current().getSpecialty() == World.Specialty.PVP;
+        Varpbits.cache();
 
         List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(playerDetails.isMember(), isInPvpWorld, destination.tile(), inventory, equipment);
 
