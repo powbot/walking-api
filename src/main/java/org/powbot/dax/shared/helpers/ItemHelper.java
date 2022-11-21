@@ -19,7 +19,7 @@ public class ItemHelper {
         if(Game.tab() != Game.Tab.INVENTORY && !Game.tab(Game.Tab.INVENTORY)){
             return false;
         }
-        return item.click(rsMenuNode -> {
+        return item.interact(rsMenuNode -> {
             String action = rsMenuNode.getAction();
             return action.matches(regex);
         });
@@ -54,14 +54,14 @@ public class ItemHelper {
         List<Item> list = Inventory.get(filter);
         if (one) {
             Item closest = getClosestToMouse(list);
-            return closest != null && closest.click(action);
+            return closest != null && closest.interact(action);
         }
         boolean value = false;
         while (!list.isEmpty()){
             Item item = getClosestToMouse(list);
             if (item != null) {
                 list.remove(item);
-                if (item.click(action)){
+                if (item.interact(action)){
                     value = true;
                 }
             }
@@ -76,7 +76,7 @@ public class ItemHelper {
         if(Game.tab() != Game.Tab.INVENTORY && !Game.tab(Game.Tab.INVENTORY)){
             return false;
         }
-        return action != null ? item.click(action) : item.click();
+        return action != null ? item.interact(action) : item.click();
     }
 
     public static boolean use(int itemID){
@@ -95,8 +95,6 @@ public class ItemHelper {
     }
 
     public static Item getClosestToMouse(List<Item> rsItems){
-//        Point mouse = Mouse.getPos();
-//        rsItems.sort(Comparator.comparingInt(o -> (int) getCenter(o.getArea()).distance(mouse)));
         return rsItems.size() > 0 ? rsItems.get(0) : null;
     }
 
