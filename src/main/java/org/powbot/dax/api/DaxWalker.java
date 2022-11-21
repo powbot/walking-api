@@ -104,8 +104,7 @@ public class DaxWalker implements Loggable {
         List<Item> inventory = Inventory.stream().list();
         List<Item> equipment = Equipment.stream().list();
         PlayerDetails playerDetails = PlayerDetails.generate(inventory, equipment);
-        boolean isInPvpWorld = Components.stream(90)
-                .anyMatch(i -> i.textureId() == 1046 && i.valid());
+        boolean isInPvpWorld = Worlds.current().getSpecialty() == World.Specialty.PVP;
         Varpbits.cache();
 
         List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(playerDetails.isMember(), isInPvpWorld, destination.tile(), inventory, equipment);
@@ -155,8 +154,7 @@ public class DaxWalker implements Loggable {
         List<Item> inventory = Inventory.stream().list();
         List<Item> equipment = Equipment.stream().list();
         PlayerDetails playerDetails = PlayerDetails.generate(inventory, equipment);
-        boolean isInPvpWorld = Components.stream(90)
-                .anyMatch(i -> i.textureId() == 1046 && i.valid());
+        boolean isInPvpWorld = Worlds.current().getSpecialty() == World.Specialty.PVP;
 
         List<BankPathRequestPair> pathRequestPairs = getInstance().getBankPathTeleports(playerDetails.isMember(), isInPvpWorld, inventory, equipment);
 
@@ -183,9 +181,7 @@ public class DaxWalker implements Loggable {
         List<Item> inventory = Inventory.stream().list();
         List<Item> equipment = Equipment.stream().list();
         PlayerDetails playerDetails = PlayerDetails.generate(inventory, equipment);
-        boolean isInPvpWorld = Components.stream(90)
-                .anyMatch(i -> i.textureId() == 1046 && i.valid());
-
+        boolean isInPvpWorld = Worlds.current().getSpecialty() == World.Specialty.PVP;
 
         List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(playerDetails.isMember(), isInPvpWorld, destination.tile(), inventory, equipment);
 
