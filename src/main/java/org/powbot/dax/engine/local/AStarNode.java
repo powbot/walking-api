@@ -1,6 +1,7 @@
 package org.powbot.dax.engine.local;
 
 import org.powbot.api.Tile;
+import org.powbot.dax.engine.collision.CollisionFlags;
 
 public class AStarNode {
 
