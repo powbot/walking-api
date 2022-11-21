@@ -52,8 +52,8 @@ public class Grouping {
         }
 
         public boolean teleportTo() {
-            if (!isMinigameTabOpen()) {
-                openMinigameTab();
+            if (!Game.tab(Game.Tab.GROUPING)) {
+                return false;
             }
             if (!isSelected()) {
                 if (!selectMinigame(this.getName()))
@@ -70,87 +70,12 @@ public class Grouping {
 
     //METHODS
     public static boolean selectMinigame(MINIGAMES name){ //Selects Desired Minigame. Returns false if failed to select.
-        if (!isMinigameTabOpen()){                        //Can be used to check if desired Minigame is already selected.
-            openMinigameTab();
-        }
-        return selectMinigame(name.getName());
+        return Game.tab(Game.Tab.GROUPING) && selectMinigame(name.getName());
     }
 
-    public static boolean isMinigameTabOpen(){ //Checks if Minigame Tab is open. Returns false if not.
-        return Game.tab() == Game.Tab.CLAN_CHAT && Widgets.widget(MAIN_INTERFACE_ID).valid();
-    }
-
-//    public static boolean inMinigameChat(){ //CHECKS IF YOU ARE IN A MINIGAME CHAT. Returns false if not.
-//        Component clan = Interfaces.get(clanInterfaceID);
-//        if (clan != null){
-//            for (Component x : clan.getChildren()){
-//                if (x != null && x.getText().contains("Osrs")){
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-//    }
-
-    public static boolean openMinigameTab(){ //Opens the Minigame tab inside the Clan tab. Returns false if failed to open.
-        if (Game.tab() != Game.Tab.CLAN_CHAT){
-            if(Game.tab(Game.Tab.CLAN_CHAT)){
-                if(WaitFor.condition(1500, () -> Game.tab() == Game.Tab.CLAN_CHAT ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)
-                 != WaitFor.Return.SUCCESS)
-                    return false;
-            }
-        }
-
-//        Component master = Interfaces.get(399);
-
-//        if (master != null){
-        if(isMinigameTabOpen())
-            return true;
-        List<Component> button = Components.stream(707).action("Grouping").list();
-        if(button.size() == 0)
+    public static boolean teleport() {
+        if (!Game.tab(Game.Tab.GROUPING)){
             return false;
-        if(button.get(0).click())
-            WaitFor.milliseconds(400,900);
-        return isMinigameTabOpen();
-//        }
-
-//        return false;
-
-    }
-
-//
-//    public static boolean joinChat(){ //Joins the chat of selected minigame. Returns false if failed to join.
-//
-//        if (!isMinigameTabOpen()){
-//            openMinigameTab();
-//        }
-//
-//        Component mini = Interfaces.get(mainInterfaceID);
-//
-//        if (mini!= null){
-//            Component button = mini.getChild(26);
-//            String text;
-//            if (button != null){
-//                if ((text = button.getText()) != null && text.contains("Leave")){
-//                    return true;
-//                }
-//                Clicking.click(button);
-//                return (Timing.waitCondition(new BooleanSupplier() {
-//                    @Override
-//                    public boolean getAsBoolean() {
-//                        WaitFor.milliseconds(350);
-//                        return inMinigameChat();
-//                    }
-//                },3000));
-//            }
-//        }
-//        return false;
-//    }
-
-    public static boolean teleport(){ //Teleports with selected minigame. Returns false if Teleport failed.
-
-        if (!isMinigameTabOpen()){
-            openMinigameTab();
         }
 
         Component button = Widgets.widget(MAIN_INTERFACE_ID).component(TELEPORT_BUTTON_INDEX);
@@ -175,8 +100,7 @@ public class Grouping {
     }
 
     private static boolean selectMinigame(String name){
-
-        if(!isMinigameTabOpen() && !openMinigameTab()) {
+        if(!Game.tab(Game.Tab.GROUPING)) {
             System.out.println("failed to open minigame tab.");
             return false;
         }
