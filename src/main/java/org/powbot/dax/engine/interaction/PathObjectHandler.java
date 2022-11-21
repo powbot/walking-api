@@ -258,7 +258,6 @@ public class PathObjectHandler implements Loggable {
 
         RealTimeCollisionTile currentFurthest = current.getDestination();
         if (!Players.local().inMotion() && !object.inViewport(true)){
-            getInstance().log("clicking destination, trying to find object");
             if (!WalkerEngine.getInstance().clickMinimap(destinationDetails.getDestination())){
                 return false;
             }
