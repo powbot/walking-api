@@ -51,33 +51,33 @@ public class RealTimeCollisionTile extends PathFindingNode {
     }
 
     public static boolean blockedNorth(int collisionData){
-        return CollisionFlags.check(collisionData, CollisionFlags.NORTH) || CollisionFlags
-	        .check(collisionData, CollisionFlags.BLOCKED_NORTH_WALL);
+        return CollisionFlags.checkFlag(collisionData, CollisionFlags.NORTH) || CollisionFlags
+	        .checkFlag(collisionData, CollisionFlags.BLOCKED_NORTH_WALL);
     }
 
     public static boolean blockedEast(int collisionData){
-        return CollisionFlags.check(collisionData, CollisionFlags.EAST) || CollisionFlags
-	        .check(collisionData, CollisionFlags.BLOCKED_EAST_WALL);
+        return CollisionFlags.checkFlag(collisionData, CollisionFlags.EAST) || CollisionFlags
+	        .checkFlag(collisionData, CollisionFlags.BLOCKED_EAST_WALL);
     }
     public static boolean blockedSouth(int collisionData){
-        return CollisionFlags.check(collisionData, CollisionFlags.SOUTH) || CollisionFlags
-	        .check(collisionData, CollisionFlags.BLOCKED_SOUTH_WALL);
+        return CollisionFlags.checkFlag(collisionData, CollisionFlags.SOUTH) || CollisionFlags
+	        .checkFlag(collisionData, CollisionFlags.BLOCKED_SOUTH_WALL);
     }
     public static boolean blockedWest(int collisionData){
-        return CollisionFlags.check(collisionData, CollisionFlags.WEST) || CollisionFlags
-	        .check(collisionData, CollisionFlags.BLOCKED_WEST_WALL);
+        return CollisionFlags.checkFlag(collisionData, CollisionFlags.WEST) || CollisionFlags
+	        .checkFlag(collisionData, CollisionFlags.BLOCKED_WEST_WALL);
     }
 
     public static boolean isWalkable(int collisionData){
-        return !(CollisionFlags.check(collisionData, CollisionFlags.OCCUPIED)
-                || CollisionFlags.check(collisionData, CollisionFlags.SOLID)
-                || CollisionFlags.check(collisionData, CollisionFlags.BLOCKED)
-                || CollisionFlags.check(collisionData, CollisionFlags.CLOSED));
+        return !(CollisionFlags.checkFlag(collisionData, CollisionFlags.OCCUPIED)
+                || CollisionFlags.checkFlag(collisionData, CollisionFlags.SOLID)
+                || CollisionFlags.checkFlag(collisionData, CollisionFlags.BLOCKED)
+                || CollisionFlags.checkFlag(collisionData, CollisionFlags.CLOSED));
     }
 
     public static boolean isInitialized(int collisionData){
         return !(blockedNorth(collisionData) && blockedEast(collisionData) &&
-                blockedSouth(collisionData) && blockedWest(collisionData) && !isWalkable(collisionData)) || !CollisionFlags.check(collisionData, CollisionFlags.INITIALIZED);
+                blockedSouth(collisionData) && blockedWest(collisionData) && !isWalkable(collisionData)) || !CollisionFlags.checkFlag(collisionData, CollisionFlags.INITIALIZED);
     }
 
     @Override
