@@ -288,7 +288,7 @@ public class PathAnalyzer {
     private static boolean isLoaded(RealTimeCollisionTile rtc){
         Tile tile = rtc.getTile();
         int localX = tile.localX(), localY = tile.localY();
-        return !(CollisionFlags.check(rtc.getCollisionData(), CollisionFlags.CLOSED) && ((localX < 5 || localX > 98) || (localY
+        return !(CollisionFlags.checkFlag(rtc.getCollisionData(), CollisionFlags.CLOSED) && ((localX < 5 || localX > 98) || (localY
          < 5 || localY > 98)));
     }
 
