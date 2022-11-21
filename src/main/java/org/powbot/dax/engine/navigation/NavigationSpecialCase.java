@@ -78,9 +78,6 @@ public class NavigationSpecialCase implements Loggable {
         GANDIUS_GLIDER (
 		        GnomeGlider.Location.GANDIUS.getX(), GnomeGlider.Location.GANDIUS.getY(), GnomeGlider.Location.GANDIUS.getZ()),
 
-        AL_KHARID_TOLL_W(3268, 3228, 0),
-        AL_KHARID_TOLL_E(3267, 3228, 0),
-
         ZANARIS_RING (2452, 4473, 0),
         LUMBRIDGE_ZANARIS_SHED (3201, 3169, 0),
 
@@ -430,17 +427,6 @@ public class NavigationSpecialCase implements Loggable {
                 break;
 
             case WATERFALL_LEDGE:
-                break;
-
-            case AL_KHARID_TOLL_E:
-                InteractionHelper.click(Objects.stream(25).name("Gate").nearest().first()
-                        , "Pay-toll(10gp)",
-                        () -> Players.local().tile().equals(AL_KHARID_TOLL_W.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
-                break;
-            case AL_KHARID_TOLL_W:
-                InteractionHelper.click(Objects.stream(25).name("Gate").nearest().first()
-                        , "Pay-toll(10gp)",
-                        () -> Players.local().tile().equals(AL_KHARID_TOLL_E.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                 break;
 
             case WATERFALL_DUNGEON:
