@@ -16,6 +16,9 @@ public class ItemHelper {
     }
 
     public static boolean clickMatch(Item item, String regex){
+        if(Game.tab() != Game.Tab.INVENTORY && !Game.tab(Game.Tab.INVENTORY)){
+            return false;
+        }
         return item.click(rsMenuNode -> {
             String action = rsMenuNode.getAction();
             return action.matches(regex);
@@ -70,6 +73,9 @@ public class ItemHelper {
         if (Bank.opened()){
             Bank.close();
         }
+        if(Game.tab() != Game.Tab.INVENTORY && !Game.tab(Game.Tab.INVENTORY)){
+            return false;
+        }
         return action != null ? item.click(action) : item.click();
     }
 
@@ -77,6 +83,9 @@ public class ItemHelper {
         String name = Inventory.selectedItem().name();
         CacheItemConfig rsItemDefinition = CacheItemConfig.load(itemID);
         String itemName;
+        if(Game.tab() != Game.Tab.INVENTORY && !Game.tab(Game.Tab.INVENTORY)){
+            return false;
+        }
         if (Inventory.selectionType() == 1 && (itemName = rsItemDefinition.getName()).length() > 0 && name.equals(itemName)){
             return true;
         } else if (Inventory.selectionType() == 1){
