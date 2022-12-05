@@ -16,7 +16,8 @@ public class ItemHelper {
     }
 
     public static boolean clickMatch(Item item, String regex){
-        if(Game.tab() != Game.Tab.INVENTORY && !Game.tab(Game.Tab.INVENTORY)){
+        Game.Tab tab = item.getType() == ItemType.INVENTORY ? Game.Tab.INVENTORY : Game.Tab.EQUIPMENT;
+        if(Game.tab() != tab && !Game.tab(tab)){
             return false;
         }
         return item.interact(rsMenuNode -> {
