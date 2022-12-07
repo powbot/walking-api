@@ -31,24 +31,32 @@ public class PlayerDetails {
                                        .map(value -> new IntPair(value, Varpbits.varpbit(value, true))).distinct().collect(Collectors.toList());
 
         List<IntPair> varbit = Arrays.stream(new int[]{
-            192,
-            199,
-            357,
-            2310,
-            2328,
-            3534,
-            3741,
-            4538,
-            4566,
-            4885,
-            4895,
-            4897,
-            5087,
-            5088,
-            5089,
-            5090,
-            5810,
-            9016
+                192,
+                199,
+                357,
+                2310,
+                2328,
+                3534,
+                3618, //dream mentor
+                3741,
+                4494, //fremmy elite diary status
+                4538,
+                4566,
+                4885,
+                4895,
+                4897,
+                5027,
+                5087,
+                5088,
+                5089,
+                5090,
+                5800, //fossil island- museum camp bank has been built if this is 1
+                5810,
+                6104,
+                7255,
+                9016,
+                10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1
+                13903, //Sleeping Giants quest
         })
                 .mapToObj(value -> new IntPair(value, Varpbits.value(value, true))).distinct().collect(
 				        Collectors.toList());
