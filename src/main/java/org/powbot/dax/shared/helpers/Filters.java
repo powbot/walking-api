@@ -74,16 +74,14 @@ public class Filters {
         public static Predicate<GroundItem> actionsContains(String... actions){
             List<String> asList = Arrays.asList(actions);
             return i -> asList.stream().anyMatch(action -> {
-                String[] curr = i.getConfig().getGroundActions();
-                return Arrays.stream(curr).anyMatch(c -> c.contains(action));
+                return i.groundActions().stream().anyMatch(c -> c.contains(action));
             });
         }
 
         public static Predicate<GroundItem> actionsEquals(String... actions){
             List<String> asList = Arrays.asList(actions);
             return i -> asList.stream().anyMatch(action -> {
-                String[] curr = i.getConfig().getGroundActions();
-                return Arrays.stream(curr).anyMatch(c -> c.contains(action));
+                return i.groundActions().stream().anyMatch(c -> c.contains(action));
             });
         }
 
