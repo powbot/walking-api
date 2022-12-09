@@ -148,22 +148,16 @@ public class Filters {
         public static Predicate<Npc> actionsContains(String... actions){
             List<String> asList = Arrays.asList(actions);
             return i -> asList.stream().anyMatch(action -> {
-                CacheNpcConfig def = i.getConfig();
-                if(def == null)
-                    return false;
-                String[] curr = def.getActions();
-                return Arrays.stream(curr).filter(java.util.Objects::nonNull).anyMatch(c -> c.contains(action));
+                List<String> curr = i.getActions();
+                return curr.stream().filter(java.util.Objects::nonNull).anyMatch(c -> c.contains(action));
             });
         }
 
         public static Predicate<Npc> actionsEquals(String... actions){
             List<String> asList = Arrays.asList(actions);
             return i -> asList.stream().anyMatch(action -> {
-                CacheNpcConfig def = i.getConfig();
-                if(def == null)
-                    return false;
-                String[] curr = def.getActions();
-                return Arrays.asList(curr).contains(action);
+                List<String> curr = i.getActions();
+                return curr.contains(action);
             });
         }
 
