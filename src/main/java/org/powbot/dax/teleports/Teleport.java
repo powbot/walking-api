@@ -869,6 +869,10 @@ public enum Teleport {
 		return getRequirement().satisfies(inventory, equipment);
 	}
 
+	public boolean requiresMembers(){
+		return requiresMembers;
+	}
+
 	public boolean trigger() {
 		return this.action.trigger();
 	}

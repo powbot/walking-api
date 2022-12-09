@@ -23,7 +23,7 @@ import org.powbot.mobile.script.ScriptManager;
 
 import java.util.List;
 
-public class WalkerEngine implements Loggable{
+public class WalkerEngine implements Loggable {
 
     private static WalkerEngine walkerEngine;
 
@@ -135,7 +135,6 @@ public class WalkerEngine implements Loggable{
 
 
                 CustomConditionContainer conditionContainer = new CustomConditionContainer(walkingCondition);
-                log(destinationDetails.getState().toString());
                 switch (destinationDetails.getState()) {
                     case DISCONNECTED_PATH:
                         if (currentNode.getTile().distanceTo(Players.local().tile()) > 10){
@@ -342,8 +341,9 @@ public class WalkerEngine implements Loggable{
             return true;
         if(Bank.opened())
             Bank.close();
+        boolean members = Worlds.isCurrentWorldMembers();
         for (Teleport teleport : Teleport.values()) {
-            if (!teleport.canUse()) continue;
+            if (!teleport.canUse() || (teleport.requiresMembers() && !members)) continue;
             if(teleport.isAtTeleportSpot(startPosition) && !teleport.isAtTeleportSpot(playerPosition)){
                 log("Using teleport method: " + teleport);
                 teleport.trigger();
