@@ -1,4 +1,5 @@
 # walking-api
+This repo is the walking engine that will be used by the PowBot webwalker when the Dax WW setting is enabled, or if you directly call the DaxWalker library.  This library makes a call to the DaxWalker server with your account's player details, and in that call it will include various skill levels, varp and varbit values, and other variables.  It also includes a list of potential starting points based upon the teleports you have available on your character.  The server will return the shortest route back, and the engine then takes over and traverses the path.  Most of the engine logic begins in the WalkerEngine class in the engine package.
 
 Many teleports are blacklisted by default to aid in reducing computation time of each call.  With those teleports blacklisted, one can expect a call to take roughly .7-1 sec to generate player details, send the request, and receive a response.  I took care to only blacklist teleports that are used in specific scenarios, and leave the generally accessible ones available.  
 <details>
@@ -62,7 +63,7 @@ Teleport.YANILLE_TELEPORT_TAB
 ```
 </details>
 
-These methods will later become available via the PowBot api, but in the DaxWalker library you can use these methods to manipulate the blacklist:
+These methods for managing teleports are available via the PowBot api:
 
 ```
 //Get a List<Teleport> of current blacklisted teleports
