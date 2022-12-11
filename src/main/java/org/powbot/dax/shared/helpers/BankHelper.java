@@ -5,12 +5,15 @@ import org.powbot.api.Tile;
 import org.powbot.api.rt4.*;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.InteractionHelper;
+import org.powbot.mobile.rlib.generated.RBank;
 import org.powbot.util.TransientGetter3D;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class BankHelper {
 
@@ -62,33 +65,7 @@ public class BankHelper {
     }
 
     public static Set<Tile> getBuilding(Locatable positionable){
-        return computeBuilding(positionable, Game.landscapeMeta(), new HashSet<>());
-    }
-
-    private static Set<Tile> computeBuilding(Locatable positionable, TransientGetter3D<Byte> sceneFlags, Set<Tile> tiles){
-        try {
-            Tile mapOffset = Game.mapOffset();
-            int localX = positionable.tile().localX(), localY = positionable.tile().localY(), localZ = positionable.tile().floor();
-            if (localX < 0 || localY < 0 || localZ < 0){
-                return tiles;
-            }
-            if (sceneFlags.getSize() <= localZ || sceneFlags.get(localZ).getSize() <= localX || sceneFlags.get(localZ).get(localX).getSize() <= localY){ //Not within bounds
-                return tiles;
-            }
-            if (sceneFlags.get(localZ).get(localX).get(localY) < 4){ //Not a building
-                return tiles;
-            }
-            if (!tiles.add(positionable.tile())){ //Already computed
-                return tiles;
-            }
-            computeBuilding(new Tile(mapOffset.getX() + localX, mapOffset.getY() + localY + 1, localZ), sceneFlags, tiles);
-            computeBuilding(new Tile(mapOffset.getX() + localX + 1, mapOffset.getY() + localY, localZ), sceneFlags, tiles);
-            computeBuilding(new Tile(mapOffset.getX() + localX, mapOffset.getY() + localY - 1, localZ), sceneFlags, tiles);
-            computeBuilding(new Tile(mapOffset.getX() + localX - 1, mapOffset.getY() + localY, localZ), sceneFlags, tiles);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
-        return tiles;
+        return Arrays.stream(RBank.computeBuilding(positionable.tile())).map(t -> new Tile(t.x(), t.y(), t.floor())).collect(Collectors.toSet());
     }
 
 }
