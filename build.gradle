@@ -10,12 +10,12 @@ version '1.0.2-SNAPSHOT'
 repositories {
     mavenCentral()
     google()
-    maven { url = 'https://repo.repsy.io/mvn/const/pow' }
+    maven { url = "https://repo.powbot.org/releases" }
 }
 
 dependencies {
     compileOnly 'com.google.code.gson:gson:2.8.6'
-    compileOnly 'org.powbot:client-sdk:1.0.14-SNAPSHOT'
+    implementation "org.powbot:client-sdk:1.0.19-SNAPSHOT"
     implementation 'com.google.guava:guava:31.1-jre'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
