@@ -4,6 +4,7 @@ import org.powbot.api.Point;
 import org.powbot.api.Rectangle;
 import org.powbot.api.rt4.*;
 import org.powbot.dax.teleports.utils.ItemFilters;
+import org.powbot.mobile.rscache.loader.ItemLoader;
 
 import java.util.Arrays;
 import java.util.List;
@@ -82,12 +83,14 @@ public class ItemHelper {
 
     public static boolean use(int itemID){
         String name = Inventory.selectedItem().name();
-        CacheItemConfig rsItemDefinition = CacheItemConfig.load(itemID);
+        CacheItemConfig config = ItemLoader.INSTANCE.load(itemID);
+        if(config == null)
+            return false;
         String itemName;
         if(Game.tab() != Game.Tab.INVENTORY && !Game.tab(Game.Tab.INVENTORY)){
             return false;
         }
-        if (Inventory.selectionType() == 1 && (itemName = rsItemDefinition.getName()).length() > 0 && name.equals(itemName)){
+        if (Inventory.selectionType() == 1 && (itemName = config.getName()).length() > 0 && name.equals(itemName)){
             return true;
         } else if (Inventory.selectionType() == 1){
             Inventory.selectedItem().click();
