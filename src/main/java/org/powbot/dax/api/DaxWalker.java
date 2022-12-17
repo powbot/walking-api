@@ -52,7 +52,8 @@ public class DaxWalker implements Loggable {
                 Teleport.BATTLEFRONT_TAB, Teleport.DRAYNOR_MANOR_TAB, Teleport.MIND_ALTAR_TAB, Teleport.ENCHANTED_LYRE_RELLEKA,
                 Teleport.FARMING_CAPE_TELEPORT, Teleport.ROYAL_SEED_POD, Teleport.DRAKANS_MEDALLION_VER_SINHAZA, Teleport.DRAKANS_MEDALLION_DARKMEYER,
                 Teleport.OURANIA_TELEPORT_TAB, Teleport.WATERBIRTH_TELEPORT_TAB, Teleport.BARBARIAN_OUTPOST_TELEPORT_TAB,
-                Teleport.KHAZARD_TELEPORT_TAB, Teleport.FISHING_GUILD_TELEPORT_TAB, Teleport.CATHERBY_TELEPORT_TAB
+                Teleport.KHAZARD_TELEPORT_TAB, Teleport.FISHING_GUILD_TELEPORT_TAB, Teleport.CATHERBY_TELEPORT_TAB,
+                Teleport.CASTLE_WARS_MINIGAME, Teleport.CLAN_WARS_MINIGAME
 
         ));
     }
