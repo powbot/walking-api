@@ -219,6 +219,8 @@ public class DaxWalker implements Loggable {
     }
 
     public List<PathResult> validPaths(List<PathResult> list) {
+        if(list == null)
+            return Collections.emptyList();
         List<PathResult> result = list.stream().filter(pathResult -> pathResult.getPathStatus() == PathStatus.SUCCESS).collect(
 		        Collectors.toList());
         if (!result.isEmpty()) {
