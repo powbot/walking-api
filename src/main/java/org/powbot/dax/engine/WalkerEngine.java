@@ -110,6 +110,10 @@ public class WalkerEngine implements Loggable {
                     return false;
                 }
 
+                if (Bank.opened()) {
+                    Bank.close();
+                }
+
                 destinationDetails = PathAnalyzer.furthestReachableTile(path);
                 if (destinationDetails == null || PathUtils.getFurthestReachableTileInMinimap(path) == null) {
                     log("Could not grab destination details, destination details: " + destinationDetails);
