@@ -4,6 +4,8 @@ import org.powbot.api.Area;
 import org.powbot.api.Locatable;
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.*;
+import org.powbot.mobile.rlib.generated.RObjectDefinition;
+import org.powbot.mobile.rscache.loader.ObjectLoader;
 
 import java.util.Arrays;
 import java.util.List;
@@ -220,8 +222,8 @@ public class Filters {
         public static Predicate<GameObject> actionsContains(String... actions){
             List<String> asList = Arrays.asList(actions);
             return i -> asList.stream().anyMatch(action -> {
-                CacheObjectConfig def = CacheObjectConfig.load(i.id());
-                String[] curr = def.getActions();
+                RObjectDefinition def = ObjectLoader.lookup(i.id());
+                String[] curr = def.actions();
                 return Arrays.stream(curr).filter(java.util.Objects::nonNull).anyMatch(c -> c.contains(action));
             });
         }
@@ -229,8 +231,8 @@ public class Filters {
         public static Predicate<GameObject> actionsEquals(String... actions){
             List<String> asList = Arrays.asList(actions);
             return i -> asList.stream().anyMatch(action -> {
-                CacheObjectConfig def = CacheObjectConfig.load(i.id());
-                String[] curr = def.getActions();
+                RObjectDefinition def = ObjectLoader.lookup(i.id());
+                String[] curr = def.actions();
                 return Arrays.asList(curr).contains(action);
             });
         }

@@ -1,9 +1,9 @@
 package org.powbot.dax.shared.helpers;
 
-
-import org.powbot.api.rt4.CacheObjectConfig;
 import org.powbot.api.rt4.GameObject;
 import org.powbot.api.rt4.Objects;
+import org.powbot.mobile.rlib.generated.RObjectDefinition;
+import org.powbot.mobile.rscache.loader.ObjectLoader;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,11 +36,11 @@ public class GameObjectHelper {
 
     public static String[] getActions(GameObject object){
         String[] emptyActions = new String[0];
-        return CacheObjectConfig.load(object.id()).getActions();
+        return ObjectLoader.lookup(object.id()).actions();
     }
 
     public static String getName(GameObject object){
-        return CacheObjectConfig.load(object.id()).getName();
+        return ObjectLoader.lookup(object.id()).name();
     }
 
 }

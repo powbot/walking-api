@@ -4,6 +4,7 @@ import org.powbot.api.Point;
 import org.powbot.api.Rectangle;
 import org.powbot.api.rt4.*;
 import org.powbot.dax.teleports.utils.ItemFilters;
+import org.powbot.mobile.rlib.generated.RItemDefinition;
 import org.powbot.mobile.rscache.loader.ItemLoader;
 
 import java.util.Arrays;
@@ -83,14 +84,14 @@ public class ItemHelper {
 
     public static boolean use(int itemID){
         String name = Inventory.selectedItem().name();
-        CacheItemConfig config = ItemLoader.INSTANCE.load(itemID);
+        RItemDefinition config = ItemLoader.lookup(itemID);
         if(config == null)
             return false;
         String itemName;
         if(Game.tab() != Game.Tab.INVENTORY && !Game.tab(Game.Tab.INVENTORY)){
             return false;
         }
-        if (Inventory.selectionType() == 1 && (itemName = config.getName()).length() > 0 && name.equals(itemName)){
+        if (Inventory.selectionType() == 1 && (itemName = config.name()).length() > 0 && name.equals(itemName)){
             return true;
         } else if (Inventory.selectionType() == 1){
             Inventory.selectedItem().click();
@@ -116,8 +117,8 @@ public class ItemHelper {
     }
 
     public static boolean isNoted(int id) {
-        CacheItemConfig definition = CacheItemConfig.load(id);
-        return definition.getNoted();
+        RItemDefinition definition = ItemLoader.lookup(id);
+        return definition.noted();
     }
 
 
@@ -131,16 +132,16 @@ public class ItemHelper {
     }
 
 
-    private static String[] getItemActions(CacheItemConfig rsItemDefinition){
+    private static String[] getItemActions(RItemDefinition rsItemDefinition){
         if (rsItemDefinition == null){
             return new String[0];
         }
-        String[] actions = rsItemDefinition.getActions();
+        String[] actions = rsItemDefinition.actions();
         return actions != null ? actions : new String[0];
     }
 
-    private static String getItemName(CacheItemConfig definition){
-        String name = definition.getName();
+    private static String getItemName(RItemDefinition definition){
+        String name = definition.name();
         return name != null ? name : "null";
     }
 
