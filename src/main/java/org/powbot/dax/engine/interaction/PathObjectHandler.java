@@ -440,6 +440,10 @@ public class PathObjectHandler implements Loggable {
                 } else if(actions2.contains("Climb-up") || actions2.contains("Climb-down")){
                     return 1;
                 }
+            } else if(actions1.contains("Climb-down") || actions1.contains("Climb-up")){
+                return 1;
+            } else if(actions2.contains("Climb-down") || actions2.contains("Climb-up")){
+                return -1;
             }
 //            else if(actions1.contains("Climb-up") || actions1.contains("Climb-down")){
 //                return 1;
