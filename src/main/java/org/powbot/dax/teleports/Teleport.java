@@ -676,6 +676,7 @@ public enum Teleport {
 	TZHAAR_FIGHT_PIT_MINIGAME(
 			Grouping.MINIGAMES.TZHAAR_FIGHT_PIT,
 			new Tile(2402, 5181, 0),
+			(i1, i2) -> Worlds.current().getNumber() == 362,
 			"No."
 	),
 
