@@ -49,9 +49,9 @@ public class Charter implements Loggable {
     }
 
     private static boolean openCharterMenu() {
-        return Widgets.component(CHARTER_INTERFACE_MASTER, 0).valid() ||
+        return Widgets.component(CHARTER_INTERFACE_MASTER, 0).visible() ||
                 (Npcs.stream().action("Charter").nearest().first().interact("Charter") &&
-                        Condition.wait(() -> Widgets.component(CHARTER_INTERFACE_MASTER, 0).valid(), 300, 20));
+                        Condition.wait(() -> Widgets.component(CHARTER_INTERFACE_MASTER, 0).visible(), 300, 20));
     }
 
     private static Map<LocationProperty, Location> getCharterLocations() {
