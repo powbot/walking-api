@@ -1,6 +1,7 @@
 package org.powbot.dax.teleports;
 
 import org.powbot.api.Condition;
+import org.powbot.api.Input;
 import org.powbot.api.StringUtils;
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.*;
@@ -23,7 +24,7 @@ public enum Teleport {
 	VARROCK_TELEPORT(
 			35, new Tile(3212, 3424, 0),
 			Spell.VARROCK_TELEPORT::canUse,
-			() -> selectSpell(Magic.Spell.VARROCK_TELEPORT,"Cast"),
+			() -> selectSpell(Spell.VARROCK_TELEPORT,"Cast"),
 			false
 	),
 
@@ -36,13 +37,13 @@ public enum Teleport {
 	VARROCK_TELEPORT_GRAND_EXCHANGE(
 			35, new Tile(3161, 3478, 0),
 			(i1, i2) -> Spell.VARROCK_TELEPORT.canUse(i1, i2) && TeleportConstants.isVarrockTeleportAtGE(),
-			() -> selectSpell(Magic.Spell.VARROCK_TELEPORT,"Grand Exchange")
+			() -> selectSpell(Spell.VARROCK_TELEPORT,"Grand Exchange")
 	),
 
 	LUMBRIDGE_TELEPORT(
 			35, new Tile(3225, 3219, 0),
 			Spell.LUMBRIDGE_TELEPORT::canUse,
-			() -> selectSpell(Magic.Spell.LUMBRIDGE_TELEPORT,"Cast"),
+			() -> selectSpell(Spell.LUMBRIDGE_TELEPORT,"Cast"),
 			false
 	),
 
@@ -55,7 +56,7 @@ public enum Teleport {
 	FALADOR_TELEPORT(
 			35, new Tile(2966, 3379, 0),
 			Spell.FALADOR_TELEPORT::canUse,
-			() -> selectSpell(Magic.Spell.FALADOR_TELEPORT,"Cast"),
+			() -> selectSpell(Spell.FALADOR_TELEPORT,"Cast"),
 			false
 	),
 
@@ -68,7 +69,7 @@ public enum Teleport {
 	CAMELOT_TELEPORT(
 			35, new Tile(2757, 3479, 0),
 			Spell.CAMELOT_TELEPORT::canUse,
-			() -> selectSpell(Magic.Spell.CAMELOT_TELEPORT,"Cast")
+			() -> selectSpell(Spell.CAMELOT_TELEPORT,"Cast")
 
 	),
 
@@ -81,13 +82,13 @@ public enum Teleport {
 	SEERS_TELEPORT(
 			35, new Tile(2757, 3479, 0),
 			(i1, i2) -> Spell.CAMELOT_TELEPORT.canUse(i1, i2) && Varpbits.value(4560, true) == 1,
-			() -> selectSpell(Magic.Spell.CAMELOT_TELEPORT,"Seers'")
+			() -> selectSpell(Spell.CAMELOT_TELEPORT,"Seers'")
 	),
 
 	ARDOUGNE_TELEPORT(
 			35, new Tile(2661, 3300, 0),
 			Spell.ARDOUGNE_TELEPORT::canUse,
-			() -> selectSpell(Magic.Spell.ARDOUGNE_TELEPORT,"Cast")
+			() -> selectSpell(Spell.ARDOUGNE_TELEPORT,"Cast")
 
 	),
 
@@ -322,7 +323,7 @@ public enum Teleport {
 	SKILLS_FARMING_GUILD_INSIDE (
 			35, new Tile(1249, 3727, 0),
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.SKILLS_FILTER, i1, i2)
-					&& Varpbits.value(4895, true) >= 600 && Skills.realLevel(Skill.Farming) >= 45,
+								&& Varpbits.value(4895, true) >= 600 && Skills.realLevel(Skill.Farming) >= 45,
 			() -> teleportWithScrollInterface(WearableItemTeleport.SKILLS_FILTER, ".*Farming.*"),
 			TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
@@ -345,11 +346,12 @@ public enum Teleport {
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.BURNING_AMULET_FILTER, "(Lava.*|Okay, teleport to level.*)")
 	),
 
-	DIGSITE_PENDANT (
+	DIGSITE_PENDANT_BARGE(
 			35, new Tile(3346,3445,0),
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.DIGSITE_PENDANT_FILTER, i1, i2),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.DIGSITE_PENDANT_FILTER, "Digsite")
 	),
+
 
 	ECTOPHIAL (
 			0, new Tile(3660, 3524, 0),
@@ -568,8 +570,7 @@ public enum Teleport {
 			35, new Tile(2661, 3465, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameContains("Enchanted lyre")),
 			() -> {
-				Item lyre = Inventory.stream().filter(ItemFilters.nameContains("Enchanted lyre")).firstOrNull();
-				return lyre != null && ItemHelper.clickMatch(lyre, "Play|Rellekka.*");
+				return ItemHelper.click("Enchanted lyre", "Play|Rellekka.*");
 			}
 	),
 
@@ -725,8 +726,8 @@ public enum Teleport {
 			(i1, i2) -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.STANDARD,
 			() -> {
 				final Tile myPos = Players.local().tile();
-				return selectSpell(Magic.Spell.HOME_TELEPORT, "Cast") && Condition.wait(() ->  !Players.local().inCombat() &&
-						!Players.local().tile().equals(myPos), 1500, 10);
+				return selectSpell(Spell.HOME_TELEPORT, "Cast") && Condition.wait(() ->  !Players.local().inCombat() &&
+																									   !Players.local().tile().equals(myPos), 1500, 10);
 			},
 			false
 	),
@@ -828,8 +829,8 @@ public enum Teleport {
 			this.requirement = (i1, i2) -> Teleport.canUseMinigameTeleport();
 		}
 		this.action = () -> {
-			if(NPCInteraction.isConversationWindowUp()){
-				Players.local().tile().matrix().click();
+			if(Chat.canContinue() || Chat.get().size() > 0){
+				Input.tap(Players.local().tile().matrix().mapPoint());
 				WaitFor.milliseconds(200, 600);
 			}
 			if(!minigame.teleportTo()){
@@ -912,9 +913,9 @@ public enum Teleport {
 			return false;
 		}
 
-		if(!Widgets.component(TeleportConstants.SCROLL_INTERFACE_MASTER, 0).valid()){
+		if(!Widgets.component(TeleportConstants.SCROLL_INTERFACE_MASTER, 0).visible()){
 			if (!ItemHelper.clickMatch(teleportItem, "(Rub|Teleport|" + regex + ")") ||
-					!Condition.wait(() -> Widgets.component(TeleportConstants.SCROLL_INTERFACE_MASTER, 0).valid(), 250, 10)) {
+						!Condition.wait(() -> Widgets.component(TeleportConstants.SCROLL_INTERFACE_MASTER, 0).visible(), 250, 10)) {
 				return false;
 			}
 		}
@@ -935,7 +936,7 @@ public enum Teleport {
 		return false;
 	}
 
-	private static boolean selectSpell(Magic.Spell spell, String action){
+	private static boolean selectSpell(Spell spell, String action){
 		if(!Game.tab(Game.Tab.MAGIC)){
 			return false;
 		}
@@ -948,12 +949,12 @@ public enum Teleport {
 
 	private static boolean canUseHomeTeleport(){
 		return !Players.local().inCombat() &&
-				((long) Varpbits.varpbit(892, true) * 60 * 1000) + (30 * 60 * 1000) < System.currentTimeMillis();
+					   ((long) Varpbits.varpbit(892, true) * 60 * 1000) + (30 * 60 * 1000) < System.currentTimeMillis();
 	}
 
 	private static boolean canUseMinigameTeleport(){
 		return !Players.local().inCombat() &&
-				((long) Varpbits.varpbit(888, true) * 60 * 1000) + (20 * 60 * 1000) < System.currentTimeMillis();
+					   ((long) Varpbits.varpbit(888, true) * 60 * 1000) + (20 * 60 * 1000) < System.currentTimeMillis();
 	}
 
 }

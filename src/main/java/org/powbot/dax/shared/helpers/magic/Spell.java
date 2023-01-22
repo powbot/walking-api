@@ -9,6 +9,9 @@ import java.util.List;
 
 public enum Spell {
 
+    HOME_TELEPORT(
+            SpellBook.Type.STANDARD, 1, Magic.Spell.HOME_TELEPORT
+    ),
     VARROCK_TELEPORT    (
 	    SpellBook.Type.STANDARD, 25, Magic.Spell.VARROCK_TELEPORT,    new Pair<>(1, RuneElement.LAW), new Pair<>(3, RuneElement.AIR),     new Pair<>(1, RuneElement.FIRE)),
     LUMBRIDGE_TELEPORT  (
@@ -47,6 +50,10 @@ public enum Spell {
 
     public boolean cast() {
         return canUse(Inventory.stream().list(), Equipment.stream().list()) && spell.cast();
+    }
+
+    public boolean cast(String action){
+        return spell.cast(action);
     }
 
     public boolean canUse(){
