@@ -247,7 +247,7 @@ public class PathObjectHandler implements Loggable {
         } else {
             action = specialObject.getAction();
             Predicate<GameObject> specialObjectFilter = specialObject.getFilter()
-                    .and(Filters.Objects.actionsContains(specialObject.getAction()))
+//                    .and(Filters.Objects.actionsContains(specialObject.getAction()))
                     .and(Filters.Objects.inArea(AreaHelper.fromCenter(specialObject.getLocation() != null ? specialObject.getLocation() : destinationDetails.getAssumed(), 1)));
             interactiveObjects = Objects.stream(15).filter(specialObjectFilter).list();
 
