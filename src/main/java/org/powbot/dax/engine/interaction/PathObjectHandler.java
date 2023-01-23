@@ -46,7 +46,7 @@ public class PathObjectHandler implements Loggable {
     }
 
     private enum SpecialObject {
-        WEB("Web", "Slash", null, new SpecialCondition() {
+        WEB(Filters.Objects.nameEquals("Web"), "Slash", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Objects.stream(15).filter(
@@ -55,7 +55,7 @@ public class PathObjectHandler implements Loggable {
                                 .and(Filters.Objects.actionsContains("Slash"))).count() > 0;
             }
         }),
-        ROCKFALL("Rockfall", "Mine", null, new SpecialCondition() {
+        ROCKFALL(Filters.Objects.nameEquals("Rockfall"), "Mine", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return  Objects.stream(15).filter(
@@ -64,7 +64,7 @@ public class PathObjectHandler implements Loggable {
                                 .and(Filters.Objects.actionsContains("Mine"))).count() > 0;
             }
         }),
-        ROOTS("Roots", "Chop", null, new SpecialCondition() {
+        ROOTS(Filters.Objects.nameEquals("Roots"), "Chop", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Objects.stream(15).filter(
@@ -73,7 +73,7 @@ public class PathObjectHandler implements Loggable {
                                 .and(Filters.Objects.actionsContains("Chop"))).count() > 0;
             }
         }),
-        ROCK_SLIDE("Rockslide", "Climb-over", null, new SpecialCondition() {
+        ROCK_SLIDE(Filters.Objects.nameEquals("Rockslide"), "Climb-over", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Objects.stream(15).filter(
@@ -82,7 +82,7 @@ public class PathObjectHandler implements Loggable {
                                 .and(Filters.Objects.actionsContains("Climb-over"))).count() > 0;
             }
         }),
-        ROOT("Root", "Step-over", null, new SpecialCondition() {
+        ROOT(Filters.Objects.nameEquals("Root"), "Step-over", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Objects.stream(15).filter(
@@ -91,7 +91,7 @@ public class PathObjectHandler implements Loggable {
                                 .and(Filters.Objects.actionsContains("Step-over"))).count() > 0;
             }
         }),
-        BRIMHAVEN_VINES("Vines", "Chop-down", null, new SpecialCondition() {
+        BRIMHAVEN_VINES(Filters.Objects.nameEquals("Vines"), "Chop-down", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Objects.stream(15).filter(
@@ -100,95 +100,110 @@ public class PathObjectHandler implements Loggable {
                                 .and(Filters.Objects.actionsContains("Chop-down"))).count() > 0;
             }
         }),
-        AVA_BOOKCASE ("Bookcase", "Search", new Tile(3097, 3359, 0), new SpecialCondition() {
+        AVA_BOOKCASE (Filters.Objects.nameEquals("Bookcase"), "Search", new Tile(3097, 3359, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getDestination().getX() >= 3097 && destinationDetails.getAssumed().equals(new Tile(3097, 3359, 0));
             }
         }),
-        AVA_LEVER ("Lever", "Pull", new Tile(3096, 3357, 0), new SpecialCondition() {
+        AVA_LEVER (Filters.Objects.nameEquals("Lever"), "Pull", new Tile(3096, 3357, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getDestination().getX() < 3097 && destinationDetails.getAssumed().equals(new Tile(3097, 3359, 0));
             }
         }),
-        ARDY_DOOR_LOCK_SIDE("Door", "Pick-lock", new Tile(2565, 3356, 0), new SpecialCondition() {
+        ARDY_DOOR_LOCK_SIDE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2565, 3356, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Players.local().tile().getX() >= 2565 && Players.local().tile().distanceTo(new Tile(2565, 3356, 0)) < 3;
             }
         }),
-        ARDY_DOOR_UNLOCKED_SIDE("Door", "Open", new Tile(2565, 3356, 0), new SpecialCondition() {
+        ARDY_DOOR_UNLOCKED_SIDE(Filters.Objects.nameEquals("Door"), "Open", new Tile(2565, 3356, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Players.local().tile().getX() < 2565 && Players.local().tile().distanceTo(new Tile(2565, 3356, 0)) < 3;
             }
         }),
-        YANILLE_DOOR_LOCK_SIDE("Door", "Pick-lock", new Tile(2601, 9482, 0), new SpecialCondition() {
+        YANILLE_DOOR_LOCK_SIDE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2601, 9482, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Players.local().tile().getY() <= 9481 && Players.local().tile().distanceTo(new Tile(2601, 9482, 0)) < 3;
             }
         }),
-        YANILLE_DOOR_UNLOCKED_SIDE("Door", "Open", new Tile(2601, 9482, 0), new SpecialCondition() {
+        YANILLE_DOOR_UNLOCKED_SIDE(Filters.Objects.nameEquals("Door"), "Open", new Tile(2601, 9482, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return Players.local().tile().getY() > 9481 && Players.local().tile().distanceTo(new Tile(2601, 9482, 0)) < 3;
             }
         }),
-        EDGEVILLE_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new Tile(3138, 3516, 0), new SpecialCondition() {
+        EDGEVILLE_UNDERWALL_TUNNEL(Filters.Objects.nameEquals("Underwall tunnel"), "Climb-into", new Tile(3138, 3516, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getAssumed().equals(new Tile(3138, 3516, 0));
             }
         }),
-        VARROCK_UNDERWALL_TUNNEL("Underwall tunnel", "Climb-into", new Tile(3141, 3513, 0), new SpecialCondition() {
+        VARROCK_UNDERWALL_TUNNEL(Filters.Objects.nameEquals("Underwall tunnel"), "Climb-into", new Tile(3141, 3513, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getAssumed().equals(new Tile(3141, 3513, 0 ));
             }
         }),
-        GAMES_ROOM_STAIRS("Stairs", "Climb-down", new Tile(2899, 3565, 0), new SpecialCondition() {
+        GAMES_ROOM_STAIRS(Filters.Objects.nameEquals("Stairs"), "Climb-down", new Tile(2899, 3565, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getDestination().getTile().equals(new Tile(2899, 3565, 0)) &&
                     destinationDetails.getAssumed().equals(new Tile(2205, 4934, 1));
             }
         }),
-        FALADOR_GATE("Gate", "Close", new Tile(3031, 3314, 0), new SpecialCondition() {
+        FALADOR_GATE(Filters.Objects.nameEquals("Gate"), "Close", new Tile(3031, 3314, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getDestination().getTile().equals(new Tile(3031, 3314, 0));
             }
         }),
-        CANIFIS_BASEMENT_WALL("Wall", "Search", new Tile(3480, 9836, 0),new SpecialCondition() {
+        CANIFIS_BASEMENT_WALL(Filters.Objects.nameEquals("Wall"), "Search", new Tile(3480, 9836, 0),new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getDestination().getTile().equals(new Tile(3480, 9836, 0)) ||
                     destinationDetails.getAssumed().equals(new Tile(3480, 9836, 0));
             }
         }),
-        BRINE_RAT_CAVE_BOULDER("Cave", "Exit", new Tile(2690, 10125, 0), new SpecialCondition() {
+        BRINE_RAT_CAVE_BOULDER(Filters.Objects.nameEquals("Cave"), "Exit", new Tile(2690, 10125, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getDestination().getTile().equals(new Tile(2690, 10125, 0))
                     && Npcs.stream().name("Boulder").action("Roll").count() > 0;
             }
+        }),
+        AL_KHARID_GATE(Filters.Objects.idEquals(44057), "Pay-toll(10gp)", new Tile(3268, 3228, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                RealTimeCollisionTile next = destinationDetails.getNextTile();
+                RealTimeCollisionTile dest = destinationDetails.getDestination();
+                if(next == null || dest == null)
+                    return false;
+                Tile end = next.getTile();
+                Tile start = dest.getTile();
+                if(end == null || start == null)
+                    return false;
+                return (end.getX() == 3268 || end.getX() == 3267) && (start.getX() == 3267 || start.getX() == 3268) && (start.getY() == 3227 || start.getY() == 3228);
+            }
         });
 
-        private String name, action;
+        private Predicate<GameObject> filter;
+        private String action;
         private Tile location;
         private SpecialCondition specialCondition;
 
-        SpecialObject(String name, String action, Tile location, SpecialCondition specialCondition){
-            this.name = name;
+        SpecialObject(Predicate<GameObject> filter, String action, Tile location, SpecialCondition specialCondition){
+            this.filter = filter;
             this.action = action;
             this.location = location;
             this.specialCondition = specialCondition;
         }
 
-        public String getName() {
-            return name;
+        public Predicate<GameObject> getFilter() {
+            return filter;
         }
 
         public String getAction() {
@@ -231,10 +246,11 @@ public class PathObjectHandler implements Loggable {
             }
         } else {
             action = specialObject.getAction();
-            Predicate<GameObject> specialObjectFilter = Filters.Objects.nameEquals(specialObject.getName())
-                                                                     .and(Filters.Objects.actionsContains(specialObject.getAction()))
-                                                                     .and(Filters.Objects.inArea(AreaHelper.fromCenter(specialObject.getLocation() != null ? specialObject.getLocation() : destinationDetails.getAssumed(), 1)));
+            Predicate<GameObject> specialObjectFilter = specialObject.getFilter()
+                    .and(Filters.Objects.actionsContains(specialObject.getAction()))
+                    .and(Filters.Objects.inArea(AreaHelper.fromCenter(specialObject.getLocation() != null ? specialObject.getLocation() : destinationDetails.getAssumed(), 1)));
             interactiveObjects = Objects.stream(15).filter(specialObjectFilter).list();
+
         }
 
         if (interactiveObjects.size() == 0) {
@@ -347,8 +363,30 @@ public class PathObjectHandler implements Loggable {
                             () -> Npcs.stream().name("Boulder").action("Roll").count() == 0 ?
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
                             WaitFor.milliseconds(3500, 6000);
+                            successfulClick = true;
                         }
                     }
+                    break;
+                case AL_KHARID_GATE:
+                    GameObject obj = Objects.stream(15, GameObject.Type.BOUNDARY).id(44057).firstOrNull();
+                    if(obj == null)
+                        break;
+                    if (!obj.inViewport()){
+                        Movement.moveTo(obj);
+                    }
+                    final boolean west = Players.local().x() >= 3268;
+                    if(obj.interact("Pay-toll(10gp)")){
+                        if(WaitFor.condition(8000, () -> {
+                            if(west){
+                                return Players.local().x() < 3268 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
+                            } else {
+                                return Players.local().x() >= 3268 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
+                            }
+                        }) == WaitFor.Return.SUCCESS){
+                            successfulClick = true;
+                        }
+                    }
+
                     break;
             }
         }
@@ -443,6 +481,12 @@ public class PathObjectHandler implements Loggable {
             } else if(actions1.contains("Climb-down") || actions1.contains("Climb-up")){
                 return 1;
             } else if(actions2.contains("Climb-down") || actions2.contains("Climb-up")){
+                return -1;
+            }
+            if (actions1.contains("Close")) {
+                return 1;
+            }
+            if(actions2.contains("Close")){
                 return -1;
             }
 //            else if(actions1.contains("Climb-up") || actions1.contains("Climb-down")){
