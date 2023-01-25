@@ -175,7 +175,7 @@ public class PathObjectHandler implements Loggable {
                     && Npcs.stream().name("Boulder").action("Roll").count() > 0;
             }
         }),
-        AL_KHARID_GATE(Filters.Objects.idEquals(44057), "Pay-toll(10gp)", new Tile(3268, 3228, 0), new SpecialCondition() {
+        AL_KHARID_GATE(Filters.Objects.idEquals(44050, 44051), "Pay-toll(10gp)", new Tile(3268, 3228, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 RealTimeCollisionTile next = destinationDetails.getNextTile();

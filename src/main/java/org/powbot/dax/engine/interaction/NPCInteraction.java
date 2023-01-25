@@ -65,7 +65,7 @@ public class NPCInteraction implements Loggable {
     }
 
     public static boolean clickNpc(Predicate<Npc> rsnpcFilter, String... options) {
-       List<Npc> rsnpcs = Npcs.stream().filter(rsnpcFilter).nearest().list();
+        List<Npc> rsnpcs = Npcs.stream().filter(rsnpcFilter).nearest().list();
         if (rsnpcs.size() < 1) {
             getInstance().log("Cannot find NPC.");
             return false;
@@ -100,12 +100,13 @@ public class NPCInteraction implements Loggable {
                     return txt.length() > 0 && t.valid() && t.visible();
                 }).findFirst().orElse(null);
                 return curr != null;
-           }
-           if(Widgets.widget(i).valid()){
-               System.out.println("Interface root: " + i + " is up.");
-               return true;
-           }
-           return false;
+            }
+            Component comp = Widgets.component(i, 0);
+            if(comp.valid() && comp.visible()){
+                System.out.println("Widget root: " + i + " is up.");
+                return true;
+            }
+            return false;
         });
     }
 
@@ -204,7 +205,7 @@ public class NPCInteraction implements Loggable {
         List<String> interfaces = getAllInterfaces().stream().map(Component::text).collect(Collectors.toList());
         WaitFor.condition(5000, () -> {
             if (!interfaces.equals(getAllInterfaces().stream().map(Component::text).collect(Collectors.toList()))){
-               return WaitFor.Return.SUCCESS;
+                return WaitFor.Return.SUCCESS;
             }
             return WaitFor.Return.IGNORE;
         });
@@ -216,10 +217,11 @@ public class NPCInteraction implements Loggable {
      */
     private static List<Component> getConversationDetails(){
         for (int window : ALL_WINDOWS){
-            List<Component> details = Components.stream(window).filter(c -> c.text().length() > 0 && c.valid()).list();
+            List<Component> details = Components.stream(window).filter(c -> c.text().length() > 0 && c.valid() && c.visible()).list();
+            System.out.println("Grabbing interfaces for window: " + window + ", list size: " + details.size());
             if (details.size() > 0) {
                 getInstance().log("Conversation Options: [" + details.stream().map(Component::text).collect(
-		                Collectors.joining(", ")) + "]");
+                        Collectors.joining(", ")) + "]");
                 return details;
             }
         }
@@ -247,7 +249,7 @@ public class NPCInteraction implements Loggable {
     private static List<Component> getAllOptions(String regex){
         List<Component> list = getConversationDetails();
         return list != null ? list.stream().filter(c -> c.text().matches(regex)).collect(
-		        Collectors.toList()) : null;
+                Collectors.toList()) : null;
     }
 
     /**
@@ -259,7 +261,7 @@ public class NPCInteraction implements Loggable {
         final List<String> optionList = Arrays.stream(options).map(String::toLowerCase).collect(Collectors.toList());
         List<Component> list = getConversationDetails();
         return list != null ? list.stream().filter(comp -> optionList.contains(comp.text().trim().toLowerCase())).collect(
-		        Collectors.toList()) : null;
+                Collectors.toList()) : null;
     }
 
     @Override
