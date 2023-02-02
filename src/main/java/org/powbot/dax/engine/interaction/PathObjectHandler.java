@@ -174,20 +174,6 @@ public class PathObjectHandler implements Loggable {
                 return destinationDetails.getDestination().getTile().equals(new Tile(2690, 10125, 0))
                     && Npcs.stream().name("Boulder").action("Roll").count() > 0;
             }
-        }),
-        AL_KHARID_GATE(Filters.Objects.idEquals(44050, 44051), "Pay-toll(10gp)", new Tile(3268, 3228, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                RealTimeCollisionTile next = destinationDetails.getNextTile();
-                RealTimeCollisionTile dest = destinationDetails.getDestination();
-                if(next == null || dest == null)
-                    return false;
-                Tile end = next.getTile();
-                Tile start = dest.getTile();
-                if(end == null || start == null)
-                    return false;
-                return (end.getX() == 3268 || end.getX() == 3267) && (start.getX() == 3267 || start.getX() == 3268) && (start.getY() == 3227 || start.getY() == 3228);
-            }
         });
 
         private Predicate<GameObject> filter;
@@ -366,27 +352,6 @@ public class PathObjectHandler implements Loggable {
                             successfulClick = true;
                         }
                     }
-                    break;
-                case AL_KHARID_GATE:
-                    GameObject obj = Objects.stream(15, GameObject.Type.BOUNDARY).id(44057).firstOrNull();
-                    if(obj == null)
-                        break;
-                    if (!obj.inViewport()){
-                        Movement.moveTo(obj);
-                    }
-                    final boolean west = Players.local().x() >= 3268;
-                    if(obj.interact("Pay-toll(10gp)")){
-                        if(WaitFor.condition(8000, () -> {
-                            if(west){
-                                return Players.local().x() < 3268 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
-                            } else {
-                                return Players.local().x() >= 3268 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
-                            }
-                        }) == WaitFor.Return.SUCCESS){
-                            successfulClick = true;
-                        }
-                    }
-
                     break;
             }
         }
