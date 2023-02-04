@@ -1000,16 +1000,18 @@ public class NavigationSpecialCase implements Loggable {
                 return clickObject(Filters.Objects.nameEquals("Lizard dwelling"), "Enter",
                         () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 100 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
 
+
             case GAMES_ROOM_BOTTOM:
-                return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals("Climb-down")), "Climb-down",
+                return clickObject(Filters.Objects.nameEquals("Stairs").and(Filters.Objects.actionsEquals("Climb-down")), "Climb-down",
                         () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case GAMES_ROOM_MIDDLE:
                 String action = Players.local().tile().y() > 4000 ? "Climb-up":"Climb-down";
-                return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals(action)), action,
+                return clickObject(Filters.Objects.nameEquals("Stairs").and(Filters.Objects.actionsEquals(action)), action,
                         () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case GAMES_ROOM_TOP:
-                return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals("Climb-up")), "Climb-up",
+                return clickObject(Filters.Objects.nameEquals("Stairs").and(Filters.Objects.actionsEquals("Climb-up")), "Climb-up",
                         () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
 
             case BOATY_MOLCH_ISLAND:
                 return handleBoaty("Molch Island", specialLocation.getTile());
