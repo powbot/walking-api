@@ -174,6 +174,12 @@ public class PathObjectHandler implements Loggable {
                 return destinationDetails.getDestination().getTile().equals(new Tile(2690, 10125, 0))
                     && Npcs.stream().name("Boulder").action("Roll").count() > 0;
             }
+        }),
+        ARDOUGNE_LOCKED_HOUSE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2611, 3316, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getDestination().getTile().equals(new Tile(2611, 3316, 0)) && destinationDetails.getDestination().
+            }
         });
 
         private Predicate<GameObject> filter;
@@ -350,6 +356,20 @@ public class PathObjectHandler implements Loggable {
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
                             WaitFor.milliseconds(3500, 6000);
                             successfulClick = true;
+                        }
+                    }
+                    break;
+                case ARDOUGNE_LOCKED_HOUSE:
+                    for (int i = 0; i < Random.nextInt(10, 15); i++) {
+                        if (!clickOnObject(object, specialObject.getAction())) {
+                            continue;
+                        }
+                        if (Players.local().tile().distanceTo(specialObject.getLocation()) > 1) {
+                            WaitFor.condition(Random.nextInt(3000, 4000), () -> Players.local().tile().distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        }
+                        if (Players.local().tile().equals(specialObject.getLocation())) {
+                            successfulClick = true;
+                            break;
                         }
                     }
                     break;
