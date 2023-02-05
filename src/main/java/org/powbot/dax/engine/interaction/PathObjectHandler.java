@@ -178,7 +178,7 @@ public class PathObjectHandler implements Loggable {
         ARDOUGNE_LOCKED_HOUSE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2611, 3316, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getTile().equals(new Tile(2611, 3316, 0)) && destinationDetails.getDestination().
+                return destinationDetails.getAssumed().equals(new Tile(2611, 3316, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(2610, 3316, 0));
             }
         });
 
