@@ -19,6 +19,7 @@ public class DaxWalker implements Loggable {
 
     private static Map<Tile, Teleport> map;
     private static DaxWalker daxWalker;
+
     public static DaxWalker getInstance() {
         return daxWalker != null ? daxWalker : (daxWalker = new DaxWalker());
     }
@@ -64,15 +65,15 @@ public class DaxWalker implements Loggable {
         return blacklist;
     }
 
-    public static void blacklistTeleports(Teleport... teleports){
+    public static void blacklistTeleports(Teleport... teleports) {
         getBlacklist().addAll(Arrays.asList(teleports));
     }
 
-    public static void removeBlacklistTeleports(Teleport... teleports){
+    public static void removeBlacklistTeleports(Teleport... teleports) {
         getBlacklist().removeAll(Arrays.asList(teleports));
     }
 
-    public static void clearTeleportBlacklist(){
+    public static void clearTeleportBlacklist() {
         getBlacklist().clear();
     }
 
@@ -93,6 +94,10 @@ public class DaxWalker implements Loggable {
     }
 
     public static boolean walkTo(Locatable destination, WalkingCondition walkingCondition) {
+        return walkTo(destination, walkingCondition, 10, 75);
+    }
+
+    public static boolean walkTo(Locatable destination, WalkingCondition walkingCondition, int runMin, int runMax) {
         if (ShipUtils.isOnShip()) {
             ShipUtils.crossGangplank();
             WaitFor.milliseconds(500, 1200);
@@ -112,15 +117,15 @@ public class DaxWalker implements Loggable {
 
         pathRequestPairs.add(new PathRequestPair(Point3D.fromTile(start), Point3D.fromTile(destination.tile())));
 
-	    List<PathResult> pathResults = WebWalkerServerApi.getInstance().getPaths(new BulkPathRequest(playerDetails,pathRequestPairs));
+        List<PathResult> pathResults = WebWalkerServerApi.getInstance().getPaths(new BulkPathRequest(playerDetails, pathRequestPairs));
 
-	    List<PathResult> validPaths = getInstance().validPaths(pathResults);
+        List<PathResult> validPaths = getInstance().validPaths(pathResults);
 
-	    PathResult pathResult = getInstance().getBestPath(validPaths);
-	    if (pathResult == null) {
+        PathResult pathResult = getInstance().getBestPath(validPaths);
+        if (pathResult == null) {
             getInstance().log(Level.WARNING, "No valid path found");
-		    return false;
-	    } else {
+            return false;
+        } else {
             getInstance().log("Path cost: " + pathResult.getCost());
         }
 
@@ -128,7 +133,7 @@ public class DaxWalker implements Loggable {
         getInstance().log("Path: [" + path.stream().map(Object::toString)
                 .collect(Collectors.joining(", ")) + "]");
 
-	    return WalkerEngine.getInstance().walkPath(path, getGlobalWalkingCondition().combine(walkingCondition));
+        return WalkerEngine.getInstance().walkPath(path, getGlobalWalkingCondition().combine(walkingCondition), runMin, runMax);
     }
 
     public static boolean walkToBank() {
@@ -144,13 +149,17 @@ public class DaxWalker implements Loggable {
     }
 
     public static boolean walkToBank(RunescapeBank bank, WalkingCondition walkingCondition) {
+        return walkToBank(bank, walkingCondition, 10, 75);
+    }
+
+    public static boolean walkToBank(RunescapeBank bank, WalkingCondition walkingCondition, int runMin, int runMax) {
         if (ShipUtils.isOnShip()) {
             ShipUtils.crossGangplank();
             WaitFor.milliseconds(500, 1200);
         }
 
-        if(bank != null)
-            return walkTo(bank.getPosition(), walkingCondition);
+        if (bank != null)
+            return walkTo(bank.getPosition(), getGlobalWalkingCondition().combine(walkingCondition), runMin, runMax);
 
         List<Item> inventory = Inventory.stream().list();
         List<Item> equipment = Equipment.stream().list();
@@ -160,10 +169,10 @@ public class DaxWalker implements Loggable {
 
         List<BankPathRequestPair> pathRequestPairs = getInstance().getBankPathTeleports(playerDetails.isMember(), isInPvpWorld, inventory, equipment);
 
-        pathRequestPairs.add(new BankPathRequestPair(Point3D.fromTile(Players.local().tile()),null));
+        pathRequestPairs.add(new BankPathRequestPair(Point3D.fromTile(Players.local().tile()), null));
 
         List<PathResult> pathResults = WebWalkerServerApi.getInstance().getBankPaths(new BulkBankPathRequest(
-	        playerDetails,pathRequestPairs));
+                playerDetails, pathRequestPairs));
 
         List<PathResult> validPaths = getInstance().validPaths(pathResults);
         PathResult pathResult = getInstance().getBestPath(validPaths);
@@ -171,10 +180,10 @@ public class DaxWalker implements Loggable {
             getInstance().log(Level.WARNING, "No valid path found");
             return false;
         }
-        return WalkerEngine.getInstance().walkPath(pathResult.toRSTilePath(), getGlobalWalkingCondition().combine(walkingCondition));
+        return WalkerEngine.getInstance().walkPath(pathResult.toRSTilePath(), getGlobalWalkingCondition().combine(walkingCondition), runMax, runMax);
     }
 
-    public static List<Tile> getPath(Locatable destination){
+    public static List<Tile> getPath(Locatable destination) {
         Tile start = Players.local().tile();
         if (start.equals(destination)) {
             return Collections.emptyList();
@@ -190,7 +199,7 @@ public class DaxWalker implements Loggable {
 
         pathRequestPairs.add(new PathRequestPair(Point3D.fromTile(start), Point3D.fromTile(destination.tile())));
 
-        List<PathResult> pathResults = WebWalkerServerApi.getInstance().getPaths(new BulkPathRequest(playerDetails,pathRequestPairs));
+        List<PathResult> pathResults = WebWalkerServerApi.getInstance().getPaths(new BulkPathRequest(playerDetails, pathRequestPairs));
 
         List<PathResult> validPaths = getInstance().validPaths(pathResults);
 
@@ -219,10 +228,10 @@ public class DaxWalker implements Loggable {
     }
 
     public List<PathResult> validPaths(List<PathResult> list) {
-        if(list == null)
+        if (list == null)
             return Collections.emptyList();
         List<PathResult> result = list.stream().filter(pathResult -> pathResult.getPathStatus() == PathStatus.SUCCESS).collect(
-		        Collectors.toList());
+                Collectors.toList());
         if (!result.isEmpty()) {
             return result;
         }
