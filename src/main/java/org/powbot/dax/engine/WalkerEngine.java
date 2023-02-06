@@ -58,6 +58,10 @@ public class WalkerEngine implements Loggable {
      * @return
      */
     public boolean walkPath(List<Tile> path, WalkingCondition walkingCondition){
+        return walkPath(path, walkingCondition, 10, 75);
+    }
+
+    public boolean walkPath(List<Tile> path, WalkingCondition walkingCondition, int runMin, int runMax){
         if (path.size() == 0) {
             log("Path is empty");
             return false;
@@ -72,6 +76,8 @@ public class WalkerEngine implements Loggable {
         }
 
         Varpbits.invalidateCache();
+
+        int wantedEnergy = runMax > runMin ? Random.nextInt(runMin, runMax) : 0;
 
 
         navigating = true;
@@ -93,6 +99,10 @@ public class WalkerEngine implements Loggable {
                 if (!Game.loggedIn()){
                     log("We are not logged in.");
                     return false;
+                }
+
+                if (wantedEnergy > 0 && !Movement.running()) {
+                    Movement.running(true);
                 }
 
                 if (ShipUtils.isOnShip()) {
@@ -127,7 +137,7 @@ public class WalkerEngine implements Loggable {
 
 
 //                if (destinationDetails.getState() != PathAnalyzer.PathState.FURTHEST_CLICKABLE_TILE) {
-                    log(destinationDetails.toString());
+                log(destinationDetails.toString());
 //                } 
 
                 final RealTimeCollisionTile destination = currentNode;
@@ -146,7 +156,7 @@ public class WalkerEngine implements Loggable {
                             WaitFor.milliseconds(1200, 3400);
                         }
                         NavigationSpecialCase.SpecialLocation specialLocation = NavigationSpecialCase.getLocation(currentNode.getTile()),
-                            specialLocationDestination = NavigationSpecialCase.getLocation(assumedNext);
+                                specialLocationDestination = NavigationSpecialCase.getLocation(assumedNext);
                         if (specialLocation != null && specialLocationDestination != null) {
                             log("[SPECIAL LOCATION] We are at " + specialLocation + " and our destination is " + specialLocationDestination);
                             if (!NavigationSpecialCase.handle(specialLocationDestination)) {
@@ -159,8 +169,8 @@ public class WalkerEngine implements Loggable {
                         }
 
                         Charter.LocationProperty
-                            locationProperty = Charter.LocationProperty.getLocation(currentNode.getTile()),
-                            destinationProperty = Charter.LocationProperty.getLocation(assumedNext);
+                                locationProperty = Charter.LocationProperty.getLocation(currentNode.getTile()),
+                                destinationProperty = Charter.LocationProperty.getLocation(assumedNext);
                         if (locationProperty != null && destinationProperty != null) {
                             log("Chartering to: " + destinationProperty);
                             if (!Charter.to(destinationProperty)) {
@@ -263,8 +273,8 @@ public class WalkerEngine implements Loggable {
     boolean isDestinationClose(PathFindingNode pathFindingNode){
         final Tile playerPosition = Players.local().tile();
         return Projection.isInMinimap(new Tile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()))
-            && playerPosition.distanceTo(new Tile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())) <= 12
-            && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.floor()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 250));
+                && playerPosition.distanceTo(new Tile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())) <= 12
+                && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.floor()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 250));
     }
 
     public boolean clickMinimap(PathFindingNode pathFindingNode){
@@ -352,8 +362,8 @@ public class WalkerEngine implements Loggable {
                 log("Using teleport method: " + teleport);
                 teleport.trigger();
                 return WaitFor.condition(Random.nextInt(3000, 20000),
-                    () -> startPosition.distanceTo(Players.local().tile()) < 10 ?
-                        WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                        () -> startPosition.distanceTo(Players.local().tile()) < 10 ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
             }
         }
         return true;
