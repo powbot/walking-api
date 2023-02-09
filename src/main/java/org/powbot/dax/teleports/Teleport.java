@@ -954,9 +954,11 @@ public enum Teleport {
 	}
 
 	private static boolean canUseMinigameTeleport(){
+		if(Varpbits.value(14022) == 1){//can't minigame teleport when we are at Duel Arena
+			return false;
+		}
 		return !Players.local().inCombat() &&
 					   ((long) Varpbits.varpbit(888, true) * 60 * 1000) + (20 * 60 * 1000) < System.currentTimeMillis();
 	}
-
 }
 
