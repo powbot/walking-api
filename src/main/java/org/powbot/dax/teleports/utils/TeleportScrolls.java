@@ -2,9 +2,11 @@ package org.powbot.dax.teleports.utils;
 
 import org.powbot.api.Condition;
 import org.powbot.api.Tile;
+import org.powbot.api.rt4.Chat;
 import org.powbot.api.rt4.Inventory;
 import org.powbot.api.rt4.Item;
 import org.powbot.api.rt4.Players;
+import org.powbot.dax.shared.helpers.ItemHelper;
 
 public enum TeleportScrolls {
 	NARDAH("Nardah teleport",new Tile(3419, 2916, 0)),
@@ -39,10 +41,17 @@ public enum TeleportScrolls {
 	public int getZ(){
 		return location.floor();
 	}
-	
+
 	public boolean teleportTo(boolean shouldWait){
 		Item scroll = Inventory.stream().name(name).first();
-		return scroll.click() && (!shouldWait || Condition.wait(() -> this.location.distanceTo(Players.local().tile()) < 15, 500, 16));
+		if(!ItemHelper.click(scroll, "Teleport"))
+			return false;
+		if(this == REVENANT_CAVES && Condition.wait(() -> Chat.get().size() > 0, 250, 10)){
+			if(!Chat.continueChat("Yes, teleport me now.")){
+				return false;
+			}
+		}
+		return (!shouldWait || Condition.wait(() -> this.location.distanceTo(Players.local().tile()) < 15, 500, 16));
 	}
 	
 	public boolean hasScroll(){
