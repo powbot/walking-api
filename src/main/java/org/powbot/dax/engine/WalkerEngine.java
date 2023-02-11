@@ -1,6 +1,7 @@
 package org.powbot.dax.engine;
 
 
+import org.powbot.api.Condition;
 import org.powbot.api.Point;
 import org.powbot.api.Random;
 import org.powbot.api.Tile;
@@ -137,7 +138,7 @@ public class WalkerEngine implements Loggable {
 
 
 //                if (destinationDetails.getState() != PathAnalyzer.PathState.FURTHEST_CLICKABLE_TILE) {
-                log(destinationDetails.toString());
+                    log(destinationDetails.toString());
 //                } 
 
                 final RealTimeCollisionTile destination = currentNode;
@@ -156,7 +157,7 @@ public class WalkerEngine implements Loggable {
                             WaitFor.milliseconds(1200, 3400);
                         }
                         NavigationSpecialCase.SpecialLocation specialLocation = NavigationSpecialCase.getLocation(currentNode.getTile()),
-                                specialLocationDestination = NavigationSpecialCase.getLocation(assumedNext);
+                            specialLocationDestination = NavigationSpecialCase.getLocation(assumedNext);
                         if (specialLocation != null && specialLocationDestination != null) {
                             log("[SPECIAL LOCATION] We are at " + specialLocation + " and our destination is " + specialLocationDestination);
                             if (!NavigationSpecialCase.handle(specialLocationDestination)) {
@@ -169,8 +170,8 @@ public class WalkerEngine implements Loggable {
                         }
 
                         Charter.LocationProperty
-                                locationProperty = Charter.LocationProperty.getLocation(currentNode.getTile()),
-                                destinationProperty = Charter.LocationProperty.getLocation(assumedNext);
+                            locationProperty = Charter.LocationProperty.getLocation(currentNode.getTile()),
+                            destinationProperty = Charter.LocationProperty.getLocation(assumedNext);
                         if (locationProperty != null && destinationProperty != null) {
                             log("Chartering to: " + destinationProperty);
                             if (!Charter.to(destinationProperty)) {
@@ -273,8 +274,8 @@ public class WalkerEngine implements Loggable {
     boolean isDestinationClose(PathFindingNode pathFindingNode){
         final Tile playerPosition = Players.local().tile();
         return Projection.isInMinimap(new Tile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()))
-                && playerPosition.distanceTo(new Tile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())) <= 12
-                && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.floor()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 250));
+            && playerPosition.distanceTo(new Tile(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ())) <= 12
+            && (BFS.isReachable(RealTimeCollisionTile.get(playerPosition.getX(), playerPosition.getY(), playerPosition.floor()), RealTimeCollisionTile.get(pathFindingNode.getX(), pathFindingNode.getY(), pathFindingNode.getZ()), 250));
     }
 
     public boolean clickMinimap(PathFindingNode pathFindingNode){
@@ -361,9 +362,11 @@ public class WalkerEngine implements Loggable {
             if(teleport.isAtTeleportSpot(startPosition) && !teleport.isAtTeleportSpot(playerPosition)){
                 log("Using teleport method: " + teleport);
                 teleport.trigger();
-                return WaitFor.condition(Random.nextInt(3000, 20000),
-                        () -> startPosition.distanceTo(Players.local().tile()) < 10 ?
-                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                if (WaitFor.condition(Random.nextInt(3000, 20000),
+                    () -> startPosition.distanceTo(Players.local().tile()) < 10 ?
+                        WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
+                    return Condition.wait(() -> Players.local().animation() == -1, 200, 10);
+                }
             }
         }
         return true;
