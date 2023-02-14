@@ -917,6 +917,7 @@ public enum Teleport {
 				WaitFor.milliseconds(200, 600);
 			}
 			if(!minigame.teleportTo()){
+				Input.tap(Players.local().tile().matrix().mapPoint());
 				return false;
 			}
 			if(chatOptions.length > 0){
@@ -1039,8 +1040,14 @@ public enum Teleport {
 		if(Varpbits.value(14022) == 1){//can't minigame teleport when we are at Duel Arena
 			return false;
 		}
+		if(Varpbits.value(542) == 1){//instanced area that prevents you from using minigame teleports
+			return false;
+		}
+		if(Components.stream(651, 4).texture(1054).viewable().isNotEmpty()){
+			return false;
+		}
 		return !Players.local().inCombat() &&
-					   ((long) Varpbits.varpbit(888, true) * 60 * 1000) + (20 * 60 * 1000) < System.currentTimeMillis();
+					   ((long) Varpbits.varpbit(888) * 60 * 1000) + (20 * 60 * 1000) < System.currentTimeMillis();
 	}
 }
 
