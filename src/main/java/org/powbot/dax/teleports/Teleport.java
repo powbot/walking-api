@@ -584,7 +584,7 @@ public enum Teleport {
 	ROYAL_SEED_POD(
 			0, new Tile(2465, 3495, 0),
 			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Royal seed pod")),
-			() -> ItemHelper.click("Royal seed.*", "Commune") && Condition.wait(() -> Players.local().animation() != -1, 200, 10) && Condition.wait(() -> Players.local().animation() == -1, 200, 40)
+			() -> ItemHelper.click("Royal seed.*", "Commune") && Condition.wait(() -> Players.local().animation() != -1, 200, 10) && Condition.wait(() -> Players.local().animation() == -1, 200, 20)
 	),
 
 	DRAKANS_MEDALLION_VER_SINHAZA(
