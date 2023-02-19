@@ -102,7 +102,7 @@ public class AccurateMouse {
      */
     private static boolean attemptAction(Interactable clickable, String... clickActions) {
         List<String> asList = new ArrayList<>(Arrays.asList(clickActions));
-        return clickable.click(m -> asList.contains(m.getAction()));
+        return clickable.interact(m -> asList.contains(m.getAction()));
     }
 
 }
