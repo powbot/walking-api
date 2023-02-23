@@ -15,6 +15,7 @@ import org.powbot.dax.shared.helpers.GameObjectHelper;
 import org.powbot.dax.shared.helpers.ItemHelper;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -239,7 +240,7 @@ public class NavigationSpecialCase implements Loggable {
         LIZARDMAN_SHAMANS_CANYON_WEST(1456, 3690, 0),
 
         SLEPE_BOAT_FROM_PORT(3671, 3542, 0),
-        SLEPE_BOAT_FROM_SLEPE(3661, 3277, 0),
+        SLEPE_BOAT_FROM_SLEPE(3661, 3278, 0),
 
         SOUL_WARS_PORTAL(2206, 2858, 0),
         FEROX_ENCLAVE_PORTAL_TO_ISLE_OF_SOULS(3158, 10027, 0),
@@ -284,9 +285,8 @@ public class NavigationSpecialCase implements Loggable {
 
     public static SpecialLocation getLocation(Tile rsTile){
         return Arrays.stream(
-                SpecialLocation.values()).filter(tile -> tile.z == rsTile.floor()
-                && tile.getTile().distanceTo(rsTile) <= 2)
-                     .findFirst().orElse(null);
+                SpecialLocation.values()).filter(tile -> tile.z == rsTile.floor() && tile.getTile().distanceTo(rsTile) <= 2)
+                .min(Comparator.comparingInt(t -> (int) t.getTile().distanceTo(rsTile))).orElse(null);
     }
 
     /**
