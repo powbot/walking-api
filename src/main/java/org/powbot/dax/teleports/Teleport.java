@@ -734,22 +734,22 @@ public enum Teleport {
 			false
 	),
 
-	POH_OUTSIDE_RIMMINGTON_TAB(
+	POH_OUTSIDE_RIMMINGTON(
 			35, new Tile(2954, 3224, 0),
 			(i1, i2) -> POH.RIMMINGTON.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(i1, i2),
 			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
 	),
-	POH_OUTSIDE_RIMMINGTON(
+	POH_OUTSIDE_RIMMINGTON_TAB(
 			35, new Tile(2954, 3224, 0),
 			(i1, i2) -> POH.RIMMINGTON.isHouseLocation() && i1.stream().anyMatch(ItemFilters.nameEquals("Teleport to house")),
 			() -> ItemHelper.click("Teleport to house", "Outside")
 	),
-	POH_OUTSIDE_TAVERLY_TAB(
+	POH_OUTSIDE_TAVERLY(
 			35, new Tile(2894, 3465, 0),
 			(i1, i2) -> POH.TAVERLY.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(i1, i2),
 			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
 	),
-	POH_OUTSIDE_TAVERLY(
+	POH_OUTSIDE_TAVERLY_TAB(
 			35, new Tile(2894, 3465, 0),
 			(i1, i2) -> POH.TAVERLY.isHouseLocation() && i1.stream().anyMatch(ItemFilters.nameEquals("Teleport to house")),
 			() -> ItemHelper.click("Teleport to house", "Outside")
@@ -764,52 +764,52 @@ public enum Teleport {
 			(i1, i2) -> POH.POLLNIVNEACH.isHouseLocation() && i1.stream().anyMatch(ItemFilters.nameEquals("Teleport to house")),
 			() -> ItemHelper.click("Teleport to house", "Outside")
 	),
-	POH_OUTSIDE_HOSIDIUS_TAB(
+	POH_OUTSIDE_HOSIDIUS(
 			35, new Tile(1744, 3517, 0),
 			(i1, i2) -> POH.HOSIDIUS.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(i1, i2),
 			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
 	),
-	POH_OUTSIDE_HOSIDIUS(
+	POH_OUTSIDE_HOSIDIUS_TAB(
 			35, new Tile(1744, 3517, 0),
 			(i1, i2) -> POH.HOSIDIUS.isHouseLocation() && i1.stream().anyMatch(ItemFilters.nameEquals("Teleport to house")),
 			() -> ItemHelper.click("Teleport to house", "Outside")
 	),
-	POH_OUTSIDE_RELLEKKA_TAB(
+	POH_OUTSIDE_RELLEKKA(
 			35, new Tile(2670, 3632, 0),
 			(i1, i2) -> POH.RELLEKKA.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(i1, i2),
 			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
 	),
-	POH_OUTSIDE_RELLEKKA(
+	POH_OUTSIDE_RELLEKKA_TAB(
 			35, new Tile(2670, 3632, 0),
 			(i1, i2) -> POH.RELLEKKA.isHouseLocation() && i1.stream().anyMatch(ItemFilters.nameEquals("Teleport to house")),
 			() -> ItemHelper.click("Teleport to house", "Outside")
 	),
-	POH_OUTSIDE_BRIMHAVEN_TAB(
+	POH_OUTSIDE_BRIMHAVEN(
 			35, new Tile(2750, 3178, 0),
 			(i1, i2) -> POH.BRIMHAVEN.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(i1, i2),
 			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
 	),
-	POH_OUTSIDE_BRIMHAVEN(
+	POH_OUTSIDE_BRIMHAVEN_TAB(
 			35, new Tile(2750, 3178, 0),
 			(i1, i2) -> POH.BRIMHAVEN.isHouseLocation() && i1.stream().anyMatch(ItemFilters.nameEquals("Teleport to house")),
 			() -> ItemHelper.click("Teleport to house", "Outside")
 	),
-	POH_OUTSIDE_YANILLE_TAB(
+	POH_OUTSIDE_YANILLE(
 			35, new Tile(2544, 3095, 0),
 			(i1, i2) -> POH.YANILLE.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(i1, i2),
 			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
 	),
-	POH_OUTSIDE_YANILLE(
+	POH_OUTSIDE_YANILLE_TAB(
 			35, new Tile(2544, 3095, 0),
 			(i1, i2) -> POH.YANILLE.isHouseLocation() && i1.stream().anyMatch(ItemFilters.nameEquals("Teleport to house")),
 			() -> ItemHelper.click("Teleport to house", "Outside")
 	),
-	POH_OUTSIDE_PRIFDDINAS_TAB(
+	POH_OUTSIDE_PRIFDDINAS(
 			35, new Tile(3239, 6076, 0),
 			(i1, i2) -> POH.PRIFDDINAS.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(i1, i2),
 			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
 	),
-	POH_OUTSIDE_PRIFDDINAS(
+	POH_OUTSIDE_PRIFDDINAS_TAB(
 			35, new Tile(3239, 6076, 0),
 			(i1, i2) -> POH.PRIFDDINAS.isHouseLocation() && i1.stream().anyMatch(ItemFilters.nameEquals("Teleport to house")),
 			() -> ItemHelper.click("Teleport to house", "Outside")
