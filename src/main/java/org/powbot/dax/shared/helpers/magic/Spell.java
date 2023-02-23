@@ -25,7 +25,7 @@ public enum Spell {
     KOUREND_TELEPORT	(
 	    SpellBook.Type.STANDARD, 69, Magic.Spell.TELEPORT_KOUREND,new Pair<>(2, RuneElement.LAW), new Pair<>(2, RuneElement.SOUL),new Pair<>(4, RuneElement.WATER), new Pair<>(5, RuneElement.FIRE)),
     TELEPORT_TO_HOUSE   (
-        SpellBook.Type.STANDARD, 69, Magic.Spell.TELEPORT_TO_HOUSE,new Pair<>(1, RuneElement.LAW), new Pair<>(1, RuneElement.AIR), new Pair<>(1, RuneElement.EARTH))
+        SpellBook.Type.STANDARD, 40, Magic.Spell.TELEPORT_TO_HOUSE,new Pair<>(1, RuneElement.LAW), new Pair<>(1, RuneElement.AIR), new Pair<>(1, RuneElement.EARTH))
     ;
 
     private final SpellBook.Type spellBookType;
