@@ -192,7 +192,10 @@ public class DaxWalker implements Loggable {
     }
 
     public static List<Tile> getPath(Locatable destination) {
-        Tile start = Players.local().tile();
+        return getPath(Players.local().tile(), destination);
+    }
+
+    public static List<Tile> getPath(Locatable start, Locatable destination) {
         if (start.equals(destination)) {
             return Collections.emptyList();
         }
@@ -205,7 +208,7 @@ public class DaxWalker implements Loggable {
 
         List<PathRequestPair> pathRequestPairs = getInstance().getPathTeleports(playerDetails.isMember(), isInPvpWorld, destination.tile(), inventory, equipment);
 
-        pathRequestPairs.add(new PathRequestPair(Point3D.fromTile(start), Point3D.fromTile(destination.tile())));
+        pathRequestPairs.add(new PathRequestPair(Point3D.fromTile(start.tile()), Point3D.fromTile(destination.tile())));
 
         List<PathResult> pathResults = WebWalkerServerApi.getInstance().getPaths(new BulkPathRequest(playerDetails, pathRequestPairs));
 
