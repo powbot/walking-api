@@ -1,5 +1,6 @@
 package org.powbot.dax.engine.interaction;
 
+import org.powbot.api.Area;
 import org.powbot.api.Random;
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.Objects;
@@ -27,6 +28,8 @@ public class PathObjectHandler implements Loggable {
 
     private final TreeSet<String> sortedOptions, sortedBlackList, sortedBlackListOptions, sortedHighPriorityOptions;
 
+    private final List<Predicate<GameObject>> blacklistedObjects;
+
     private PathObjectHandler(){
         sortedOptions = new TreeSet<>(
 		        Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through", "Exit",
@@ -39,6 +42,9 @@ public class PathObjectHandler implements Loggable {
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin","Drawers","null","Ornate railing","Wardrobe"));
         sortedBlackListOptions = new TreeSet<>(Arrays.asList("Chop down"));
         sortedHighPriorityOptions = new TreeSet<>(Arrays.asList("Pay-toll(10gp)","Squeeze-past"));
+        blacklistedObjects = new ArrayList<>(Arrays.asList(
+                Filters.Objects.inArea(new Area(new Tile(3205, 3226, 0), new Tile(3212, 3218, 0)))//LUMBRIDGE DINING ROOM
+        ));
     }
 
     private static PathObjectHandler getInstance(){
@@ -510,10 +516,12 @@ public class PathObjectHandler implements Loggable {
      * @return
      */
     private static Predicate<GameObject> interactiveObjectFilter(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
-        final Tile position = new Tile(x, y, z);
-        return rsObject -> {
+         return rsObject -> {
             String name = rsObject.getName();
             if (getInstance().sortedBlackList.contains(name)) {
+                return false;
+            }
+            if(getInstance().blacklistedObjects.stream().anyMatch(p -> p.test(rsObject))){
                 return false;
             }
             List<String> actionsList = rsObject.actions();
