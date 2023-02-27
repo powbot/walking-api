@@ -290,7 +290,7 @@ public class WalkerEngine implements Loggable {
         final Tile playerPosition = Players.local().tile();
         if (playerPosition.distanceTo(pathFindingNode.getTile()) <= 1){
             log("We are 1 tile or less away from target node, returning true.");
-            return true;
+            return playerPosition.equals(pathFindingNode.getTile()) || pathFindingNode.getTile().matrix().interact("Walk here");
         }
         PathFindingNode randomNearby = BFS.getRandomTileNearby(pathFindingNode);
 
