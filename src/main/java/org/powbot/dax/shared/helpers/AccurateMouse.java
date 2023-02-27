@@ -84,12 +84,7 @@ public class AccurateMouse {
      * @return whether action was successful.
      */
     private static boolean action(Interactable clickable, String... clickActions) {
-        for (int i = 0; i < Random.nextInt(4, 7); i++) {
-            if (attemptAction(clickable, clickActions)) {
-                return true;
-            }
-        }
-        return false;
+        return attemptAction(clickable, clickActions);
     }
 
 
