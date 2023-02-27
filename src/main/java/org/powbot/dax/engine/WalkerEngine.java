@@ -106,6 +106,14 @@ public class WalkerEngine implements Loggable {
                     Movement.running(true);
                 }
 
+                switch (walkingCondition.action()){
+
+                    case EXIT_OUT_WALKER_SUCCESS:
+                        return true;
+                    case EXIT_OUT_WALKER_FAIL:
+                        return false;
+                }
+
                 if (ShipUtils.isOnShip()) {
                     log("Exiting ship via gangplank.");
                     if (!ShipUtils.crossGangplank()) {
