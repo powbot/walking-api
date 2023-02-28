@@ -105,13 +105,15 @@ public class WalkerEngine implements Loggable {
                 if (wantedEnergy > 0 && !Movement.running()) {
                     Movement.running(true);
                 }
+                
+                if(walkingCondition != null){
+                    switch (walkingCondition.action()){
 
-                switch (walkingCondition.action()){
-
-                    case EXIT_OUT_WALKER_SUCCESS:
-                        return true;
-                    case EXIT_OUT_WALKER_FAIL:
-                        return false;
+                        case EXIT_OUT_WALKER_SUCCESS:
+                            return true;
+                        case EXIT_OUT_WALKER_FAIL:
+                            return false;
+                    }
                 }
 
                 if (ShipUtils.isOnShip()) {
