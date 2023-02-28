@@ -1041,7 +1041,7 @@ public class NavigationSpecialCase implements Loggable {
     }
     public static boolean handleZeahBoats(String locationOption){
         String travelOption = "Travel";
-        Npc npc = Npcs.stream().name("Veos","Captain Magoro").nearest().first();
+        Npc npc = Npcs.stream().name("Veos", "Captain Magoro",  "Cabin Boy Herbert").nearest().first();
         if(npc.valid()){
             List<String> actions = npc.getActions();
             if(actions.contains("Port Sarim") || actions.contains("Land's End")){
@@ -1056,7 +1056,7 @@ public class NavigationSpecialCase implements Loggable {
                 return handleFirstTripToZeah(locationOption);
             }
         }
-        if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Veos", "Captain Magoro"),new String[]{travelOption})){
+        if(NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Veos", "Captain Magoro",  "Cabin Boy Herbert"),new String[]{travelOption})){
             Tile current = Players.local().tile();
             if (WaitFor.condition(8000, () -> (ShipUtils.isOnShip() || Players.local().tile().distanceTo(current) > 20) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS) {
                 return false;
