@@ -63,6 +63,10 @@ public class RunePouch{
         public int getQuantity(){
             return Varpbits.value(quantityVarbitIndex, true);
         }
+        
+        public int type() {
+            return type;
+        }
 
     }
 
@@ -82,7 +86,7 @@ public class RunePouch{
         return 0;
     }
 
-    private static boolean hasPouch(){
+    public static boolean hasPouch(){
         return Inventory.stream().name(POUCH_NAMES).isNotEmpty() && Worlds.isCurrentWorldMembers();
     }
 
