@@ -223,6 +223,8 @@ public class Filters {
             List<String> asList = Arrays.asList(actions);
             return i -> asList.stream().anyMatch(action -> {
                 RObjectDefinition def = ObjectLoader.lookup(i.id());
+                if(def == null)
+                    return false;
                 String[] curr = def.actions();
                 return Arrays.stream(curr).filter(java.util.Objects::nonNull).anyMatch(c -> c.contains(action));
             });
@@ -232,6 +234,8 @@ public class Filters {
             List<String> asList = Arrays.asList(actions);
             return i -> asList.stream().anyMatch(action -> {
                 RObjectDefinition def = ObjectLoader.lookup(i.id());
+                if(def == null)
+                    return false;
                 String[] curr = def.actions();
                 return Arrays.asList(curr).contains(action);
             });
@@ -249,7 +253,7 @@ public class Filters {
             List<String> asList = Arrays.asList(names);
             return i -> {
                 String objName = i.getName();
-                return objName != null && asList.stream().anyMatch(o -> objName.toLowerCase().contains(o.toLowerCase()));
+                return asList.stream().anyMatch(o -> objName.toLowerCase().contains(o.toLowerCase()));
             };
         }
 
