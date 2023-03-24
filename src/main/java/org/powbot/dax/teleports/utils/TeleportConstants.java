@@ -7,6 +7,7 @@ public class TeleportConstants {
 
 
     public static final TeleportLimit
+            LEVEL_0_WILDERNESS_LIMIT = i -> i < 1,
             LEVEL_20_WILDERNESS_LIMIT = i -> i <= 20,
             LEVEL_30_WILDERNESS_LIMIT = i -> i <= 30;
 

@@ -925,7 +925,7 @@ public enum Teleport {
 			}
 			return true;
 		};
-		this.teleportLimit = TeleportConstants.LEVEL_20_WILDERNESS_LIMIT;
+		this.teleportLimit = TeleportConstants.LEVEL_0_WILDERNESS_LIMIT;
 		this.requiresMembers = requiresMembers;
 		this.canBeUsedInPvpWorlds = false;
 	}
@@ -1040,7 +1040,7 @@ public enum Teleport {
 		if(Varpbits.value(14022) == 1){//can't minigame teleport when we are at Duel Arena
 			return false;
 		}
-		if(Varpbits.value(542) == 1){//instanced area that prevents you from using minigame teleports
+		if(Varpbits.value(541) == 1){//instanced area that prevents you from using minigame teleports
 			return false;
 		}
 		if(Components.stream(651, 4).texture(1054).viewable().isNotEmpty()){
