@@ -71,11 +71,9 @@ public class NPCInteraction implements Loggable {
             return false;
         }
 
+
         Npc npc = rsnpcs.get(0);
-        for (String opt : options) {
-            if (InteractionHelper.click(npc, opt)) return true;
-        }
-        return false;
+        return InteractionHelper.click(npc, options);
     }
 
     public static boolean waitForConversationWindow(){
