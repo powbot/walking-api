@@ -58,7 +58,8 @@ public class PlayerDetails {
                 7255,
                 7928, //kourend elite diary
                 9016,
-                10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1
+                10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1,
+                13738, // temple of the eye
                 13903, //Sleeping Giants quest
         })
                 .mapToObj(value -> new IntPair(value, Varpbits.value(value, true))).distinct().collect(
