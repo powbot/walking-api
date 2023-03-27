@@ -47,7 +47,7 @@ public enum RuneElement {
     }
 
     public int getCount(List<Item> inventory, List<Item> equipment) {
-        if (haveStaff(equipment)) {
+        if (haveStaff(equipment) || (this == FIRE && equipment.stream().anyMatch(i -> i.name().equals("Tome of fire")))) {
             return Integer.MAX_VALUE;
         }
         return inventory.stream().filter(rsItem -> {
