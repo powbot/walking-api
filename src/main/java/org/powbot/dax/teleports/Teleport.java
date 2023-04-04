@@ -724,7 +724,7 @@ public enum Teleport {
 	),
 
 	LUMBRIDGE_HOME_TELEPORT(
-			150, new Tile(3225, 3219, 0),
+			150, new Tile(3223, 3219, 0),
 			(i1, i2) -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.STANDARD,
 			() -> {
 				final Tile myPos = Players.local().tile();
