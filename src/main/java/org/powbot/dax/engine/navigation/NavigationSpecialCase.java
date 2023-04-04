@@ -269,7 +269,10 @@ public class NavigationSpecialCase implements Loggable {
 
         BOATY_SLEPE(3661, 3277, 0),
         BOATY_ICYENE_GRAVEYARD(3685, 3174, 0),
-        BOATY_BURGH(3525, 3170, 0);
+        BOATY_BURGH(3525, 3170, 0),
+
+        LIGHTHOUSE_LADDER(2510, 3644, 0),
+        LIGHTHOUSE_UNDERGROUND(2518, 9994, 0);
 
 
         int x, y, z;
@@ -1038,6 +1041,11 @@ public class NavigationSpecialCase implements Loggable {
                 return handleBoaty("Icyene Graveyard.", specialLocation.getTile());
             case BOATY_SLEPE:
                 return handleBoaty("Slepe.", specialLocation.getTile());
+
+            case LIGHTHOUSE_LADDER:
+            case LIGHTHOUSE_UNDERGROUND:
+                return clickObject(Filters.Objects.nameEquals("Iron ladder"), "Climb",
+                        () -> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return false;
