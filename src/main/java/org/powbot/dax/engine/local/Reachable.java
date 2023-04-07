@@ -261,7 +261,7 @@ public class Reachable {
 
                 Tile neighbor = direction.getPointingTile(currentLocal);
                 int destinationX = neighbor.localX(), destinationY = neighbor.localY();
-                if(destinationX < 0 || destinationY < 0 || destinationX > 104 || destinationY > 104)
+                if(destinationX < 0 || destinationY < 0 || destinationX > 103 || destinationY > 103)
                     continue;
                 if (traversed[destinationX][destinationY]) {
                     continue; //Traversed already
