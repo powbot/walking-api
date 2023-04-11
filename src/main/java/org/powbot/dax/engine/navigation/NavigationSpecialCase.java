@@ -59,7 +59,8 @@ public class NavigationSpecialCase implements Loggable {
         POLLNIVNEACH_SOUTH(3352, 2941, 0),
         NARDAH(3400, 2917, 0),
 
-        SHILO_ENTRANCE (2881, 2953, 0),
+        SHILO_ENTRANCE (2880, 2953, 0),
+        SHILO_EXIT(2876, 2953, 0),
         SHILO_INSIDE (2864, 2955, 0),
 
         RELEKKA_WEST_BOAT (2621, 3682, 0),
@@ -356,6 +357,9 @@ public class NavigationSpecialCase implements Loggable {
 
 
             case SHILO_ENTRANCE: break;
+            case SHILO_EXIT:
+                return clickObject(Filters.Objects.nameEquals("Broken cart"), "Climb over", () -> Players.local().tile().getX() >= 2880 ?
+                                                                                              WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case SHILO_INSIDE: return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Mosol Rei"), new String[]{"Talk-to"}, new String[]{"Yes, Ok, I'll go into the village!"});
 
             case RELEKKA_WEST_BOAT:
