@@ -554,7 +554,7 @@ public class NavigationSpecialCase implements Loggable {
                 break;
 
             case ZEAH_SAND_CRAB:
-                if (InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Sandicrahb")), "Quick-travel") && WaitFor.condition(10000, () -> Players.local().tile().getY() >= 3457 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+                if (InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Sandicrahb")), "Travel") && WaitFor.condition(10000, () -> Players.local().tile().getY() >= 3457 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
                     getInstance().log("Paid for travel.");
                     return true;
                 } else {
@@ -562,7 +562,7 @@ public class NavigationSpecialCase implements Loggable {
                 }
                 break;
             case ZEAH_SAND_CRAB_ISLAND:
-                if (InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Sandicrahb")), "Quick-travel") && WaitFor.condition(10000, () -> Players.local().tile().getY() < 3457 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+                if (InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Sandicrahb")), "Travel") && WaitFor.condition(10000, () -> Players.local().tile().getY() < 3457 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
                     getInstance().log("Paid for travel.");
                     return true;
                 } else {
