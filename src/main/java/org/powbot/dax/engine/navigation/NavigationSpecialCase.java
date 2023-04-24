@@ -304,7 +304,7 @@ public class NavigationSpecialCase implements Loggable {
         switch (specialLocation){
 
             case BRIMHAVEN_DUNGEON:
-                if (Varpbits.varpbit(393) != 1){
+                if (Varpbits.value(5628) != 1){
                     if (!InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Saniboch")), "Pay")) {
                         getInstance().log("Could not pay saniboch");
                         break;
