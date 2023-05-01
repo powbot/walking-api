@@ -580,6 +580,11 @@ public enum Teleport {
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.FARMING_CAPE_FILTER, i1, i2),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.FARMING_CAPE_FILTER, "Teleport")
 	),
+	ARDOUGNE_FARM_TELEPORT(
+			0, new Tile(2663, 3375, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.ARDOUGNE_CLOAK_4_FILTER, i1, i2),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK_4_FILTER, "Farm Teleport")
+	),
 
 	ROYAL_SEED_POD(
 			0, new Tile(2465, 3495, 0),

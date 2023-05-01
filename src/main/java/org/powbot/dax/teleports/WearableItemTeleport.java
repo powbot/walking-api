@@ -33,6 +33,7 @@ public class WearableItemTeleport {
 	public static final Predicate<Item> EXPLORERS_RING_FILTER = ItemFilters.nameContains("Explorer's ring");
 	public static final Predicate<Item> QUEST_CAPE_FILTER = ItemFilters.nameContains("Quest point cape");
 	public static final Predicate<Item> ARDOUGNE_CLOAK_FILTER = ItemFilters.nameContains("Ardougne cloak");
+	public static final Predicate<Item> ARDOUGNE_CLOAK_4_FILTER = ItemFilters.nameEquals("Ardougne cloak 4");
 	public static final Predicate<Item> CONSTRUCTION_CAPE_FILTER = ItemFilters.nameContains("Construct. cape");
 	public static final Predicate<Item> SLAYER_RING = ItemFilters.nameContains("Slayer ring");
 	public static final Predicate<Item> FARMING_CAPE_FILTER = ItemFilters.nameContains("Farming cape");
