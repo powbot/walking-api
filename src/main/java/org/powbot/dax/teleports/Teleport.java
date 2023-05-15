@@ -921,6 +921,9 @@ public enum Teleport {
 				Input.tap(Players.local().tile().matrix().mapPoint());
 				WaitFor.milliseconds(200, 600);
 			}
+			if(Grouping.hasPvpArenaWidget()){
+				Grouping.closePvpArenaWidget();
+			}
 			if(!minigame.teleportTo()){
 				Input.tap(Players.local().tile().matrix().mapPoint());
 				return false;

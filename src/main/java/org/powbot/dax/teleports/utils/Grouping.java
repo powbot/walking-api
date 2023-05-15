@@ -16,7 +16,11 @@ public class Grouping {
             MAIN_INTERFACE_ID = 76,
             TELEPORT_BUTTON_INDEX = 32,
             SELECTED_MINIGAME_INDEX = 11,
-            MINIGAMES_SELECTION_BOX_INDEX = 22;
+            MINIGAMES_SELECTION_BOX_INDEX = 22,
+
+            PVP_ARENA_VARBIT = 13143,
+            PVP_WIDGET = 762,
+            PVP_CLOSE_COMPONENT = 3;
 //            clanInterfaceID = 589;
 
     //ENUMS
@@ -200,6 +204,15 @@ public class Grouping {
     public static boolean canMinigameTeleport(){
         return Worlds.isCurrentWorldMembers() && !Players.local().inCombat() &&
                 ((long) Varpbits.varpbit(888) * 60 * 1000) + (20 * 60 * 1000) < Timing.currentTimeMillis();
+    }
+
+    public static boolean hasPvpArenaWidget(){
+        return Varpbits.value(PVP_ARENA_VARBIT) == 1;
+    }
+
+    public static boolean closePvpArenaWidget(){
+        Component close = Widgets.component(PVP_WIDGET, PVP_CLOSE_COMPONENT);
+        return close != Component.Companion.getNil() && close.visible() && close.click();
     }
 
 }
