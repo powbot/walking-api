@@ -355,10 +355,10 @@ public class NavigationSpecialCase implements Loggable {
                 handleCarpetRide("Nardah");
                 break;
 
-
-            case SHILO_ENTRANCE: break;
+            case SHILO_ENTRANCE:
+                return clickObject(Filters.Objects.nameEquals("Broken cart"), "Climb over", () -> Players.local().tile().getX() >= 2880 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case SHILO_EXIT:
-                return clickObject(Filters.Objects.nameEquals("Broken cart"), "Climb over", () -> Players.local().tile().getX() >= 2880 ?
+                return clickObject(Filters.Objects.nameEquals("Broken cart"), "Climb over", () -> Players.local().tile().getX() <= 2876 ?
                                                                                               WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case SHILO_INSIDE: return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Mosol Rei"), new String[]{"Talk-to"}, new String[]{"Yes, Ok, I'll go into the village!"});
 
