@@ -148,12 +148,12 @@ public class FairyRing {
 
 	private static void handleSpecialCases(){
 		Tile myPos = Players.local().tile();
-		if(myPos.distanceTo(SINCLAIR_TILE) < 5 && Players.local().inCombat() &&
-				Npcs.stream().name("Wolf").interactingWithMe().within(2).isNotEmpty()) {
+		if(myPos.distanceTo(SINCLAIR_TILE) < 8 && Players.local().inCombat() &&
+				Npcs.stream().name("Wolf").interactingWithMe().within(3).isNotEmpty()) {
 			if(myPos.getY() >= 3577){
-				Movement.walkTo(SINCLAIR_TILE.derive(-1, 0));
+				Movement.step(SINCLAIR_TILE.derive(-1, 0));
 			} else {
-				Movement.walkTo(SINCLAIR_TILE.derive(0, 1));
+				Movement.step(SINCLAIR_TILE.derive(0, 1));
 			}
 		}
 	}
