@@ -317,15 +317,15 @@ public class PathObjectHandler implements Loggable {
                 case ARDY_DOOR_LOCK_SIDE:
                 case YANILLE_DOOR_LOCK_SIDE:
                     for (int i = 0; i < Random.nextInt(15, 25); i++) {
+                        if (Players.local().tile().equals(new Tile(2564, 3356, 0))){
+                            successfulClick = true;
+                            break;
+                        }
                         if (!clickOnObject(object, specialObject.getAction())){
                             continue;
                         }
                         if (Players.local().tile().distanceTo(specialObject.getLocation()) > 1){
                             WaitFor.condition(Random.nextInt(3000, 4000), () -> Players.local().tile().distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
-                        }
-                        if (Players.local().tile().equals(new Tile(2564, 3356, 0))){
-                            successfulClick = true;
-                            break;
                         }
                     }
                     break;
@@ -367,15 +367,15 @@ public class PathObjectHandler implements Loggable {
                     break;
                 case ARDOUGNE_LOCKED_HOUSE:
                     for (int i = 0; i < Random.nextInt(10, 15); i++) {
+                        if (Players.local().tile().equals(specialObject.getLocation())) {
+                            successfulClick = true;
+                            break;
+                        }
                         if (!clickOnObject(object, specialObject.getAction())) {
                             continue;
                         }
                         if (Players.local().tile().distanceTo(specialObject.getLocation()) > 1) {
                             WaitFor.condition(Random.nextInt(3000, 4000), () -> Players.local().tile().distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
-                        }
-                        if (Players.local().tile().equals(specialObject.getLocation())) {
-                            successfulClick = true;
-                            break;
                         }
                     }
                     break;
