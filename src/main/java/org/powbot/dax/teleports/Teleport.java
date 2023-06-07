@@ -820,6 +820,12 @@ public enum Teleport {
 			() -> ItemHelper.click("Teleport to house", "Outside")
 	),
 
+	KHARYRLL_TELEPORT_TAB(
+			35, new Tile(3496, 3472, 0),
+			(i1, i2) -> hasCompletedDesertTreasure() && i1.stream().anyMatch(ItemFilters.nameEquals("Kharyrll teleport")),
+			() -> ItemHelper.click("Kharyrll t.*", "Break")
+	),
+
 //	ARCEUUS_HOME_TELEPORT(
 //			150, new Tile(1712, 3883, 0),
 //			(i1, i2) -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.ARCEUUS,
@@ -1057,5 +1063,10 @@ public enum Teleport {
 		return !Players.local().inCombat() &&
 					   ((long) Varpbits.varpbit(888) * 60 * 1000) + (20 * 60 * 1000) < System.currentTimeMillis();
 	}
+
+	private static boolean hasCompletedDesertTreasure(){
+		return Varpbits.value(358, true) >= 15;
+	}
+
 }
 
