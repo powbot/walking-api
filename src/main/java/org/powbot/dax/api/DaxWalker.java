@@ -63,8 +63,8 @@ public class DaxWalker implements Loggable {
                 Teleport.POH_OUTSIDE_RELLEKKA, Teleport.POH_OUTSIDE_RELLEKKA_TAB,
                 Teleport.POH_OUTSIDE_YANILLE, Teleport.POH_OUTSIDE_YANILLE_TAB,
                 Teleport.POH_OUTSIDE_PRIFDDINAS, Teleport.POH_OUTSIDE_PRIFDDINAS_TAB,
-                Teleport.ARDOUGNE_FARM_TELEPORT, Teleport.KHARYRLL_TELEPORT_TAB
-
+                Teleport.ARDOUGNE_FARM_TELEPORT, Teleport.KHARYRLL_TELEPORT_TAB,
+                Teleport.LASSAR_TELEPORT_TAB
         ));
     }
 

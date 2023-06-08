@@ -826,6 +826,12 @@ public enum Teleport {
 			() -> ItemHelper.click("Kharyrll t.*", "Break")
 	),
 
+	LASSAR_TELEPORT_TAB(
+			35, new Tile(3001, 3470, 0),
+			(i1, i2) -> hasCompletedDesertTreasure() && i1.stream().anyMatch(ItemFilters.nameEquals("Lassar teleport")),
+			() -> ItemHelper.click("Lassar t.*", "Break")
+	),
+
 //	ARCEUUS_HOME_TELEPORT(
 //			150, new Tile(1712, 3883, 0),
 //			(i1, i2) -> canUseHomeTeleport() && SpellBook.getCurrentSpellBook() == SpellBook.Type.ARCEUUS,
