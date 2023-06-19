@@ -3,12 +3,14 @@ package org.powbot.dax.api;
 import org.powbot.api.Locatable;
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.*;
+import org.powbot.api.rt4.Objects;
 import org.powbot.dax.api.models.*;
 import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.WalkerEngine;
 import org.powbot.dax.engine.WalkingCondition;
 import org.powbot.dax.engine.navigation.ShipUtils;
+import org.powbot.dax.engine.navigation.fairyring.FairyRing;
 import org.powbot.dax.teleports.Teleport;
 
 import java.util.*;
@@ -115,6 +117,9 @@ public class DaxWalker implements Loggable {
         if (start.equals(destination)) {
             return true;
         }
+        if(Objects.stream(start, GameObject.Type.FLOOR_DECORATION).name("Fairy ring").isNotEmpty()){
+            start = start.derive(0, 1);
+        }
 
         List<Item> inventory = Inventory.stream().list();
         List<Item> equipment = Equipment.stream().list();
@@ -177,8 +182,11 @@ public class DaxWalker implements Loggable {
         Varpbits.cache();
 
         List<BankPathRequestPair> pathRequestPairs = getInstance().getBankPathTeleports(playerDetails.isMember(), isInPvpWorld, inventory, equipment);
-
-        pathRequestPairs.add(new BankPathRequestPair(Point3D.fromTile(Players.local().tile()), null));
+        Tile start = Players.local().tile();
+        if(Objects.stream(start, GameObject.Type.FLOOR_DECORATION).name("Fairy ring").isNotEmpty()){
+            start = start.derive(0, 1);
+        }
+        pathRequestPairs.add(new BankPathRequestPair(Point3D.fromTile(start), null));
 
         List<PathResult> pathResults = WebWalkerServerApi.getInstance().getBankPaths(new BulkBankPathRequest(
                 playerDetails, pathRequestPairs));
@@ -193,7 +201,11 @@ public class DaxWalker implements Loggable {
     }
 
     public static List<Tile> getPath(Locatable destination) {
-        return getPath(Players.local().tile(), destination);
+        Tile start = Players.local().tile();
+        if(Objects.stream(start, GameObject.Type.FLOOR_DECORATION).name("Fairy ring").isNotEmpty()){
+            start = start.derive(0, 1);
+        }
+        return getPath(start, destination);
     }
 
     public static List<Tile> getPath(Locatable start, Locatable destination) {
