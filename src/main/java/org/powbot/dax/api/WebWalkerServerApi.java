@@ -123,6 +123,8 @@ public class WebWalkerServerApi implements Loggable {
             }
 
             switch (serverResponse.getCode()) {
+                case 502:
+                    log("Error: HTTP 502 from cloudflare.  This is an issue with the powbot proxy service.");
                 case 429:
                     return Collections.singletonList(new PathResult(PathStatus.RATE_LIMIT_EXCEEDED));
                 case 400:
