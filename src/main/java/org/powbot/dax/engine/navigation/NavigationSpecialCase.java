@@ -277,6 +277,18 @@ public class NavigationSpecialCase implements Loggable {
         LIGHTHOUSE_LADDER(2510, 3644, 0),
         LIGHTHOUSE_UNDERGROUND(2518, 9994, 0),
 
+        LOKAR_SEARUNNER_RELLEKKA(2620, 3692, 0),
+        LOKAR_SEARUNNER_PIRATES_COVE(2213, 3794, 0),
+
+        CAPTAIN_BENTLEY_PIRATES_COVE(2222, 3797, 2),
+        CAPTAIN_BENTLEY_LUNAR_ISLE(2138, 3899, 2),
+
+        PRIF_MINE_INSIDE(3302, 12454, 0),
+        PRIF_MINE_OUTSIDE(3271, 6051, 0),
+
+        SHILO_CART_FROM_BRIMHAVEN(2777, 3214, 0),
+        SHILO_CART_FROM_SHILO(2834, 2951, 0),
+
         KILLERWAT_PLANE_ENTRANCE(3110, 3363, 2),
         KILLERWAT_PLANE_EXIT(2677, 5214, 2)
         ;
@@ -1059,6 +1071,39 @@ public class NavigationSpecialCase implements Loggable {
             case LIGHTHOUSE_UNDERGROUND:
                 return clickObject(Filters.Objects.nameEquals("Iron ladder"), "Climb",
                         () -> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+            case CAPTAIN_BENTLEY_PIRATES_COVE:
+            case CAPTAIN_BENTLEY_LUNAR_ISLE:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Captain Bentley"),"Travel") &&
+                               WaitFor.condition(15000,() -> specialLocation.getTile().distanceTo(Players.local().tile()) < 10
+                                                                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            case LOKAR_SEARUNNER_RELLEKKA:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Lokar Searunner"),"Rellekka") &&
+                               WaitFor.condition(15000,() -> specialLocation.getTile().distanceTo(Players.local().tile()) < 10
+                                                                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            case LOKAR_SEARUNNER_PIRATES_COVE:
+                return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Lokar Searunner"),"Pirate's Cove") &&
+                               WaitFor.condition(15000,() -> {
+                                   if(NPCInteraction.isConversationWindowUp()){
+                                       NPCInteraction.handleConversationRegex("That's fine.*");
+                                   }
+                                   return specialLocation.getTile().distanceTo(Players.local().tile()) < 10
+                                                  ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
+                               }) == WaitFor.Return.SUCCESS;
+
+            case PRIF_MINE_INSIDE:
+                return clickObject(Filters.Objects.nameEquals("Cave entrance"), "Enter",
+                        () -> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case PRIF_MINE_OUTSIDE:
+                return clickObject(Filters.Objects.nameEquals("Steps"), "Exit",
+                        () -> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+
+            case SHILO_CART_FROM_BRIMHAVEN:
+            case SHILO_CART_FROM_SHILO:
+                return NPCInteraction.clickNpc(Filters.NPCs.actionsContains("Pay-fare"), "Pay-fare") &&
+                               WaitFor.condition(15000,() -> specialLocation.getTile().distanceTo(Players.local().tile()) < 10
+                                                                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
 
             case KILLERWAT_PLANE_ENTRANCE:
             case KILLERWAT_PLANE_EXIT:
