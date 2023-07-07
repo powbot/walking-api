@@ -69,16 +69,17 @@ public class Charter implements Loggable {
     }
 
     public enum LocationProperty {
-        PORT_TYRAS("Port Tyras", null),
-        PORT_PHASMATYS("Port Phasmatys", new Tile(3702, 3503, 0)),
-        CATHERBY("Catherby", new Tile(2796, 3414, 0)),
-        SHIPYARD("Shipyard", null),
-        KARAMJA("Musa Point", new Tile(2956, 3146, 0)),
-        BRIMHAVEN("Brimhaven", new Tile(2760, 3237, 0)),
-        PORT_KHAZARD("Port Khazard", new Tile(2674, 3149, 0)),
-        PORT_SARIM("Port Sarim", new Tile(3041, 3193, 0)),
-        MOS_LE_HARMLESS("Mos le'Harmless", null),
-        CRANDOR("Crandor", null);
+        BRIMHAVEN ("Brimhaven", new Tile(2760, 3237, 0)),
+        CATHERBY ("Catherby", new Tile(2796, 3414, 0)),
+        CORSAIR_COVE ("Corsair Cove", new Tile(2587, 2851, 0)),
+        MUSA_POINT("Musa Point", new Tile(2954, 3158, 0)),
+        MOS_LE_HARMLESS ("Mos le'Harmless", new Tile(3671, 2931, 0)),
+        PORT_KHAZARD ("Port Khazard", new Tile(2674, 3144, 0)),
+        PORT_PHASMATYS ("Port Phasmatys", new Tile(3702, 3503, 0)),
+        PORT_SARIM ("Port Sarim", new Tile(3038, 3192, 0)),
+        PORT_TYRAS ("Port Tyras", new Tile(2142, 3122, 0)),
+        SHIPYARD ("Shipyard", new Tile(3001, 3032, 0)),
+        PRIFDDINAS ("Prifddinas", new Tile(2159, 3329, 0));
 
         private String name;
         private Area area;
