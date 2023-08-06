@@ -102,7 +102,7 @@ public class WalkerEngine implements Loggable {
                     return false;
                 }
 
-                if (wantedEnergy > 0 && !Movement.running()) {
+                if (wantedEnergy >= Movement.energyLevel() && !Movement.running()) {
                     Movement.running(true);
                 }
                 
