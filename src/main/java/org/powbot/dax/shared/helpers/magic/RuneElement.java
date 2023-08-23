@@ -69,7 +69,7 @@ public enum RuneElement {
     private boolean haveStaff(List<Item> equipment) {
         return equipment.stream().anyMatch(rsItem -> {
             String name = getItemName(rsItem).toLowerCase();
-            if (!name.contains("staff")) {
+            if (!name.contains("staff") && !name.matches("tome of (water|fire)$")) {
                 return false;
             }
             for (String alternativeName : alternativeNames) {
