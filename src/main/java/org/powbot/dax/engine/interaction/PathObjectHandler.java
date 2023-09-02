@@ -8,6 +8,7 @@ import org.powbot.api.rt4.*;
 import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.WalkerEngine;
+import org.powbot.dax.engine.WalkingCondition;
 import org.powbot.dax.engine.bfs.BFS;
 import org.powbot.dax.engine.collision.RealTimeCollisionTile;
 import org.powbot.dax.engine.local.PathAnalyzer;
@@ -32,11 +33,11 @@ public class PathObjectHandler implements Loggable {
 
     private PathObjectHandler(){
         sortedOptions = new TreeSet<>(
-		        Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through", "Exit",
-                "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb over", "Climb-into", "Climb-through", "Climb through",
-                "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up","Walk-Up", "Travel", "Get in",
-                "Investigate", "Operate", "Climb-under","Jump","Crawl-down","Crawl-through","Activate","Push","Squeeze-past","Walk-Down",
-                "Swing-on", "Climb up","Pass-Through","Jump-up","Jump-down","Swing across", "Climb Down", "Jump-Down", "Jump to"));
+                Arrays.asList("Enter", "Cross", "Pass", "Open", "Close", "Walk-through", "Use", "Pass-through", "Exit",
+                        "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb over", "Climb-into", "Climb-through", "Climb through",
+                        "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up","Walk-Up", "Travel", "Get in",
+                        "Investigate", "Operate", "Climb-under","Jump","Crawl-down","Crawl-through","Activate","Push","Squeeze-past","Walk-Down",
+                        "Swing-on", "Climb up","Pass-Through","Jump-up","Jump-down","Swing across", "Climb Down", "Jump-Down", "Jump to"));
 
 
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin","Drawers","null","Ornate railing","Wardrobe"));
@@ -158,7 +159,7 @@ public class PathObjectHandler implements Loggable {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getDestination().getTile().equals(new Tile(2899, 3565, 0)) &&
-                    destinationDetails.getAssumed().equals(new Tile(2205, 4934, 1));
+                        destinationDetails.getAssumed().equals(new Tile(2205, 4934, 1));
             }
         }),
         FALADOR_GATE(Filters.Objects.nameEquals("Gate"), "Close", new Tile(3031, 3314, 0), new SpecialCondition() {
@@ -171,14 +172,14 @@ public class PathObjectHandler implements Loggable {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getDestination().getTile().equals(new Tile(3480, 9836, 0)) ||
-                    destinationDetails.getAssumed().equals(new Tile(3480, 9836, 0));
+                        destinationDetails.getAssumed().equals(new Tile(3480, 9836, 0));
             }
         }),
         BRINE_RAT_CAVE_BOULDER(Filters.Objects.nameEquals("Cave"), "Exit", new Tile(2690, 10125, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getDestination().getTile().equals(new Tile(2690, 10125, 0))
-                    && Npcs.stream().name("Boulder").action("Roll").count() > 0;
+                        && Npcs.stream().name("Boulder").action("Roll").count() > 0;
             }
         }),
         ARDOUGNE_LOCKED_HOUSE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2611, 3316, 0), new SpecialCondition() {
@@ -231,7 +232,7 @@ public class PathObjectHandler implements Loggable {
         abstract boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails);
     }
 
-    public static boolean handle(PathAnalyzer.DestinationDetails destinationDetails, List<Tile> path){
+    public static boolean handle(PathAnalyzer.DestinationDetails destinationDetails, List<Tile> path, WalkingCondition walkingCondition){
         RealTimeCollisionTile start = destinationDetails.getDestination(), end = destinationDetails.getNextTile();
 
         List<GameObject> interactiveObjects = null;
@@ -257,13 +258,13 @@ public class PathObjectHandler implements Loggable {
 
         StringBuilder stringBuilder = new StringBuilder("Sort Order: ");
         interactiveObjects.forEach(rsObject -> stringBuilder.append(rsObject.name()).append(" ").append(
-		       rsObject.actions()).append(", "));
+                rsObject.actions()).append(", "));
         getInstance().log(stringBuilder);
 
-        return handle(path, interactiveObjects.get(0), destinationDetails, action, specialObject);
+        return handle(path, interactiveObjects.get(0), destinationDetails, action, specialObject, walkingCondition);
     }
 
-    private static boolean handle(List<Tile> path, GameObject object, PathAnalyzer.DestinationDetails destinationDetails, String action, SpecialObject specialObject){
+    private static boolean handle(List<Tile> path, GameObject object, PathAnalyzer.DestinationDetails destinationDetails, String action, SpecialObject specialObject, WalkingCondition walkingCondition){
         PathAnalyzer.DestinationDetails current = PathAnalyzer.furthestReachableTile(path);
 
         if (current == null){
@@ -358,8 +359,8 @@ public class PathObjectHandler implements Loggable {
                     Npc boulder = InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Boulder").and(Filters.NPCs.actionsContains("Roll")));
                     if(InteractionHelper.click(boulder, "Roll")){
                         if(WaitFor.condition(12000,
-                            () -> Npcs.stream().name("Boulder").action("Roll").count() == 0 ?
-                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
+                                () -> Npcs.stream().name("Boulder").action("Roll").count() == 0 ?
+                                        WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS){
                             WaitFor.milliseconds(3500, 6000);
                             successfulClick = true;
                         }
@@ -416,27 +417,39 @@ public class PathObjectHandler implements Loggable {
         }
 
         WaitFor.Return result = WaitFor.condition(Random.nextInt(8500, 11000), () -> {
+            switch (walkingCondition.action()) {
+                case EXIT_OUT_WALKER_FAIL:
+                    return WaitFor.Return.FAIL;
+                case EXIT_OUT_WALKER_SUCCESS:
+                    return WaitFor.Return.SUCCESS;
+            }
+
             DoomsToggle.handleToggle();
-            PathAnalyzer.DestinationDetails destinationDetails1 = PathAnalyzer.furthestReachableTile(path);
             if (NPCInteraction.isConversationWindowUp()) {
                 NPCInteraction.handleConversation(NPCInteraction.GENERAL_RESPONSES);
             }
+
+            PathAnalyzer.DestinationDetails destinationDetails1 = PathAnalyzer.furthestReachableTile(path);
             if (destinationDetails1 != null) {
                 if (!destinationDetails1.getDestination().equals(currentFurthest)){
                     return WaitFor.Return.SUCCESS;
                 }
             }
+
             if (current.getNextTile() != null){
                 PathAnalyzer.DestinationDetails hoverDetails = PathAnalyzer.furthestReachableTile(path, current.getNextTile());
                 if (hoverDetails != null && hoverDetails.getDestination() != null && hoverDetails.getDestination().getTile().distanceTo(Players.local().tile()) > 7 && !strongholdDoor && Players.local().tile().distanceTo(object) <= 2){
                     WalkerEngine.getInstance().hoverMinimap(hoverDetails.getDestination());
                 }
             }
+
             return WaitFor.Return.IGNORE;
         });
+
         if (strongholdDoor){
             WaitFor.milliseconds(800, 1200);
         }
+
         return result == WaitFor.Return.SUCCESS;
     }
 
@@ -498,7 +511,7 @@ public class PathObjectHandler implements Loggable {
             return c;
         });
         StringBuilder a = new StringBuilder("Detected: ");
-       objects.forEach(object -> a.append(object.name()).append(" "));
+        objects.forEach(object -> a.append(object.name()).append(" "));
         getInstance().log(a);
 
 
@@ -516,7 +529,7 @@ public class PathObjectHandler implements Loggable {
      * @return
      */
     private static Predicate<GameObject> interactiveObjectFilter(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
-         return rsObject -> {
+        return rsObject -> {
             String name = rsObject.getName();
             if (getInstance().sortedBlackList.contains(name)) {
                 return false;
@@ -635,7 +648,7 @@ public class PathObjectHandler implements Loggable {
             }) == WaitFor.Return.SUCCESS){
                 return false;
             } else {
-               List<GameObject> objects = Objects.stream(15).action("Climb-down").filter(Filters.Objects.inArea(AreaHelper.fromCenter(object, 2))).list();
+                List<GameObject> objects = Objects.stream(15).action("Climb-down").filter(Filters.Objects.inArea(AreaHelper.fromCenter(object, 2))).list();
                 return objects.size() > 0 && handleTrapDoor(objects.get(0));
             }
         }
