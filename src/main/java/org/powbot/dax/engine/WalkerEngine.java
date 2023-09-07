@@ -88,10 +88,10 @@ public class WalkerEngine implements Loggable {
             resetAttempts();
 
             while (true) {
-
                 if(ScriptManager.INSTANCE.isStopping()){
                     return false;
                 }
+
                 if(ScriptManager.INSTANCE.isPaused()){
                     WaitFor.milliseconds(1000);
                     continue;
@@ -105,10 +105,9 @@ public class WalkerEngine implements Loggable {
                 if (wantedEnergy >= Movement.energyLevel() && !Movement.running()) {
                     Movement.running(true);
                 }
-                
+
                 if(walkingCondition != null){
                     switch (walkingCondition.action()){
-
                         case EXIT_OUT_WALKER_SUCCESS:
                             return true;
                         case EXIT_OUT_WALKER_FAIL:
@@ -145,11 +144,9 @@ public class WalkerEngine implements Loggable {
                 RealTimeCollisionTile currentNode = destinationDetails.getDestination();
                 Tile assumedNext = destinationDetails.getAssumed();
 
-
-
 //                if (destinationDetails.getState() != PathAnalyzer.PathState.FURTHEST_CLICKABLE_TILE) {
-                    log(destinationDetails.toString());
-//                } 
+                log(destinationDetails.toString());
+//                }
 
                 final RealTimeCollisionTile destination = currentNode;
                 if (!Projection.isInMinimap(new Tile(destination.getX(), destination.getY(), destination.getZ()))) {
@@ -167,7 +164,7 @@ public class WalkerEngine implements Loggable {
                             WaitFor.milliseconds(1200, 3400);
                         }
                         NavigationSpecialCase.SpecialLocation specialLocation = NavigationSpecialCase.getLocation(currentNode.getTile()),
-                            specialLocationDestination = NavigationSpecialCase.getLocation(assumedNext);
+                                specialLocationDestination = NavigationSpecialCase.getLocation(assumedNext);
                         if (specialLocation != null && specialLocationDestination != null) {
                             log("[SPECIAL LOCATION] We are at " + specialLocation + " and our destination is " + specialLocationDestination);
                             if (!NavigationSpecialCase.handle(specialLocationDestination)) {
@@ -180,8 +177,8 @@ public class WalkerEngine implements Loggable {
                         }
 
                         Charter.LocationProperty
-                            locationProperty = Charter.LocationProperty.getLocation(currentNode.getTile()),
-                            destinationProperty = Charter.LocationProperty.getLocation(assumedNext);
+                                locationProperty = Charter.LocationProperty.getLocation(currentNode.getTile()),
+                                destinationProperty = Charter.LocationProperty.getLocation(assumedNext);
                         if (locationProperty != null && destinationProperty != null) {
                             log("Chartering to: " + destinationProperty);
                             if (!Charter.to(destinationProperty)) {
@@ -196,10 +193,12 @@ public class WalkerEngine implements Loggable {
                         Tile walkingTile = Reachable.getBestWalkableTile(destination.getTile(), new Reachable());
                         if (isDestinationClose(destination) || (walkingTile != null ? AccurateMouse.clickMinimap(walkingTile) : clickMinimap(destination))) {
                             log("Handling Object...");
-                            if (!PathObjectHandler.handle(destinationDetails, path)) {
+
+                            if (!PathObjectHandler.handle(destinationDetails, path, walkingCondition)) {
                                 log("Failed to handle object.");
                                 failedAttempt();
                             } else {
+                                log("Successfully handled object.");
                                 successfulAttempt();
                                 WaitFor.milliseconds(200,800);
                             }
