@@ -395,7 +395,7 @@ public enum Teleport {
 	),
 	RADAS_BLESSING_MOUNT_KARUULM(
 			0, new Tile(1310, 3796, 0),
-			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.RADAS_BLESSING_FILTER.and(ItemFilters.nameContains("3","4")), i1, i2),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.RADAS_BLESSING_FILTER.and(ItemFilters.nameContains("4")), i1, i2),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.RADAS_BLESSING_FILTER, "Mount.*")
 	),
 
@@ -583,7 +583,7 @@ public enum Teleport {
 	ARDOUGNE_FARM_TELEPORT(
 			0, new Tile(2663, 3375, 0),
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.ARDOUGNE_CLOAK_4_FILTER, i1, i2),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK_4_FILTER, "Farm Teleport")
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK_4_FILTER, "Ardougne Farm")
 	),
 
 	ROYAL_SEED_POD(
