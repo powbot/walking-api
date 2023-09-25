@@ -1142,12 +1142,14 @@ public class NavigationSpecialCase implements Loggable {
             case GIANT_MOLE_HOLE:
                 if(Players.local().tile().distanceTo(GIANT_MOLE_HOLE.getTile()) >= 2){
                     if(Movement.walkTo(GIANT_MOLE_HOLE.getTile())){
-                        WaitFor.condition(4500, () -> Players.local().tile().distanceTo(GIANT_MOLE_HOLE.getTile()) < 2 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                       WaitFor.condition(4500, () -> Players.local().tile().distanceTo(GIANT_MOLE_HOLE.getTile()) < 2 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                     }
                 }
                 if(ItemHelper.click("Spade", "Dig")){
-                    WaitFor.condition(4500, () -> Players.local().tile().equals(GIANT_MOLE_ENTRANCE.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                    return (WaitFor.condition(4500, () -> Players.local().tile().equals(GIANT_MOLE_ENTRANCE.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) == WaitFor.Return.SUCCESS;
                 }
+                break;
+
 
 
         }
