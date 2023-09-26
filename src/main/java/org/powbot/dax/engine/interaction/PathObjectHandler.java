@@ -187,6 +187,24 @@ public class PathObjectHandler implements Loggable {
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getAssumed().equals(new Tile(2611, 3316, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(2610, 3316, 0));
             }
+        }),
+        WILDERNESS_CAVERN(Filters.Objects.nameEquals("Cavern"), "Enter", new Tile(3126, 3832, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getAssumed().equals(new Tile(3126, 3832, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(3241, 10233, 0));
+            }
+        }),
+        WILDERNESS_CREVICE(Filters.Objects.nameEquals("Crevice"), "Jump-Down", new Tile(3067, 3740, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getAssumed().equals(new Tile(3067, 3740, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(3187, 10127, 0));
+            }
+        }),
+        WILDERNESS_CAVERN_2(Filters.Objects.nameEquals("Cavern"), "Enter", new Tile(3075, 3653, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getAssumed().equals(new Tile(3075, 3653, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(3197, 10056, 0));
+            }
         });
 
         private Predicate<GameObject> filter;
@@ -377,6 +395,20 @@ public class PathObjectHandler implements Loggable {
                         }
                         if (Players.local().tile().distanceTo(specialObject.getLocation()) > 1) {
                             WaitFor.condition(Random.nextInt(3000, 4000), () -> Players.local().tile().distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        }
+                    }
+                    break;
+                case WILDERNESS_CREVICE:
+                case WILDERNESS_CAVERN:
+                case WILDERNESS_CAVERN_2:
+                    if(NPCInteraction.isConversationWindowUp()){
+                        NPCInteraction.handleConversation("Yes, and don't ask again.");
+                    } else if(clickOnObject(object,specialObject.getAction())){
+                        WaitFor.condition(4500, () -> (Players.local().tile().equals(new Tile(3187, 10127, 0)) || NPCInteraction.isConversationWindowUp() || Widgets.widget(720).valid()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        if(NPCInteraction.isConversationWindowUp()){
+                            NPCInteraction.handleConversation("Yes, and don't ask again.");
+                        } else if(Widgets.widget(720).valid()){
+                            DoomsToggle.handle(720, "Let me jump, and don't warn me again!");
                         }
                     }
                     break;

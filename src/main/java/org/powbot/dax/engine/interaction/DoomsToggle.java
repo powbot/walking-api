@@ -7,6 +7,7 @@ import org.powbot.api.rt4.Widgets;
 import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.WaitFor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class DoomsToggle implements Loggable {
         WATERBIRTH(574),
         MORT_MYRE(580),
         LUMBRIDGE_SWAMP_CAVES(572),
-        OBSERVATORY(560)
+        OBSERVATORY(560),
+        REVENANT(720);
         ;
         private int widget, component;
         WARNINGS(int widget){
@@ -66,16 +68,15 @@ public class DoomsToggle implements Loggable {
             return;
         }
         getInstance().log("Handling Interface: " + parentInterface);
-        Components.stream(565).anyMatch(c -> {
+        List<String> asList = new ArrayList<>(Arrays.asList(options));
+        Components.stream(parentInterface).anyMatch(c -> {
             String txt = c.text();
             if(txt.length() == 0)
                 return false;
-            boolean matches = txt.contains("Proceed regardless");
-            System.out.println("[TEST] Found component with text: " + txt + ", matches: " + matches);
+            boolean matches = txt.contains("Proceed regardless") || asList.contains(txt);
             if(!matches){
                 return false;
             }
-            System.out.println("[TEST] Found matching component! Clicking it.");
             return c.click();
         });
     }
