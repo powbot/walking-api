@@ -583,7 +583,7 @@ public enum Teleport {
 	ARDOUGNE_FARM_TELEPORT(
 			0, new Tile(2663, 3375, 0),
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.ARDOUGNE_CLOAK_4_FILTER, i1, i2),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK_4_FILTER, "Ardougne Farm")
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK_4_FILTER, "(Ardougne Farm|Farm Teleport)")
 	),
 
 	ROYAL_SEED_POD(
