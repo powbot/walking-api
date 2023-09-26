@@ -205,7 +205,13 @@ public class PathObjectHandler implements Loggable {
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getAssumed().equals(new Tile(3075, 3653, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(3197, 10056, 0));
             }
-        });
+        }),
+        BASILISK_SHORTCUT(Filters.Objects.nameEquals("Crevice"), "Squeeze-through", new Tile(2735, 10008, 0), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getDestination().getTile().equals(new Tile(2735, 10008, 0)) || destinationDetails.getDestination().getTile().equals(new Tile(2730, 10008, 0));
+            }
+        }),;
 
         private Predicate<GameObject> filter;
         private String action;
@@ -411,6 +417,9 @@ public class PathObjectHandler implements Loggable {
                             DoomsToggle.handle(720, "Let me jump, and don't warn me again!");
                         }
                     }
+                    break;
+                case BASILISK_SHORTCUT:
+                    object.bounds(-52, 42, -217, 20, -52, 52);
                     break;
             }
         }
