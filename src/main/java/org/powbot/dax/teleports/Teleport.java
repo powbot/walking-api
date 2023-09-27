@@ -99,6 +99,13 @@ public enum Teleport {
 			() -> ItemHelper.click("Ardougne t.*", "Break")
 	),
 
+	//Need Varbit that updates after reading Transportation Incantantions to unlock
+	/*KOUREND_CASTLE_TELEPORT(
+			35, new Tile(2661, 3300, 0),
+			Spell.KOUREND_TELEPORT::canUse,
+			() -> selectSpell(Spell.KOUREND_TELEPORT,"Cast")
+	),*/
+
 	NARDAH_TELEPORT(
 			35, TeleportScrolls.NARDAH
 	),
@@ -380,6 +387,11 @@ public enum Teleport {
 			35, new Tile(1575, 3531, 0),
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.XERICS_TALISMAN_FILTER, i1, i2),
 			() -> teleportWithScrollInterface(WearableItemTeleport.XERICS_TALISMAN_FILTER, ".*Xeric's Lookout")
+	),
+	XERICS_HEART(
+			35, new Tile(1644, 3670, 0),
+			(i1, i2) -> Varpbits.value(4982, true) >= 3 && WearableItemTeleport.has(WearableItemTeleport.XERICS_TALISMAN_FILTER, i1, i2),
+			() -> teleportWithScrollInterface(WearableItemTeleport.XERICS_TALISMAN_FILTER, ".*Xeric's Heart")
 	),
 
 	WEST_ARDOUGNE_TELEPORT_TAB(
