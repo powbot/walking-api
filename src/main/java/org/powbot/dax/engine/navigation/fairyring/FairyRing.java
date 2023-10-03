@@ -39,6 +39,11 @@ public class FairyRing {
 			}
 		}
 		handleSpecialCases();
+		final Tile myPos = Players.local().tile();
+		if(location == Locations.ZANARIS){
+			return InteractionHelper.click(ring,"Zanaris") &&
+						   Condition.wait(() -> myPos.distanceTo(Players.local().tile()) > 20,800, 10);
+		}
 		if(!hasInterface()){
 			if(hasCachedLocation(location)){
 				return takeLastDestination(location) && WaitFor.milliseconds(500, 1200) != null;
@@ -46,7 +51,6 @@ public class FairyRing {
 				return false;
 			}
 		}
-		final Tile myPos = Players.local().tile();
 		return location.turnTo() && pressTeleport() && Condition.wait(() -> myPos.distanceTo(Players.local().tile()) > 20, 800, 10) && WaitFor.milliseconds(500, 1200) != null;
 	}
 
