@@ -35,6 +35,7 @@ public class PlayerDetails {
                 199,
                 357,
                 386,
+                571,
                 1990,
                 2310,
                 2328,
