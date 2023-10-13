@@ -41,8 +41,7 @@ public class FairyRing {
 		handleSpecialCases();
 		final Tile myPos = Players.local().tile();
 		if(location == Locations.ZANARIS){
-			return InteractionHelper.click(ring,"Zanaris") &&
-						   Condition.wait(() -> myPos.distanceTo(Players.local().tile()) > 20,800, 10);
+			return travelToZanaris(myPos);
 		}
 		if(!hasInterface()){
 			if(hasCachedLocation(location)){
@@ -77,6 +76,13 @@ public class FairyRing {
 	private static boolean openFairyRing(){
 		return ring.valid() && InteractionHelper.click(ring,"Configure") &&
 				Condition.wait(() -> Widgets.component(INTERFACE_MASTER, 0).visible(),1000, 10);
+	}
+
+
+	private static boolean travelToZanaris(Tile myPos){
+		ring = Objects.stream(25).name("Fairy ring").nearest().first();
+		return ring.valid() && InteractionHelper.click(ring,"Zanaris") &&
+					   Condition.wait(() -> myPos.distanceTo(Players.local().tile()) > 20,800, 10);
 	}
 
 	public enum Locations {
