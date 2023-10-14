@@ -131,6 +131,7 @@ public class FairyRing {
 		WIZARDS_TOWER(D, I, S),
 		YANILLE(C, I, Q),
 		ZANARIS(B, K, S),
+		NOWHERE(D, J, Q),
 		ZUL_ANDRA(B, J, S);
 
 		FirstLetter first;
