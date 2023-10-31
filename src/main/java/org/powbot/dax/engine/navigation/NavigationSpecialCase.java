@@ -1300,13 +1300,13 @@ public class NavigationSpecialCase implements Loggable {
     }
 
     private static boolean takeFossilIslandBoat(String destination){
-        if(NPCInteraction.isConversationWindowUp() || clickObject(
+        if(Chat.chatting() || clickObject(
                 Filters.Objects.nameEquals("Rowboat"),
                 "Travel",
-                () -> NPCInteraction.isConversationWindowUp() ?
+                () -> Chat.chatting() ?
                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)){
             Tile myPos = Players.local().tile();
-            NPCInteraction.handleConversation(destination);
+            Chat.completeChat(destination);
             return WaitFor.condition(5000,() -> Players.local().tile().distanceTo(myPos) > 10 ? WaitFor.Return.SUCCESS :
                     WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
         }
