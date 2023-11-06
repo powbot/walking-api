@@ -18,8 +18,8 @@ public class RunePouch{
 			SLOT_4_TYPE_BIT = 14285,
 			SLOT_4_QUANTITY_BIT = 14286;
 
-   private static final String[]
-            POUCH_NAMES = {"Rune pouch", "Divine rune pouch"};
+    private static final String[]
+            POUCH_NAMES = {"Rune pouch", "Divine rune pouch", "Rune pouch (l)", "Divine rune pouch (l)"};
 
     public enum RuneSlot {
         FIRST (SLOT_1_TYPE_BIT,SLOT_1_QUANTITY_BIT),
