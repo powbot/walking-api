@@ -372,6 +372,11 @@ public enum Teleport {
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.TELEPORT_CRYSTAL_FILTER, i1, i2),
 			() -> WearableItemTeleport.teleport(WearableItemTeleport.TELEPORT_CRYSTAL_FILTER, "Lletya")
 	),
+	PRIFDDINAS(
+			35, new Tile(3266, 6064, 0),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.TELEPORT_CRYSTAL_FILTER, i1, i2),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.TELEPORT_CRYSTAL_FILTER, "Prifddinas")
+	),
 
 	XERICS_GLADE(
 			35, new Tile(1753, 3565, 0),
