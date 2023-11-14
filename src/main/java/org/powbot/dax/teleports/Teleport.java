@@ -527,7 +527,7 @@ public enum Teleport {
 	SLAYER_RING_GNOME_STRONGHOLD(
 			35, new Tile(2433, 3424, 0),
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.SLAYER_RING, i1, i2),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.SLAYER_RING, ".*Stronghold")
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.SLAYER_RING, ".*Stronghold.*")
 	),
 
 	SLAYER_RING_MORYTANIA(
