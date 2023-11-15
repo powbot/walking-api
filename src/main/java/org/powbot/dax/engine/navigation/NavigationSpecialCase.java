@@ -1092,6 +1092,8 @@ public class NavigationSpecialCase implements Loggable {
                 return handleBoaty("Slepe.", specialLocation.getTile());
 
             case LIGHTHOUSE_LADDER:
+                return clickObject(Filters.Objects.nameEquals("Iron ladder").and(o -> o.getTile().getY() < 9995), "Climb",
+                        () -> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case LIGHTHOUSE_UNDERGROUND:
                 return clickObject(Filters.Objects.nameEquals("Iron ladder"), "Climb",
                         () -> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
