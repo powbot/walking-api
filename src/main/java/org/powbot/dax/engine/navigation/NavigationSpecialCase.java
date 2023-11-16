@@ -312,7 +312,12 @@ public class NavigationSpecialCase implements Loggable {
         DWARVEN_FERRYMAN_2_NORTH(2854, 10143, 0),
 
         KHAZARD_BATTLEMENT_ENTRANCE(2509, 3252, 0),
-        KHAZARD_BATTLEMENT_LANDING(2509, 3254, 0)
+        KHAZARD_BATTLEMENT_LANDING(2509, 3254, 0),
+
+        MOUNT_KARUULM_BOTTOM(1324, 3777, 0),
+        MOUNT_KARUULM_MIDDLE_TO_BOTTOM(1324, 3785 , 0),
+        MOUNT_KARUULM_MIDDLE_TO_TOP(1324, 3787 , 0),
+        MOUNT_KARUULM_TOP(1324, 3795 , 0),
         ;
 
         int x, y, z;
@@ -1186,6 +1191,20 @@ public class NavigationSpecialCase implements Loggable {
                     return WaitFor.condition(15000, () -> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
                 }
                 break;
+
+            case MOUNT_KARUULM_BOTTOM:
+                return clickObject(Filters.Objects.nameEquals("Rocks").and(o -> o.getTile().getY() == 3784), "Climb",
+                        ()-> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case MOUNT_KARUULM_MIDDLE_TO_BOTTOM:
+                return clickObject(Filters.Objects.nameEquals("Rocks").and(o -> o.getTile().getY() == 3778), "Climb",
+                        ()-> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case MOUNT_KARUULM_MIDDLE_TO_TOP:
+                return clickObject(Filters.Objects.nameEquals("Rocks").and(o -> o.getTile().getY() == 3794), "Climb",
+                        ()-> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case MOUNT_KARUULM_TOP:
+                return clickObject(Filters.Objects.nameEquals("Rocks").and(o -> o.getTile().getY() == 3788), "Climb",
+                        ()-> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
 
         }
 
