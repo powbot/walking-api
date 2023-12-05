@@ -694,12 +694,12 @@ public enum Teleport {
 			new Tile(2210, 2857, 0)
 	),
 	//	TITHE_FARM_MINIGAME(Minigame.TITHE_FARM, new Tile(0, 0, 0),) I didn't see a way to determine if we've unlocked it.
-//	TROUBLE_BREWING_MINIGAME(
-//			Grouping.MINIGAMES.TROUBLE_BREWING,
-//			new Tile(3817, 3025, 0),
-//			() -> Quest.CABIN_FEVER.getState() == Quest.State.COMPLETE && Skills.SKILLS.COOKING.getActualLevel() >= 40,
-//			"No."
-//	),
+	TROUBLE_BREWING_MINIGAME(
+			Grouping.MINIGAMES.TROUBLE_BREWING,
+			new Tile(3817, 3025, 0),
+			(i1, i2) -> Varpbits.varpbit(655) > 130 && Skills.realLevel(Skill.Cooking) >= 40,
+			"No."
+	),
 	TZHAAR_FIGHT_PIT_MINIGAME(
 			Grouping.MINIGAMES.TZHAAR_FIGHT_PIT,
 			new Tile(2402, 5181, 0),
