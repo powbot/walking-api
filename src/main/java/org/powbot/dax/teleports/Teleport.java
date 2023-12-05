@@ -213,25 +213,29 @@ public enum Teleport {
 	COMBAT_BRACE_WARRIORS_GUILD (
 			35, new Tile(2882, 3550, 0),
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.COMBAT_BRACE_FILTER, i1, i2),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.COMBAT_BRACE_FILTER, "(?i).*warrior.+guild.*")
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.COMBAT_BRACE_FILTER, "(?i).*warrior.+guild.*"),
+			TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
 
 	COMBAT_BRACE_CHAMPIONS_GUILD (
 			35, new Tile(3190, 3366, 0),
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.COMBAT_BRACE_FILTER, i1, i2),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.COMBAT_BRACE_FILTER, "(?i).*champion.+guild.*")
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.COMBAT_BRACE_FILTER, "(?i).*champion.+guild.*"),
+			TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
 
 	COMBAT_BRACE_MONASTARY (
 			35, new Tile(3053, 3486, 0),
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.COMBAT_BRACE_FILTER, i1, i2),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.COMBAT_BRACE_FILTER, "(?i).*monastery.*")
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.COMBAT_BRACE_FILTER, "(?i).*monastery.*"),
+			TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
 
 	COMBAT_BRACE_RANGE_GUILD (
 			35, new Tile(2656, 3442, 0),
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.COMBAT_BRACE_FILTER, i1, i2),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.COMBAT_BRACE_FILTER, "(?i).*rang.+guild.*")
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.COMBAT_BRACE_FILTER, "(?i).*rang.+guild.*"),
+			TeleportConstants.LEVEL_30_WILDERNESS_LIMIT
 	),
 
 	GAMES_NECK_BURTHORPE (
