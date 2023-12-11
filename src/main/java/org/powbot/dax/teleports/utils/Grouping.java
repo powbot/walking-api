@@ -121,7 +121,7 @@ public class Grouping {
 
 
         final Component minigamesBox = minigameBox(currentMinigame);
-        if (!minigamesBox.valid()) {
+        if (!minigamesBox.visible()) {
             System.out.println("Unable to detect minigames children.");
             return false;
         }
@@ -141,10 +141,10 @@ public class Grouping {
 
     private static Component minigameBox(Component currentMinigame) {
         Component minigamesBox = Widgets.component(MAIN_INTERFACE_ID, MINIGAMES_SELECTION_BOX_INDEX);
-        if ((!minigamesBox.valid() || minigamesBox.components().getSize() == 0) && currentMinigame.click()) {
+        if ((!minigamesBox.visible() || minigamesBox.components().getSize() == 0) && currentMinigame.click()) {
             if (!Condition.wait(() -> {
                 Component minigamesBox1 = Widgets.component(MAIN_INTERFACE_ID, MINIGAMES_SELECTION_BOX_INDEX);
-                return minigamesBox1.valid() && minigamesBox1.components().getSize() > 0;
+                return minigamesBox1.visible() && minigamesBox1.components().getSize() > 0;
             }, 200, 10)) {
                 System.out.println("Failed to wait for minigames children to appear.");
                 return Component.getNil();
@@ -157,15 +157,6 @@ public class Grouping {
 
     private static Component minigameItem(Component minigamesBox, String name) {
         return Components.stream(minigamesBox.widgetId(), minigamesBox.index()).withChildren(true).textContains(name).first();
-    }
-
-    private static boolean isMinigameVisible(Point p) {
-        return p.getY() > 275 && p.getY() < 400;
-    }
-
-    public static boolean canMinigameTeleport() {
-        return Worlds.isCurrentWorldMembers() && !Players.local().inCombat() &&
-                ((long) Varpbits.varpbit(888) * 60 * 1000) + (20 * 60 * 1000) < Timing.currentTimeMillis();
     }
 
     public static boolean hasPvpArenaWidget() {
