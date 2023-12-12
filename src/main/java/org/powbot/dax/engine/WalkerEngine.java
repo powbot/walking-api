@@ -368,7 +368,7 @@ public class WalkerEngine implements Loggable {
         boolean members = Worlds.isCurrentWorldMembers();
         for (Teleport teleport : Teleport.values()) {
             if (!teleport.canUse() || (teleport.requiresMembers() && !members)) continue;
-            if(teleport.isAtTeleportSpot(startPosition) && !teleport.isAtTeleportSpot(playerPosition)){
+            if(teleport.getLocation().equals(startPosition) && !teleport.isAtTeleportSpot(playerPosition)){
                 log("Using teleport method: " + teleport);
                 teleport.trigger();
                 if (WaitFor.condition(Random.nextInt(3000, 20000),
