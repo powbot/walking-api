@@ -651,13 +651,13 @@ public class PathObjectHandler implements Loggable {
                 "Don't give them the information and send an 'Abuse Report'.",
                 "Don't give them my password.",
                 "The birthday of a famous person or event.",
-                "Through account settings on runescape.com.",
+                "Through account settings on oldschool.runescape.com.",
                 "Secure my device and reset my RuneScape password.",
                 "Report the player for phishing.",
                 "Don't click any links, forward the email to reportphishing@jagex.com.",
                 "Inform Jagex by emailing reportphishing@jagex.com.",
                 "Don't give out your password to anyone. Not even close friends.",
-                "Politely tell them no and then use the 'Report Abuse' button.",
+                "Politely tell them no, then use the 'Report Abuse' button.",
                 "Set up 2 step authentication with my email provider.",
                 "No, you should never buy a RuneScape account.",
                 "Do not visit the website and report the player who messaged you.",
@@ -673,7 +673,9 @@ public class PathObjectHandler implements Loggable {
                 "Talk to any banker.", // Not sure if its a seperate question to above?
                 "Secure my device and reset my RuneScape password.",
                 "Don't share your information and report the player.",
-                "Nothing, it's a fake.");
+                "Nothing, it's a fake.",
+                "Delete it - it's a fake!"
+        );
     }
 
     private static boolean isClosedTrapDoor(GameObject object, String[] options){
