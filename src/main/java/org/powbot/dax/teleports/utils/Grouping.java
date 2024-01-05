@@ -147,7 +147,7 @@ public class Grouping {
                 return minigamesBox1.visible() && minigamesBox1.components().getSize() > 0;
             }, 200, 10)) {
                 System.out.println("Failed to wait for minigames children to appear.");
-                return Component.getNil();
+                return Component.Companion.getNil();
             }
             return Widgets.component(MAIN_INTERFACE_ID, MINIGAMES_SELECTION_BOX_INDEX);
         }
