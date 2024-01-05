@@ -882,6 +882,16 @@ public enum Teleport {
 //						!Players.local().tile().equals(myPos), 15000);
 //			}
 //	),
+	STONY_BASALT(
+			35, new Tile(2842, 3690, 0),
+			(i1, i2) ->  Varpbits.value(6528) > 196 && i1.stream().anyMatch(ItemFilters.nameEquals("Stony basalt")) && (Varpbits.value(4493) == 0 || Skills.level(Skill.Agility) < 73),
+			() ->  ItemHelper.click("Stony basalt", "Troll Stronghold")
+	),
+	STONY_BASALT_DIARY(
+			35, new Tile(3496, 3472, 0),
+			(i1, i2) ->  Varpbits.value(6528) > 196 && i1.stream().anyMatch(ItemFilters.nameEquals("Stony basalt")) && Varpbits.value(4493) == 1 && Skills.level(Skill.Agility) >= 73,
+			() ->  ItemHelper.click("Stony basalt", "Troll Stronghold")
+	),
 
 	;
 
@@ -1004,7 +1014,7 @@ public enum Teleport {
 	}
 
 	public boolean isAtTeleportSpot(Tile tile) {
-		return tile.distanceTo(location) < 10;
+		return tile.distanceTo(location) <= 15;
 	}
 
 	public static void setMoveCosts(int moveCost){
