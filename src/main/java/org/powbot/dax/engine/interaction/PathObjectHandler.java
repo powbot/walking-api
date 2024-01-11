@@ -674,8 +674,8 @@ public class PathObjectHandler implements Loggable {
                 "Secure my device and reset my RuneScape password.",
                 "Don't share your information and report the player.",
                 "Nothing, it's a fake.",
-                "Delete it - it's a fake!"
-        );
+                "Delete it - it's a fake!",
+                "Nope, you're tricking me into going somewhere dangerous.");
     }
 
     private static boolean isClosedTrapDoor(GameObject object, String[] options){
