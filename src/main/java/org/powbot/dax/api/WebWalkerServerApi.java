@@ -10,7 +10,7 @@ import org.powbot.dax.api.json.JsonValue;
 import org.powbot.dax.api.json.ParseException;
 import org.powbot.dax.api.models.*;
 import org.powbot.dax.engine.Loggable;
-import org.powbot.mobile.service.DaxProxyService;
+import org.powbot.mobile.service.gob.DaxProxyService;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
