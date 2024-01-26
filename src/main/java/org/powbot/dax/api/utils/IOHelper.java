@@ -2,7 +2,7 @@ package org.powbot.dax.api.utils;
 
 import com.google.gson.JsonObject;
 import org.powbot.dax.api.models.ServerResponse;
-import org.powbot.mobile.service.DaxProxyService;
+import org.powbot.mobile.service.gob.DaxProxyService;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
