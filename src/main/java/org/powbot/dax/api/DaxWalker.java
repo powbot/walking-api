@@ -4,6 +4,8 @@ import org.powbot.api.Locatable;
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.*;
 import org.powbot.api.rt4.Objects;
+import org.powbot.api.rt4.walking.FailureReason;
+import org.powbot.api.rt4.walking.WebWalkingResult;
 import org.powbot.dax.api.models.*;
 import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.WaitFor;
@@ -99,23 +101,34 @@ public class DaxWalker implements Loggable {
     public static void setGlobalWalkingCondition(WalkingCondition walkingCondition) {
         getInstance().globalWalkingCondition = walkingCondition;
     }
-
     public static boolean walkTo(Locatable positionable) {
-        return walkTo(positionable, null);
+        return walkToWithResult(positionable).getSuccess();
+    }
+
+    public static WebWalkingResult walkToWithResult(Locatable positionable) {
+        return walkToWithResult(positionable, null);
     }
 
     public static boolean walkTo(Locatable destination, WalkingCondition walkingCondition) {
-        return walkTo(destination, walkingCondition, 10, 75);
+        return walkToWithResult(destination, walkingCondition).getSuccess();
+    }
+
+    public static WebWalkingResult walkToWithResult(Locatable destination, WalkingCondition walkingCondition) {
+        return walkToWithResult(destination, walkingCondition, 10, 75);
     }
 
     public static boolean walkTo(Locatable destination, WalkingCondition walkingCondition, int runMin, int runMax) {
+        return walkToWithResult(destination, walkingCondition, runMin, runMax).getSuccess();
+    }
+
+    public static WebWalkingResult walkToWithResult(Locatable destination, WalkingCondition walkingCondition, int runMin, int runMax) {
         if (ShipUtils.isOnShip()) {
             ShipUtils.crossGangplank();
             WaitFor.milliseconds(500, 1200);
         }
         Tile start = Players.local().tile();
         if (start.equals(destination)) {
-            return true;
+            return new WebWalkingResult(true, true, null);
         }
         if(Objects.stream(start, GameObject.Type.FLOOR_DECORATION).name("Fairy ring").isNotEmpty()){
             start = start.derive(0, 1);
@@ -138,7 +151,7 @@ public class DaxWalker implements Loggable {
         PathResult pathResult = getInstance().getBestPath(validPaths);
         if (pathResult == null) {
             getInstance().log(Level.WARNING, "No valid path found");
-            return false;
+            return new WebWalkingResult(true, false, FailureReason.NoPath);
         } else {
             getInstance().log("Path cost: " + pathResult.getCost());
         }
@@ -147,7 +160,12 @@ public class DaxWalker implements Loggable {
         getInstance().log("Path: [" + path.stream().map(Object::toString)
                 .collect(Collectors.joining(", ")) + "]");
 
-        return WalkerEngine.getInstance().walkPath(path, getGlobalWalkingCondition().combine(walkingCondition), runMin, runMax);
+        boolean res = WalkerEngine.getInstance().walkPath(path, getGlobalWalkingCondition().combine(walkingCondition), runMin, runMax);
+        if (res) {
+            return new WebWalkingResult(true, true, null);
+        }
+
+        return new WebWalkingResult(true, false, FailureReason.Unknown);
     }
 
     public static boolean walkToBank() {
