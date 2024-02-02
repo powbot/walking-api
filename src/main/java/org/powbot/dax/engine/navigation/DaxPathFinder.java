@@ -147,8 +147,7 @@ public class DaxPathFinder {
     }
 
     public static List<Tile> getPath(Destination[][] map, Tile tile) {
-        Tile worldTile = tile.globalTile();
-        int x = worldTile.getX(), y = worldTile.getY();
+        int x = tile.localX(), y = tile.localY();
 
         Destination destination = map[x][y];
 
