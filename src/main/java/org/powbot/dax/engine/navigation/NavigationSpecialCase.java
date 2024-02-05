@@ -531,7 +531,7 @@ public class NavigationSpecialCase implements Loggable {
                         List<String> actions = object.actions();
                         if (actions.stream().noneMatch(s -> s.startsWith("Climb-down"))){
                             Item item = Inventory.stream().id(954).first();
-                            if (item.valid() && item.click() && clickObject(Filters.Objects.nameEquals("Tunnel entrance"), "Use", () -> WaitFor.Return.SUCCESS)){
+                            if (item.valid() && item.interact("Use") && clickObject(Filters.Objects.nameEquals("Tunnel entrance"), "Use", () -> WaitFor.Return.SUCCESS)){
                                 WaitFor.milliseconds(3000, 6000);
                             }
                         }
