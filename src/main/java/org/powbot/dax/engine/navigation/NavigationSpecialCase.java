@@ -318,6 +318,26 @@ public class NavigationSpecialCase implements Loggable {
         MOUNT_KARUULM_MIDDLE_TO_BOTTOM(1324, 3785 , 0),
         MOUNT_KARUULM_MIDDLE_TO_TOP(1324, 3787 , 0),
         MOUNT_KARUULM_TOP(1324, 3795 , 0),
+
+        DEATH_PLATEAU_ROCKS_1_W(2877, 3622, 0),
+        DEATH_PLATEAU_ROCKS_1_E(2880, 3622, 0),
+
+        MOUNTAIN_GUIDE_MOUNT_QUIDAMORTEM(1275, 3557, 0),
+        MOUNTAIN_GUIDE_SOUTH_OF_QUIDAMORTEM(1272, 3477, 0),
+        MOUNTAIN_GUIDE_WALL(1401, 3536, 0),
+
+        ZEAH_MINECART_ARCEUUS(1670, 3833, 0),
+        ZEAH_MINECART_FARMING_GUILD(1218, 3737, 0),
+        ZEAH_MINECART_HOSIDIUS_SOUTH(1808, 3479, 0),
+        ZEAH_MINECART_HOSIDIUS_WEST(1655, 3543, 0),
+        ZEAH_MINECART_KINGSTOWN(1699, 3660, 0),
+        ZEAH_MINECART_KOUREND_WOODLAND(1572, 3466, 0),
+        ZEAH_MINECART_LOVAKENGJ(1518, 3733, 0),
+        ZEAH_MINECART_MOUNT_QUIDAMORTEM(1255, 3548, 0),
+        ZEAH_MINECART_NORTHERN_TUNDRAS(1648, 3931, 0),
+        ZEAH_MINECART_PORT_PISCARILIUS(1761, 3710, 0),
+        ZEAH_MINECART_SHAYZIEN_EAST(1590, 3620, 0),
+        ZEAH_MINECART_SHAYZIEN_WEST(1415, 3577, 0)
         ;
 
         int x, y, z;
@@ -1129,7 +1149,6 @@ public class NavigationSpecialCase implements Loggable {
                 return clickObject(Filters.Objects.nameEquals("Steps"), "Exit",
                         () -> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
 
-
             case SHILO_CART_FROM_BRIMHAVEN:
             case SHILO_CART_FROM_SHILO:
                 return NPCInteraction.clickNpc(Filters.NPCs.actionsContains("Pay-fare"), "Pay-fare") &&
@@ -1204,6 +1223,47 @@ public class NavigationSpecialCase implements Loggable {
             case MOUNT_KARUULM_TOP:
                 return clickObject(Filters.Objects.nameEquals("Rocks").and(o -> o.getTile().getY() == 3788), "Climb",
                         ()-> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case DEATH_PLATEAU_ROCKS_1_E:
+                return clickObject(Filters.Objects.nameEquals("Rocks").and(o -> o.getTile().getX() == 2878), "Climb",
+                        ()-> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case DEATH_PLATEAU_ROCKS_1_W:
+                return clickObject(Filters.Objects.nameEquals("Rocks").and(o -> o.getTile().getX() == 2877), "Climb",
+                        ()-> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+           case MOUNTAIN_GUIDE_MOUNT_QUIDAMORTEM:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Mountain Guide"), new String[]{"Travel"}, new String[]{"Mount Quidamortem."})
+                       && WaitFor.condition(15000, () -> Players.local().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            case MOUNTAIN_GUIDE_SOUTH_OF_QUIDAMORTEM:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Mountain Guide"), new String[]{"Travel"}, new String[]{"South of Quidamortem."})
+                       && WaitFor.condition(15000, () -> Players.local().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+            case MOUNTAIN_GUIDE_WALL:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Mountain Guide"), new String[]{"Travel"}, new String[]{"The Shayzien Outpost."})
+                       && WaitFor.condition(15000, () -> Players.local().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+
+            case ZEAH_MINECART_ARCEUUS:
+                return ZeahMineCarts.to(ZeahMineCarts.Location.ARCEUUS);
+            case ZEAH_MINECART_FARMING_GUILD:
+                return ZeahMineCarts.to(ZeahMineCarts.Location.FARMING_GUILD);
+            case ZEAH_MINECART_HOSIDIUS_SOUTH:
+                return ZeahMineCarts.to(ZeahMineCarts.Location.HOSIDIUS_SOUTH);
+            case ZEAH_MINECART_HOSIDIUS_WEST:
+                return ZeahMineCarts.to(ZeahMineCarts.Location.HOSIDIUS_WEST);
+            case ZEAH_MINECART_KINGSTOWN:
+                return ZeahMineCarts.to(ZeahMineCarts.Location.KINGSTOWN);
+            case ZEAH_MINECART_KOUREND_WOODLAND:
+                return ZeahMineCarts.to(ZeahMineCarts.Location.KOUREND_WOODLAND);
+            case ZEAH_MINECART_LOVAKENGJ:
+                return ZeahMineCarts.to(ZeahMineCarts.Location.LOVAKENGJ);
+            case ZEAH_MINECART_MOUNT_QUIDAMORTEM:
+                return ZeahMineCarts.to(ZeahMineCarts.Location.MOUNT_QUIDAMORTEM);
+            case ZEAH_MINECART_NORTHERN_TUNDRAS:
+                return ZeahMineCarts.to(ZeahMineCarts.Location.NORTHERN_TUNDRAS);
+            case ZEAH_MINECART_PORT_PISCARILIUS:
+                return ZeahMineCarts.to(ZeahMineCarts.Location.PORT_PISCARILIUS);
+            case ZEAH_MINECART_SHAYZIEN_EAST:
+                return ZeahMineCarts.to(ZeahMineCarts.Location.SHAYZIEN_EAST);
+            case ZEAH_MINECART_SHAYZIEN_WEST:
+                return ZeahMineCarts.to(ZeahMineCarts.Location.SHAYZIEN_WEST);
 
 
         }
