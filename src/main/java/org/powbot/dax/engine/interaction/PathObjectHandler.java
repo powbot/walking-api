@@ -122,25 +122,13 @@ public class PathObjectHandler implements Loggable {
         ARDY_DOOR_LOCK_SIDE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2565, 3356, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Players.local().tile().getX() >= 2565 && Players.local().tile().distanceTo(new Tile(2565, 3356, 0)) < 3;
+                return Players.local().tile().getX() >= 2565 && destinationDetails.getAssumed().equals(new Tile(2564, 3356, 0));
             }
         }),
-        ARDY_DOOR_UNLOCKED_SIDE(Filters.Objects.nameEquals("Door"), "Open", new Tile(2565, 3356, 0), new SpecialCondition() {
+        YANILLE_DOOR_LOCK_SIDE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2601, 9481, 0), new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Players.local().tile().getX() < 2565 && Players.local().tile().distanceTo(new Tile(2565, 3356, 0)) < 3;
-            }
-        }),
-        YANILLE_DOOR_LOCK_SIDE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2601, 9482, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Players.local().tile().getY() <= 9481 && Players.local().tile().distanceTo(new Tile(2601, 9482, 0)) < 3;
-            }
-        }),
-        YANILLE_DOOR_UNLOCKED_SIDE(Filters.Objects.nameEquals("Door"), "Open", new Tile(2601, 9482, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Players.local().tile().getY() > 9481 && Players.local().tile().distanceTo(new Tile(2601, 9482, 0)) < 3;
+                return Players.local().tile().getY() <= 9481 && destinationDetails.getAssumed().equals(new Tile(2601, 9482, 0));
             }
         }),
         EDGEVILLE_UNDERWALL_TUNNEL(Filters.Objects.nameEquals("Underwall tunnel"), "Climb-into", new Tile(3138, 3516, 0), new SpecialCondition() {
@@ -340,17 +328,34 @@ public class PathObjectHandler implements Loggable {
                     }
                     break;
                 case ARDY_DOOR_LOCK_SIDE:
-                case YANILLE_DOOR_LOCK_SIDE:
                     for (int i = 0; i < Random.nextInt(15, 25); i++) {
-                        if (Players.local().tile().equals(new Tile(2564, 3356, 0))){
-                            successfulClick = true;
-                            break;
-                        }
                         if (!clickOnObject(object, specialObject.getAction())){
                             continue;
                         }
                         if (Players.local().tile().distanceTo(specialObject.getLocation()) > 1){
                             WaitFor.condition(Random.nextInt(3000, 4000), () -> Players.local().tile().distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        } else {
+                            WaitFor.milliseconds(400, 600);
+                        }
+                        if (Players.local().tile().equals(new Tile(2564, 3356, 0))){
+                            successfulClick = true;
+                            break;
+                        }
+                    }
+                    break;
+                case YANILLE_DOOR_LOCK_SIDE:
+                    for (int i = 0; i < Random.nextInt(15, 25); i++) {
+                        if (!clickOnObject(object, specialObject.getAction())){
+                            continue;
+                        }
+                        if (Players.local().tile().distanceTo(specialObject.getLocation()) > 1){
+                            WaitFor.condition(Random.nextInt(3000, 4000), () -> Players.local().tile().distanceTo(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        } else {
+                            WaitFor.milliseconds(400, 600);
+                        }
+                        if (Players.local().tile().equals(new Tile(2601, 9482, 0))){
+                            successfulClick = true;
+                            break;
                         }
                     }
                     break;
