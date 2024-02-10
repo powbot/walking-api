@@ -622,7 +622,7 @@ public enum Teleport {
 
 	DRAKANS_MEDALLION_DARKMEYER(
 			0, new Tile(3592, 3337, 0),
-			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.DRAKANS_MEDALLION_FILTER, i1, i2),
+			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.DRAKANS_MEDALLION_FILTER, i1, i2) && Varpbits.value(7255) > 136,
 			() -> ItemHelper.click("Drakan's.*", "Darkmeyer")
 
 	),
