@@ -99,12 +99,11 @@ public enum Teleport {
 			() -> ItemHelper.click("Ardougne t.*", "Break")
 	),
 
-	//Need Varbit that updates after reading Transportation Incantantions to unlock
-	/*KOUREND_CASTLE_TELEPORT(
+	KOUREND_CASTLE_TELEPORT(
 			35, new Tile(2661, 3300, 0),
 			Spell.KOUREND_TELEPORT::canUse,
 			() -> selectSpell(Spell.KOUREND_TELEPORT,"Cast")
-	),*/
+	),
 
 	NARDAH_TELEPORT(
 			35, TeleportScrolls.NARDAH
