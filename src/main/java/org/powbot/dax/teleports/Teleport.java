@@ -779,12 +779,12 @@ public enum Teleport {
 			(i1, i2) -> POH.TAVERLY.isHouseLocation() && i1.stream().anyMatch(ItemFilters.nameEquals("Teleport to house")),
 			() -> ItemHelper.click("Teleport to house", "Outside")
 	),
-	POH_OUTSIDE_POLLNIVNEACH_TAB(
+	POH_OUTSIDE_POLLNIVNEACH(
 			35, new Tile(3340, 3004, 0),
 			(i1, i2) -> POH.POLLNIVNEACH.isHouseLocation() && Spell.TELEPORT_TO_HOUSE.canUse(i1, i2),
 			() -> Spell.TELEPORT_TO_HOUSE.cast("Outside")
 	),
-	POH_OUTSIDE_POLLNIVNEACH(
+	POH_OUTSIDE_POLLNIVNEACH_TAB(
 			35, new Tile(3340, 3004, 0),
 			(i1, i2) -> POH.POLLNIVNEACH.isHouseLocation() && i1.stream().anyMatch(ItemFilters.nameEquals("Teleport to house")),
 			() -> ItemHelper.click("Teleport to house", "Outside")
