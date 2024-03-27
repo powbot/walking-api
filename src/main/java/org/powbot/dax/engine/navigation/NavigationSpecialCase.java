@@ -337,7 +337,10 @@ public class NavigationSpecialCase implements Loggable {
         ZEAH_MINECART_NORTHERN_TUNDRAS(1648, 3931, 0),
         ZEAH_MINECART_PORT_PISCARILIUS(1761, 3710, 0),
         ZEAH_MINECART_SHAYZIEN_EAST(1590, 3620, 0),
-        ZEAH_MINECART_SHAYZIEN_WEST(1415, 3577, 0)
+        ZEAH_MINECART_SHAYZIEN_WEST(1415, 3577, 0),
+
+        GUARDIANS_OF_THE_RIFT_ENTRANCE(3104, 9573, 0),
+        GUARDIANS_OF_THE_RIFT_EXIT(3615, 9470, 0)
         ;
 
         int x, y, z;
@@ -1264,6 +1267,11 @@ public class NavigationSpecialCase implements Loggable {
                 return ZeahMineCarts.to(ZeahMineCarts.Location.SHAYZIEN_EAST);
             case ZEAH_MINECART_SHAYZIEN_WEST:
                 return ZeahMineCarts.to(ZeahMineCarts.Location.SHAYZIEN_WEST);
+
+            case GUARDIANS_OF_THE_RIFT_ENTRANCE:
+            case GUARDIANS_OF_THE_RIFT_EXIT:
+                return clickObject(Filters.Objects.nameEquals("Portal"), "Enter",
+                        ()-> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
 
 
         }
