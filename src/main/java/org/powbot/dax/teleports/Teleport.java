@@ -1087,6 +1087,12 @@ public enum Teleport {
 	}
 
 	private static boolean canUseMinigameTeleport(){
+		if(((long) Varpbits.varpbit(888) * 60 * 1000) + (20 * 60 * 1000) < System.currentTimeMillis()){
+			return false;
+		}
+		if(Players.local().inCombat()){
+			return false;
+		}
 		if(Varpbits.value(14022) == 1){//can't minigame teleport when we are at Duel Arena
 			return false;
 		}
@@ -1096,8 +1102,7 @@ public enum Teleport {
 		if(Components.stream(651, 4).texture(1054).viewable().isNotEmpty()){
 			return false;
 		}
-		return !Players.local().inCombat() &&
-					   ((long) Varpbits.varpbit(888) * 60 * 1000) + (20 * 60 * 1000) < System.currentTimeMillis();
+		return true;
 	}
 
 	private static boolean hasCompletedDesertTreasure(){
