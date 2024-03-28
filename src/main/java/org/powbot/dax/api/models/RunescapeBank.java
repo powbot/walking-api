@@ -71,7 +71,10 @@ public enum RunescapeBank {
     WOODCUTTING_GUILD(1591, 3479, 0),
     YANILLE(2613, 3093, 0),
     ZANARIS(2383, 4458, 0),
-    ZEAH_SAND_BANK(1719, 3465, 0)
+    ZEAH_SAND_BANK(1719, 3465, 0),
+    CAM_TORUM_BANK(1451, 9567, 1),
+    VARLAMORE_FORTIS_WEST_BANK(1648, 3117, 0),
+    VARLAMORE_FORTIS_EAST_BANK(1779, 3095, 0)
     ;
     Tile position;
     RunescapeBank(int x, int y, int z){
