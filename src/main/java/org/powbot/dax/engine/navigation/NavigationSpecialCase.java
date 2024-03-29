@@ -156,6 +156,7 @@ public class NavigationSpecialCase implements Loggable {
         FAIRY_RING_APE_ATOLL(2740, 2738, 0),
         FAIRY_RING_ARCEUUS_LIBRARY(1639, 3868, 0),
         FAIRY_RING_ARDOUGNE_ZOO(2635, 3266, 0),
+        FAIRY_RING_AVIUM_SAVANNAH(1651, 3011, 0),
         FAIRY_RING_CANIFIS(3447, 3470, 0),
         FAIRY_RING_CHASM_OF_FIRE(1455, 3658, 0),
         FAIRY_RING_COSMIC_ENTITYS_PLANE(2075, 4848, 0),
@@ -340,7 +341,10 @@ public class NavigationSpecialCase implements Loggable {
         ZEAH_MINECART_SHAYZIEN_WEST(1415, 3577, 0),
 
         GUARDIANS_OF_THE_RIFT_ENTRANCE(3104, 9573, 0),
-        GUARDIANS_OF_THE_RIFT_EXIT(3615, 9470, 0)
+        GUARDIANS_OF_THE_RIFT_EXIT(3615, 9470, 0),
+
+        QUETZAL_AT_VARROCK(3280, 3412, 0),
+        QUETZAL_AT_VARLAMORE(1710, 3124, 0)
         ;
 
         int x, y, z;
@@ -817,6 +821,8 @@ public class NavigationSpecialCase implements Loggable {
                 return FairyRing.takeFairyRing(FairyRing.Locations.ARCEUUS_LIBRARY);
             case FAIRY_RING_ARDOUGNE_ZOO:
                 return FairyRing.takeFairyRing(FairyRing.Locations.ARDOUGNE_ZOO);
+            case FAIRY_RING_AVIUM_SAVANNAH:
+                return FairyRing.takeFairyRing(FairyRing.Locations.AVIUM_SAVANNAH);
             case FAIRY_RING_CANIFIS:
                 return FairyRing.takeFairyRing(FairyRing.Locations.CANIFIS);
             case FAIRY_RING_CHASM_OF_FIRE:
@@ -1272,6 +1278,11 @@ public class NavigationSpecialCase implements Loggable {
             case GUARDIANS_OF_THE_RIFT_EXIT:
                 return clickObject(Filters.Objects.nameEquals("Portal"), "Enter",
                         ()-> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+            case QUETZAL_AT_VARLAMORE:
+            case QUETZAL_AT_VARROCK:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Regulus Cento"), new String[]{"Travel"}, new String[]{})
+                        && WaitFor.condition(15000, () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
 
 
         }
