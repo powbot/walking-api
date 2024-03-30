@@ -958,13 +958,17 @@ public enum Teleport {
 		this.action = () -> {
 			if(Chat.canContinue() || Chat.get().size() > 0){
 				Input.tap(Players.local().tile().matrix().mapPoint());
-				WaitFor.milliseconds(200, 600);
+				WaitFor.milliseconds(400, 600);
 			}
 			if(Grouping.hasPvpArenaWidget()){
 				Grouping.closePvpArenaWidget();
 			}
 			if(!minigame.teleportTo()){
-				Input.tap(Players.local().tile().matrix().mapPoint());
+				Tile local = Players.local().tile();
+				Tile random = local.derive(Random.nextInt(-1, 1), Random.nextInt(-1, 1));
+				Movement.step(random);
+				WaitFor.milliseconds(200, 600);
+				Movement.step(local);
 				return false;
 			}
 			if(chatOptions.length > 0){
