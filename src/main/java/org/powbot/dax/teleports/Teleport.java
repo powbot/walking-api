@@ -1,9 +1,6 @@
 package org.powbot.dax.teleports;
 
-import org.powbot.api.Condition;
-import org.powbot.api.Input;
-import org.powbot.api.StringUtils;
-import org.powbot.api.Tile;
+import org.powbot.api.*;
 import org.powbot.api.rt4.*;
 import org.powbot.api.rt4.walking.model.Skill;
 import org.powbot.dax.api.models.Requirement;
@@ -1087,7 +1084,7 @@ public enum Teleport {
 	}
 
 	private static boolean canUseMinigameTeleport(){
-		if(((long) Varpbits.varpbit(888) * 60 * 1000) + (20 * 60 * 1000) < System.currentTimeMillis()){
+		if(((long) Varpbits.varpbit(888) * 60 * 1000) + (20 * 60 * 1000) > System.currentTimeMillis()){
 			return false;
 		}
 		if(Players.local().inCombat()){
