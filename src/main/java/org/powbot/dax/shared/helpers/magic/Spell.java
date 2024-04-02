@@ -25,7 +25,10 @@ public enum Spell {
     KOUREND_TELEPORT	(
 	    SpellBook.Type.STANDARD, 69, Magic.Spell.KOUREND_CASTLE_TELEPORT,new Pair<>(2, RuneElement.LAW),new Pair<>(1, RuneElement.WATER), new Pair<>(1, RuneElement.FIRE)),
     TELEPORT_TO_HOUSE   (
-        SpellBook.Type.STANDARD, 40, Magic.Spell.TELEPORT_TO_HOUSE,new Pair<>(1, RuneElement.LAW), new Pair<>(1, RuneElement.AIR), new Pair<>(1, RuneElement.EARTH))
+        SpellBook.Type.STANDARD, 40, Magic.Spell.TELEPORT_TO_HOUSE,new Pair<>(1, RuneElement.LAW), new Pair<>(1, RuneElement.AIR), new Pair<>(1, RuneElement.EARTH)),
+    CIVITAS_ILLA_FORTIS (
+        SpellBook.Type.STANDARD, 54, Magic.Spell.CIVITAS_ILLA_FORTIS_TELEPORT, new Pair<>(2, RuneElement.LAW), new Pair<>(1, RuneElement.EARTH), new Pair<>(1, RuneElement.FIRE)
+    )
     ;
 
     private final SpellBook.Type spellBookType;
@@ -70,6 +73,13 @@ public enum Spell {
         if (this == ARDOUGNE_TELEPORT && Varpbits.varpbit(165, true) < 30){
             return false;
         }
+        if (this == KOUREND_TELEPORT && Varpbits.value(6027) < 11){
+            return false;
+        }
+        if (this == CIVITAS_ILLA_FORTIS && Varpbits.value(9649) <= 48){
+            return false;
+        }
+
 
         for (Pair<Integer, RuneElement> pair : recipe){
             int amountRequiredForSpell = pair.getKey();

@@ -102,6 +102,12 @@ public enum Teleport {
 			() -> selectSpell(Spell.KOUREND_TELEPORT,"Cast")
 	),
 
+	KOUREND_CASTLE_TELEPORT_TAB(
+			35, new Tile(2661, 3300, 0),
+			(i1, i2) -> Varpbits.value(6027, true) < 11 && i1.stream().anyMatch(ItemFilters.nameEquals("Kourend castle teleport")),
+			() -> ItemHelper.click("Kourend castle.*", "Break")
+	),
+
 	NARDAH_TELEPORT(
 			35, TeleportScrolls.NARDAH
 	),
@@ -888,6 +894,18 @@ public enum Teleport {
 			(i1, i2) ->  Varpbits.value(6528) > 196 && i1.stream().anyMatch(ItemFilters.nameEquals("Stony basalt")) && Varpbits.value(4493) == 1 && Skills.level(Skill.Agility) >= 73,
 			() ->  ItemHelper.click("Stony basalt", "Troll Stronghold")
 	),
+	CIVITAS_ILLA_FORTIS_TELEPORT(
+			35, new Tile(1680, 3132, 0),
+			Spell.CIVITAS_ILLA_FORTIS::canUse,
+			() -> selectSpell(Spell.CIVITAS_ILLA_FORTIS, "Cast")
+
+	),
+	CALCIFIED_MOTH(
+			35, new Tile(1440, 9555, 1),
+			(i1, i2) -> Varpbits.value(9819) > 5 && i1.stream().anyMatch(ItemFilters.nameEquals("Calcified moth")),
+			() -> ItemHelper.click("Calcified moth", "Crush")
+	),
+
 
 	;
 
