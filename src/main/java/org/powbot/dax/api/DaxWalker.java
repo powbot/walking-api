@@ -75,7 +75,7 @@ public class DaxWalker implements Loggable {
     private static final List<Teleport> blacklist = new ArrayList<>();
 
     public static List<Teleport> getBlacklist() {
-        return blacklist;
+        return DaxWalker.getInstance().blacklist;
     }
 
     public static void blacklistTeleports(Teleport... teleports) {
