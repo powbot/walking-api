@@ -163,6 +163,8 @@ public class PlayerDetails {
 
     private List<IntPair> inventory;
 
+    private List<IntPair> walkerPreferences;
+
     public PlayerDetails() {
 
     }
