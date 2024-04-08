@@ -1,18 +1,17 @@
 package org.powbot.dax.engine.navigation;
 
+import org.powbot.api.Input;
+import org.powbot.api.Point;
 import org.powbot.api.Random;
 import org.powbot.api.Tile;
-import org.powbot.api.rt4.Component;
-import org.powbot.api.rt4.Components;
-import org.powbot.api.rt4.Players;
-import org.powbot.api.rt4.Widgets;
+import org.powbot.api.rt4.*;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.InteractionHelper;
 import org.powbot.dax.shared.helpers.Filters;
 
 public class ZeahMineCarts {
 
-	public static int MINECART_WIDGET = -1;
+	public static int MINECART_WIDGET = 187;
 
 	public enum Location {
 		ARCEUUS("Arceuus", 1670, 3833, 0),
@@ -59,17 +58,27 @@ public class ZeahMineCarts {
 
 	public static boolean to(Location location){
 		if (!Widgets.component(MINECART_WIDGET, 0).visible()
-					&& !InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.actionsContains("Travel")), "Travel", () -> Components.stream(MINECART_WIDGET).anyMatch(Component::valid) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
+					&& !InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.nameEquals("Minecart").and(Filters.Objects.actionsContains("Travel"))), "Travel", () -> Widgets.widget(MINECART_WIDGET).valid() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
 			return false;
 		}
 
-		Component option = Components.stream(MINECART_WIDGET).text(location.getName()).findAny().orElse(null);
+		Component option = Components.stream(MINECART_WIDGET).text(location.getName()).firstOrNull();
 
 		if (option == null){
 			return false;
 		}
-
-		if (!option.click()){
+		Component downArrow = Components.stream(MINECART_WIDGET).texture(794).viewable().firstOrNull();
+		if(downArrow != null){
+			int downArrowY = downArrow.y();
+			int optionY = option.y();
+			if(downArrowY < optionY){
+				Point p = downArrow.screenPoint();
+				Input.press(p);
+				WaitFor.milliseconds(500, 1250);
+				Input.release(p);
+			}
+		}
+		if (!option.interact("Continue")){
 			return false;
 		}
 
