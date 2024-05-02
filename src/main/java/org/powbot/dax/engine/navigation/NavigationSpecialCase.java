@@ -344,7 +344,7 @@ public class NavigationSpecialCase implements Loggable {
         GUARDIANS_OF_THE_RIFT_EXIT(3615, 9470, 0),
 
         QUETZAL_AT_VARROCK(3280, 3412, 0),
-        QUETZAL_AT_VARLAMORE(1703, 3124, 0)
+        QUETZAL_AT_VARLAMORE(1703, 3140, 0)
         ;
 
         int x, y, z;
