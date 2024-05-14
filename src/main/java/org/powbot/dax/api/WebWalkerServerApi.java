@@ -1,9 +1,6 @@
 package org.powbot.dax.api;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import org.powbot.dax.api.json.Json;
 import org.powbot.dax.api.json.JsonValue;
@@ -14,10 +11,9 @@ import org.powbot.mobile.service.gob.DaxProxyService;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class WebWalkerServerApi implements Loggable {
 
@@ -193,14 +189,22 @@ public class WebWalkerServerApi implements Loggable {
             return new ServerResponse(true, HttpURLConnection.HTTP_OK, cache.get(json.toString()));
         }
 
-       String resp = DaxProxyService.INSTANCE.executePostRequest(endpoint, json);
+        String resp = DaxProxyService.INSTANCE.executePostRequest(endpoint, json);
 
         if (resp == null) {
             return new ServerResponse(false, -1, null);
         }
+        try {
 
-        cache.put(json, resp);
+            Map<String, String>[] responseJson = new Gson().fromJson(resp, new TypeToken<Map<String, Object>[]>() {}.getType());
 
+            String statusCode = responseJson[0].get("status");
+            if(!Objects.equals(statusCode, "429")){
+                cache.put(json, resp);
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
         return new ServerResponse(true, HttpURLConnection.HTTP_OK, resp);
     }
 
