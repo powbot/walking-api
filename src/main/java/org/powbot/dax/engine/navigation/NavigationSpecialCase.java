@@ -1181,8 +1181,10 @@ public class NavigationSpecialCase implements Loggable {
                 return clickObject(Filters.Objects.nameEquals("Rowboat"), "Travel",
                         ()-> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case STRANGLEWOOD_ENTRY_ENTRANCE:
+                return clickObject(Filters.Objects.nameEquals("Entry").and(o -> o.getTile().getY() > 3440), "Enter",
+                        ()-> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case STRANGLEWOOD_ENTRY_EXIT:
-                return clickObject(Filters.Objects.nameEquals("Entry"), "Enter",
+                return clickObject(Filters.Objects.nameEquals("Entry").and(o -> o.getTile().getY() < 3440), "Enter",
                         ()-> Players.local().tile().equals(specialLocation.getTile()) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
 
             case GIANT_MOLE_ENTRANCE:
