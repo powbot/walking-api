@@ -545,7 +545,7 @@ public enum Teleport {
 	SLAYER_RING_RELLEKKA_CAVE(
 			35, new Tile(2801, 9999, 0),
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.SLAYER_RING, i1 , i2),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.SLAYER_RING, ".*Rellekka.*")
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.SLAYER_RING, ".*Fremennik.*")
 	),
 
 	SALVE_GRAVEYARD_TAB(
