@@ -63,6 +63,7 @@ public class PlayerDetails {
                 7796,//forsaken tower
                 7928, //kourend elite diary
                 9016,
+                9459, //fremennik exiles
                 9632, //Children of the sun
                 9819,
                 10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1,

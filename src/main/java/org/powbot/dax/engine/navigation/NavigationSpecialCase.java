@@ -344,7 +344,11 @@ public class NavigationSpecialCase implements Loggable {
         GUARDIANS_OF_THE_RIFT_EXIT(3615, 9470, 0),
 
         QUETZAL_AT_VARROCK(3280, 3412, 0),
-        QUETZAL_AT_VARLAMORE(1703, 3140, 0)
+        QUETZAL_AT_VARLAMORE(1703, 3140, 0),
+        LUNAR_ISLE_RETURN_ORB(2101, 3918, 0),
+        FREMENNIK_RETURN_ORB_DESTINATION(2631, 3678, 0),
+        FREMENNIK_DOCK_TO_ISLAND_OF_STONE(2621, 3689, 0),
+        ISLAND_OF_STONE_LANDING(2472, 3994, 0)
         ;
 
         int x, y, z;
@@ -1291,6 +1295,20 @@ public class NavigationSpecialCase implements Loggable {
             case QUETZAL_AT_VARROCK:
                 return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Regulus Cento"), new String[]{"Travel"}, new String[]{})
                         && WaitFor.condition(15000, () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+
+            case LUNAR_ISLE_RETURN_ORB:
+            case FREMENNIK_RETURN_ORB_DESTINATION:
+                if(clickObject(Filters.Objects.nameEquals("Return Orb"), "Teleport",
+                        () -> NPCInteraction.isConversationWindowUp() ?  WaitFor.Return.SUCCESS: WaitFor.Return.IGNORE)){
+                    NPCInteraction.handleConversation("Yes.");
+                    return WaitFor.condition(4500, ()-> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                }
+                break;
+            case FREMENNIK_DOCK_TO_ISLAND_OF_STONE:
+            case ISLAND_OF_STONE_LANDING:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Haskell"), new String[]{"Island of Stone", "Rellekka"}, new String[]{})
+                               && WaitFor.condition(15000, () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+
 
 
         }
