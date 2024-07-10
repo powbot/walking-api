@@ -179,7 +179,7 @@ public enum Teleport {
 	RING_OF_DUELING_PVP_ARENA (
 			35, new Tile(3313, 3233, 0),
 			(i1, i2) -> WearableItemTeleport.has(WearableItemTeleport.RING_OF_DUELING_FILTER, i1, i2),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_DUELING_FILTER, "(?i).*PvP Arena.*")
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.RING_OF_DUELING_FILTER, "(?i).*Emir's Arena.*")
 	),
 
 	RING_OF_DUELING_CASTLE_WARS (
