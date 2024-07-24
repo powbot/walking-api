@@ -92,7 +92,7 @@ public enum Teleport {
 
 	ARDOUGNE_TELEPORT_TAB(
 			35, new Tile(2661, 3300, 0),
-			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Ardougne teleport")),
+			(i1, i2) -> Varpbits.varbit(165) >= 29 && i1.stream().anyMatch(ItemFilters.nameEquals("Ardougne teleport")),
 			() -> ItemHelper.click("Ardougne t.*", "Break")
 	),
 
