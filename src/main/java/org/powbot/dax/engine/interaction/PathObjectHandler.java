@@ -37,7 +37,7 @@ public class PathObjectHandler implements Loggable {
                         "Walk-Across", "Go-through", "Walk-across", "Climb", "Climb-up", "Climb-down", "Climb-over", "Climb over", "Climb-into", "Climb-through", "Climb through",
                         "Board", "Jump-from", "Jump-across", "Jump-to", "Squeeze-through", "Jump-over", "Pay-toll(10gp)", "Step-over", "Walk-down", "Walk-up","Walk-Up", "Travel", "Get in",
                         "Investigate", "Operate", "Climb-under","Jump","Crawl-down","Crawl-through","Activate","Push","Squeeze-past","Walk-Down",
-                        "Swing-on", "Climb up","Pass-Through","Jump-up","Jump-down","Swing across", "Climb Down", "Jump-Down", "Jump to", "Unlock"));
+                        "Swing-on", "Climb up","Pass-Through","Jump-up","Jump-down","Swing across", "Climb Down", "Jump-Down", "Jump to", "Unlock", "Channel"));
 
 
         sortedBlackList = new TreeSet<>(Arrays.asList("Coffin","Drawers","null","Ornate railing","Wardrobe"));
@@ -500,7 +500,7 @@ public class PathObjectHandler implements Loggable {
     }
 
     public static List<GameObject> getInteractiveObjects(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
-        List<GameObject> objects = Objects.stream(15).filter(interactiveObjectFilter(x, y, z, destinationDetails)).list();
+        List<GameObject> objects = Objects.stream(15).type(GameObject.Type.INTERACTIVE, GameObject.Type.BOUNDARY).filter(interactiveObjectFilter(x, y, z, destinationDetails)).list();
         final Tile base = new Tile(x, y, z);
         objects.sort((o1, o2) -> {
             int c = Integer.compare((int)o1.getTile().distanceTo(base), (int)o2.getTile().distanceTo(base));
