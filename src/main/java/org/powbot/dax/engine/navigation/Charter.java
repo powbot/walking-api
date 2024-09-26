@@ -56,8 +56,13 @@ public class Charter implements Loggable {
 
     private static Map<LocationProperty, Location> getCharterLocations() {
         Map<LocationProperty, Location> locations = new HashMap<>();
-        for (Component c : Components.stream(CHARTER_INTERFACE_MASTER).filtered(c -> c.text().length() > 0 && c.visible())) {
-            locations.put(LocationProperty.stringToLocation(c.text()), new Location(c));
+        for (Component c : Components.stream(CHARTER_INTERFACE_MASTER).filtered(c -> c.visible() && !c.actions().isEmpty())) {
+            LocationProperty locationProperty = Charter.LocationProperty.stringToLocation(c.actions().get(0));
+            if(locationProperty == null) {
+                continue;
+            }
+            
+            locations.put(locationProperty, new Location(c));
         }
 
         return locations;
