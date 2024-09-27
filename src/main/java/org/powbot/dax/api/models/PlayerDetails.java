@@ -43,6 +43,7 @@ public class PlayerDetails {
                 3534,
                 3618, //dream mentor
                 3741,
+                4163, //teleblock
                 4493,
                 4494, //fremmy elite diary status
                 4538,
@@ -64,9 +65,13 @@ public class PlayerDetails {
                 7928, //kourend elite diary
                 9016,
                 9459, //fremennik exiles
-                9632, //Children of the sun
+                9632, //Children of the sun,
+                9649, //Twilights Promise
+                9956, //colossal wyrm remains quetzal landing site
+                9957, //outer fortis quetzal landing site
                 9819,
                 10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1,
+                11379, //salvager outlook quetzal landing site
                 12063, //below ice mountain quest
                 13719, //unlocked the 93 agility blood altar shortcut by mining the other side (78 mining req)
                 13738, // temple of the eye
