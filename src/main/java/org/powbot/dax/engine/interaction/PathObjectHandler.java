@@ -500,7 +500,7 @@ public class PathObjectHandler implements Loggable {
     }
 
     public static List<GameObject> getInteractiveObjects(int x, int y, int z, PathAnalyzer.DestinationDetails destinationDetails){
-        List<GameObject> objects = Objects.stream(15).type(GameObject.Type.INTERACTIVE, GameObject.Type.BOUNDARY).filter(interactiveObjectFilter(x, y, z, destinationDetails)).list();
+        List<GameObject> objects = Objects.stream(15).filter(interactiveObjectFilter(x, y, z, destinationDetails)).list();
         final Tile base = new Tile(x, y, z);
         objects.sort((o1, o2) -> {
             int c = Integer.compare((int)o1.getTile().distanceTo(base), (int)o2.getTile().distanceTo(base));
