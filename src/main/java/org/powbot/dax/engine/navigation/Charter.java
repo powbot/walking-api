@@ -74,6 +74,7 @@ public class Charter implements Loggable {
     }
 
     public enum LocationProperty {
+        ALDARIN("Aldarin", new Tile(1455, 2968, 0)),
         BRIMHAVEN ("Brimhaven", new Tile(2760, 3237, 0)),
         CATHERBY ("Catherby", new Tile(2796, 3414, 0)),
         CORSAIR_COVE ("Corsair Cove", new Tile(2587, 2851, 0)),
