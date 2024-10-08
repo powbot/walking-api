@@ -684,7 +684,7 @@ public class PathObjectHandler implements Loggable {
     }
 
     private static boolean isClosedTrapDoor(GameObject object, String[] options){
-        return  (object.name().equals("Trapdoor") && Arrays.asList(options).contains("Open"));
+        return  (Arrays.asList("Trapdoor", "Manhole").contains(object.name()) && Arrays.asList(options).contains("Open"));
     }
 
     private static boolean handleTrapDoor(GameObject object){
