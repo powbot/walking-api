@@ -87,7 +87,7 @@ public class Charter implements Loggable {
         PORT_TYRAS ("Port Tyras", new Tile(2142, 3122, 0)),
         PRIFDDINAS ("Prifddinas", new Tile(2159, 3329, 0)),
         SHIPYARD ("Shipyard", new Tile(3001, 3032, 0)),
-        SUNSET_COAST("Sunset Coast", new Tile(1514, 2871, 0)),
+        SUNSET_COAST("Sunset Coast", new Tile(1514, 2971, 0)),
 
         ;
 
