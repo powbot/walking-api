@@ -153,6 +153,7 @@ public class NavigationSpecialCase implements Loggable {
 
         FAIRY_RING_ABYSSAL_AREA(3059, 4875, 0),
         FAIRY_RING_ABYSSAL_NEXUS(3037, 4763, 0),
+        FAIRY_RING_ALDARIN(1358, 2941, 0),
         FAIRY_RING_APE_ATOLL(2740, 2738, 0),
         FAIRY_RING_ARCEUUS_LIBRARY(1639, 3868, 0),
         FAIRY_RING_ARDOUGNE_ZOO(2635, 3266, 0),
@@ -833,6 +834,8 @@ public class NavigationSpecialCase implements Loggable {
                 return FairyRing.takeFairyRing(FairyRing.Locations.ABYSSAL_AREA);
             case FAIRY_RING_ABYSSAL_NEXUS:
                 return FairyRing.takeFairyRing(FairyRing.Locations.ABYSSAL_NEXUS);
+            case FAIRY_RING_ALDARIN:
+                return FairyRing.takeFairyRing(FairyRing.Locations.ALDARIN);
             case FAIRY_RING_APE_ATOLL:
                 return FairyRing.takeFairyRing(FairyRing.Locations.APE_ATOLL);
             case FAIRY_RING_ARCEUUS_LIBRARY:
