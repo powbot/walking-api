@@ -88,6 +88,7 @@ public class FairyRing {
 	public enum Locations {
 		ABYSSAL_AREA(A, L, R),
 		ABYSSAL_NEXUS(D, I, P),
+		ALDARIN(C, K, Q),
 		APE_ATOLL(C, L, R),
 		ARCEUUS_LIBRARY(C, I, S),
 		ARDOUGNE_ZOO(B, I, S),
