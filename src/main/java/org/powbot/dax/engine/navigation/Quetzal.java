@@ -12,7 +12,7 @@ import org.powbot.dax.shared.helpers.Filters;
 
 public class Quetzal {
 
-	public static final int QUETZAL_WIDGET_ROOT = 8741;
+	public static final int QUETZAL_WIDGET_ROOT = 874;
 
 	public enum Location {
 		ALDARIN("Aldarin", 1390, 2901, 0),
@@ -58,7 +58,7 @@ public class Quetzal {
 
 	public static boolean to(Location location){
 		if (!Widgets.component(QUETZAL_WIDGET_ROOT, 0).visible()
-					&& !InteractionHelper.click(InteractionHelper.getGameObject(Filters.Objects.nameEquals("Renu")), "Travel", () -> Components.stream(QUETZAL_WIDGET_ROOT).anyMatch(Component::valid) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
+					&& !InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Renu")), "Travel", () -> Components.stream(QUETZAL_WIDGET_ROOT).anyMatch(Component::valid) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
 			return false;
 		}
 
