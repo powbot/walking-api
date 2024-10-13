@@ -36,6 +36,7 @@ public class PlayerDetails {
                 357,
                 386,
                 571,
+                1048,
                 1990,
                 2310,
                 2328,
@@ -67,9 +68,9 @@ public class PlayerDetails {
                 9459, //fremennik exiles
                 9632, //Children of the sun,
                 9649, //Twilights Promise
+                9819,
                 9956, //colossal wyrm remains quetzal landing site
                 9957, //outer fortis quetzal landing site
-                9819,
                 10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1,
                 11379, //salvager outlook quetzal landing site
                 12063, //below ice mountain quest
