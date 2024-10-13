@@ -363,7 +363,10 @@ public class NavigationSpecialCase implements Loggable {
         QUETZAL_THE_TEOMAT(1437, 3171, 0),
 
         ALDARIN_SHIP(1442, 2977, 0),
-        VARLAMORE_SHIP(1494, 2985, 0)
+        VARLAMORE_SHIP(1494, 2985, 0),
+
+        MIXOLOGY_ENTRANCE(1389, 2918, 0),
+        MIXOLOGY_EXIT(1388, 9313, 0)
         ;
 
         int x, y, z;
@@ -1352,6 +1355,12 @@ public class NavigationSpecialCase implements Loggable {
             case ALDARIN_SHIP:
                 return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Antonia"), "Travel")
                     && WaitFor.condition(10000, () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+            case MIXOLOGY_ENTRANCE:
+                return clickObject(Filters.Objects.nameEquals("Staircase"), "Climb-up",
+                        ()-> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+            case MIXOLOGY_EXIT:
+                return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals("Climb-down")), "Climb-down",
+                        ()-> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
         }
 
         return false;
