@@ -71,6 +71,7 @@ public class NavigationSpecialCase implements Loggable {
         SPIRIT_TREE_KHAZARD (2555, 3259, 0),
         SPIRIT_TREE_VILLAGE (2542, 3170, 0),
         SPIRIT_TREE_FELDIP(2488, 2850, 0),
+        SPIRIT_TREE_POISON_WASTE(2339, 3109, 0),
         SPIRIT_TREE_PRIF (3274, 6123, 0),
 
         GNOME_TREE_GLIDER (GnomeGlider.Location.TA_QUIR_PRIW.getX(), GnomeGlider.Location.TA_QUIR_PRIW.getY(), GnomeGlider.Location.TA_QUIR_PRIW.getZ()),

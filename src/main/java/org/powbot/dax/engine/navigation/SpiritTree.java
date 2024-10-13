@@ -23,6 +23,7 @@ public class SpiritTree {
         SPIRIT_TREE_KHAZARD("Battlefield of Khazard", 2555, 3259, 0),
         SPIRIT_TREE_VILLAGE("Tree Gnome Village", 2542, 3170, 0),
         SPIRIT_TREE_FELDIP("Feldip Hills", 2488, 2850, 0),
+        SPIRIT_TREE_POISON_WASTE("Poison Waste", 2339, 3109, 0),
         SPIRIT_TREE_PRIFDDINAS("Prifddinas", 3274, 6123, 0);
 
         private int x, y, z;

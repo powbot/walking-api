@@ -77,6 +77,7 @@ public class PlayerDetails {
                 13719, //unlocked the 93 agility blood altar shortcut by mining the other side (78 mining req)
                 13738, // temple of the eye
                 13903, //Sleeping Giants quest
+                15288 //Path of Glouphrie quest
         })
                 .mapToObj(value -> new IntPair(value, Varpbits.value(value, true))).distinct().collect(
 				        Collectors.toList());
