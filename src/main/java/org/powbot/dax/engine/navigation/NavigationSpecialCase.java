@@ -362,7 +362,7 @@ public class NavigationSpecialCase implements Loggable {
         QUETZAL_SUNSET_COAST(1548, 2995, 0),
         QUETZAL_THE_TEOMAT(1437, 3171, 0),
 
-        ALDARIN_SHIP(1442, 2976, 0),
+        ALDARIN_SHIP(1442, 2977, 0),
         VARLAMORE_SHIP(1494, 2985, 0)
         ;
 
