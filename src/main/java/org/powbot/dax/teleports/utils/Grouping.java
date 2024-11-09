@@ -60,6 +60,9 @@ public class Grouping {
             if (!Game.tab(Game.Tab.GROUPING)) {
                 return false;
             }
+            if (Grouping.hasPvpArenaWidget()) {
+                Grouping.closePvpArenaWidget();
+            }
             if (!isSelected()) {
                 if (!selectMinigame(this.getName()))
                     return false;
@@ -117,7 +120,6 @@ public class Grouping {
         final Component currentMinigame = Widgets.component(MAIN_INTERFACE_ID, 7);
         if (!currentMinigame.valid())
             return false;
-
 
 
         final Component minigamesBox = minigameBox(currentMinigame);
