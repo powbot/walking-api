@@ -2,8 +2,8 @@ package org.powbot.dax.api;
 
 import org.powbot.api.Locatable;
 import org.powbot.api.Tile;
-import org.powbot.api.rt4.*;
 import org.powbot.api.rt4.Objects;
+import org.powbot.api.rt4.*;
 import org.powbot.api.rt4.walking.FailureReason;
 import org.powbot.api.rt4.walking.WebWalkingResult;
 import org.powbot.dax.api.models.*;
@@ -12,7 +12,6 @@ import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.WalkerEngine;
 import org.powbot.dax.engine.WalkingCondition;
 import org.powbot.dax.engine.navigation.ShipUtils;
-import org.powbot.dax.engine.navigation.fairyring.FairyRing;
 import org.powbot.dax.teleports.Teleport;
 
 import java.util.*;
@@ -130,7 +129,7 @@ public class DaxWalker implements Loggable {
         if (start.equals(destination)) {
             return new WebWalkingResult(true, true, null);
         }
-        if(Objects.stream(start, GameObject.Type.FLOOR_DECORATION).name("Fairy ring").isNotEmpty()){
+        if(Objects.stream(start, GameObject.Type.INTERACTIVE).name("Fairy ring").isNotEmpty()){
             start = start.derive(0, 1);
         }
 
@@ -201,7 +200,7 @@ public class DaxWalker implements Loggable {
 
         List<BankPathRequestPair> pathRequestPairs = getInstance().getBankPathTeleports(playerDetails.isMember(), isInPvpWorld, inventory, equipment);
         Tile start = Players.local().tile();
-        if(Objects.stream(start, GameObject.Type.FLOOR_DECORATION).name("Fairy ring").isNotEmpty()){
+        if(Objects.stream(start, GameObject.Type.INTERACTIVE).name("Fairy ring").isNotEmpty()){
             start = start.derive(0, 1);
         }
         pathRequestPairs.add(new BankPathRequestPair(Point3D.fromTile(start), null));
@@ -220,7 +219,7 @@ public class DaxWalker implements Loggable {
 
     public static List<Tile> getPath(Locatable destination) {
         Tile start = Players.local().tile();
-        if(Objects.stream(start, GameObject.Type.FLOOR_DECORATION).name("Fairy ring").isNotEmpty()){
+        if(Objects.stream(start, GameObject.Type.INTERACTIVE).name("Fairy ring").isNotEmpty()){
             start = start.derive(0, 1);
         }
         return getPath(start, destination);
