@@ -367,7 +367,20 @@ public class NavigationSpecialCase implements Loggable {
         VARLAMORE_SHIP(1494, 2985, 0),
 
         MIXOLOGY_ENTRANCE(1389, 2918, 0),
-        MIXOLOGY_EXIT(1388, 9313, 0)
+        MIXOLOGY_EXIT(1388, 9313, 0),
+
+        ANCIENT_CAVERN_WHIRLPOOL(2511, 3511, 0),
+        ANCIENT_CAVERN_ENTRANCE(1763, 5366, 1),
+        ANCIENT_CAVERN_AGED_LOG(1761, 5361, 0),
+        ANCIENT_CAVERN_EXIT(2531, 3446, 0),
+
+        NEITZ_BRIDGE_W(2314, 3839, 0),
+        NEITZ_BRIDGE_W2(2314, 3848, 0),
+        NEITZ_BRIDGE_E(2355, 3839, 0),
+        NEITZ_BRIDGE_E2(2355, 3848, 0),
+
+        LUMBRIDGE_GROUND_FLOOR(3206, 3208, 0),
+        LUMBRIDGE_TOP_FLOOR(3205, 3209, 2),
         ;
 
         int x, y, z;
@@ -395,6 +408,7 @@ public class NavigationSpecialCase implements Loggable {
      */
     public static boolean handle(SpecialLocation specialLocation){
         final Tile curr = Players.local().tile();
+        String action = null;
         switch (specialLocation){
 
             case BRIMHAVEN_DUNGEON:
@@ -1121,7 +1135,7 @@ public class NavigationSpecialCase implements Loggable {
                 return clickObject(Filters.Objects.nameEquals("Stairs").and(Filters.Objects.actionsEquals("Climb-down")), "Climb-down",
                         () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case GAMES_ROOM_MIDDLE:
-                String action = Players.local().tile().y() > 4000 ? "Climb-up":"Climb-down";
+                action = Players.local().tile().y() > 4000 ? "Climb-up":"Climb-down";
                 return clickObject(Filters.Objects.nameEquals("Stairs").and(Filters.Objects.actionsEquals(action)), action,
                         () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case GAMES_ROOM_TOP:
@@ -1362,6 +1376,28 @@ public class NavigationSpecialCase implements Loggable {
             case MIXOLOGY_EXIT:
                 return clickObject(Filters.Objects.nameEquals("Staircase").and(Filters.Objects.actionsEquals("Climb-down")), "Climb-down",
                         ()-> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+
+            case ANCIENT_CAVERN_ENTRANCE:
+                return clickObject(Filters.Objects.nameEquals("Whirlpool").and(Filters.Objects.actionsEquals("Dive in")), "Dive in",
+                        ()-> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, Random.nextInt(12000, 15000));
+            case ANCIENT_CAVERN_EXIT:
+                return clickObject(Filters.Objects.nameEquals("Whirlpool").and(Filters.Objects.actionsEquals("Dive in")), "Dive in",
+                        ()-> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, Random.nextInt(12000, 15000));
+
+            case NEITZ_BRIDGE_E:
+            case NEITZ_BRIDGE_E2:
+            case NEITZ_BRIDGE_W:
+            case NEITZ_BRIDGE_W2:
+                return clickObject(Filters.Objects.nameEquals("Robe bridge"), new String[]{"Walk-across", "Cross-bridge"},
+                        ()-> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, Random.nextInt(12000, 15000));
+
+            case LUMBRIDGE_GROUND_FLOOR:
+                action = "Top-floor";
+            case LUMBRIDGE_TOP_FLOOR:
+                if(action == null) action = "Bottom-floor";
+                return clickObject(Filters.Objects.nameEquals("Stairs"), action,
+                        ()-> Players.local().tile().equals(specialLocation.getTile()) ?
+                                     WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, Random.nextInt(12000, 15000));
         }
 
         return false;
@@ -1455,6 +1491,18 @@ public class NavigationSpecialCase implements Loggable {
             return false;
         }
         return InteractionHelper.click(object, action, condition);
+    }
+
+    public static boolean clickObject(Predicate<GameObject> filter, String action, WaitFor.Condition condition, int timeout){
+        return clickObject(filter, new String[]{action}, condition, timeout);
+    }
+
+    public static boolean clickObject(Predicate<GameObject> filter, String[] action, WaitFor.Condition condition, int timeout){
+        GameObject object = Objects.stream(15).filter(filter).nearest().first();
+        if (!object.valid()){
+            return false;
+        }
+        return InteractionHelper.click(object, action, condition, timeout);
     }
 
     private static boolean handleFishingPlatform(){

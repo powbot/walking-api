@@ -24,23 +24,28 @@ public class InteractionHelper {
         return click(clickable, new String[]{action}, condition);
     }
 
+    public static boolean click(Interactive clickable, String[] action, WaitFor.Condition condition){
+        return click(clickable, action, condition, Random.nextInt(7000, 8000));
+    }
+
     /**
      * Interacts with nearby object and waits for {@code condition}.
      *
      * @param clickable clickable entity
      * @param action actions to click
      * @param condition condition to wait for after the click action
+     * @param timeout
      * @return if {@code condition} is null, then return the outcome of condition.
      *          Otherwise, return the result of the click action.
      */
-    public static boolean click(Interactive clickable, String[] action, WaitFor.Condition condition){
+    public static boolean click(Interactive clickable, String[] action, WaitFor.Condition condition, int timeout){
         if (clickable == null){
             return false;
         }
 
         if (clickable instanceof Item){
             List<String> asList = new ArrayList<>(Arrays.asList(action));
-            return clickable.interact(m -> asList.contains(m.getAction())) && (condition == null || WaitFor.condition(Random.nextInt(7000, 8000), condition) == WaitFor.Return.SUCCESS);
+            return clickable.interact(m -> asList.contains(m.getAction())) && (condition == null || WaitFor.condition(timeout, condition) == WaitFor.Return.SUCCESS);
         }
 
         Tile position = ((Locatable) clickable).tile();
@@ -74,7 +79,7 @@ public class InteractionHelper {
             return false;
         }
 
-        return condition == null || WaitFor.condition(Random.nextInt(7000, 8500), condition) == WaitFor.Return.SUCCESS;
+        return condition == null || WaitFor.condition(timeout, condition) == WaitFor.Return.SUCCESS;
     }
 
     public static Item getItem(Predicate<Item> filter){
