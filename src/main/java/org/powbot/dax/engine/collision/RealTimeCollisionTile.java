@@ -187,7 +187,7 @@ public class RealTimeCollisionTile extends PathFindingNode {
     public static RealTimeCollisionTile create(int x, int y, int z, int collision){
         RealTimeCollisionTile realTimeCollisionTile = new RealTimeCollisionTile(x, y, z, collision);
         if (!realTimeCollisionTile.isInitialized()){
-            System.out.println("Real time collision tile is not initialized.");
+//            System.out.println("Real time collision tile is not initialized.");
             return null;
         }
         HashMap<Integer, HashMap<Integer, RealTimeCollisionTile>> yMap = xMap.computeIfAbsent(realTimeCollisionTile.getX(), k -> new HashMap<>());
