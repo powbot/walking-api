@@ -650,8 +650,8 @@ public class PathObjectHandler implements Loggable {
                 "Me.",
                 "Only on the RuneScape website.",
                 "Report the incident and do not click any links.",
-                "Set up two-factor authentiation with my email provider."
-                "Two-factor authentication on your account and your registered email."
+                "Set up two-factor authentiation with my email provider.",
+                "Two-factor authentication on your account and your registered email.",
                 "No way! You'll just take my gold for your own! Reported!",
                 "No.",
                 "Don't give them my password.",
@@ -659,8 +659,8 @@ public class PathObjectHandler implements Loggable {
                 "Report the player for phishing.",
                 "Don't give out your password to anyone. Not even close friends.",
                 "Politely tell them no, then use the 'Report Abuse' button.",
-                "Do no visit the website and report the player who messaged you."
-                "Decline the offer and report that player."
+                "Do no visit the website and report the player who messaged you.",
+                "Decline the offer and report that player.",
                 "Do not visit the website and report the player who messaged you.",
                 "Don't type in my password backwards and report the player.",
                 "Virus scan my device then change my password.",
@@ -673,8 +673,8 @@ public class PathObjectHandler implements Loggable {
                 "Don't share your information and report the player.",
                 "Nothing, it's a fake.",
                 "Delete it - it is fake!",
-                "Nope, you're tricking me into going somewhere dangerous."
-                "No, you should never buy an account."
+                "Nope, you're tricking me into going somewhere dangerous.",
+                "No, you should never buy an account.",
                 "It's never used on other websites or accounts.",
                 "Report the stream. Real Jagex streams have a 'varified' mark.");
     }
