@@ -352,6 +352,7 @@ public class NavigationSpecialCase implements Loggable {
         FREMENNIK_DOCK_TO_ISLAND_OF_STONE(2621, 3689, 0),
         ISLAND_OF_STONE_LANDING(2472, 3994, 0),
         QUETZAL_ALDARIN(1390, 2901, 0),
+        QUETZAL_AUBURNVALE(1411, 3361, 0),
         QUETZAL_CAM_TORUM_ENTRANCE(1446, 3108, 0),
         QUETZAL_CIVITAS_ILLA_FORTIS(1696, 3140, 0),
         QUETZAL_COLOSSAL_WYRM_REMAINS(1670, 2934, 0),
@@ -362,6 +363,7 @@ public class NavigationSpecialCase implements Loggable {
         QUETZAL_SALVAGER_OUTLOOK(1614, 3300, 0),
         QUETZAL_SUNSET_COAST(1548, 2995, 0),
         QUETZAL_THE_TEOMAT(1437, 3171, 0),
+        QUETZAL_TAL_TEKLAN(1226, 3091, 0),
 
         ALDARIN_SHIP(1442, 2977, 0),
         VARLAMORE_SHIP(1494, 2985, 0),
@@ -1347,6 +1349,8 @@ public class NavigationSpecialCase implements Loggable {
 
             case QUETZAL_ALDARIN:
                 return Quetzal.to(Quetzal.Location.ALDARIN);
+            case QUETZAL_AUBURNVALE:
+                return Quetzal.to(Quetzal.Location.AUBURNVALE);
             case QUETZAL_CAM_TORUM_ENTRANCE:
                 return Quetzal.to(Quetzal.Location.CAM_TORUM_ENTRANCE);
             case QUETZAL_CIVITAS_ILLA_FORTIS:
@@ -1363,6 +1367,8 @@ public class NavigationSpecialCase implements Loggable {
                 return Quetzal.to(Quetzal.Location.SALVAGER_OUTLOOK);
             case QUETZAL_SUNSET_COAST:
                 return Quetzal.to(Quetzal.Location.SUNSET_COAST);
+            case QUETZAL_TAL_TEKLAN:
+                return Quetzal.to(Quetzal.Location.TAL_TEKLAN);
             case QUETZAL_THE_TEOMAT:
                 return Quetzal.to(Quetzal.Location.THE_TEOMAT);
 
