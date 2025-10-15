@@ -10,8 +10,8 @@ public enum RuneElement {
 
     AIR("Air", "Smoke", "Mist", "Dust"),
     EARTH("Earth", "Lava", "Mud", "Dust"),
-    FIRE("Fire", "Lava", "Smoke", "Steam"),
-    WATER("Water", "Mud", "Steam", "Mist"),
+    FIRE("Fire", "Lava", "Smoke", "Steam", "Twinflame"),
+    WATER("Water", "Mud", "Steam", "Mist", "Twinflame"),
     LAW("Law"),
     NATURE("Nature"),
     SOUL("Soul");
