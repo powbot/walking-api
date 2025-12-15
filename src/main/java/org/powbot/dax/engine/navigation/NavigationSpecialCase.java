@@ -1138,7 +1138,7 @@ public class NavigationSpecialCase implements Loggable {
                         () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case GAMES_ROOM_MIDDLE:
                 action = Players.local().tile().y() > 4000 ? "Climb-up":"Climb-down";
-                return clickObject(Filters.Objects.nameEquals("Stairs").and(Filters.Objects.actionsEquals(action)), action,
+                return clickObject(Filters.Objects.nameEquals("Stairs").and(Filters.Objects.actionsEquals(action)).and(o -> o.tile().getY() < 4940), action,
                         () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
             case GAMES_ROOM_TOP:
                 return clickObject(Filters.Objects.nameEquals("Stairs").and(Filters.Objects.actionsEquals("Climb-up")), "Climb-up",
