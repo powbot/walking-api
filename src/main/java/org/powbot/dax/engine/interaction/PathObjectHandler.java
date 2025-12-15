@@ -199,7 +199,22 @@ public class PathObjectHandler implements Loggable {
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 return destinationDetails.getDestination().getTile().equals(new Tile(2735, 10008, 0)) || destinationDetails.getDestination().getTile().equals(new Tile(2730, 10008, 0));
             }
-        }),;
+        }),
+        PATERDOMUS_ORNATE_RAILING(Filters.Objects.nameEquals("Ornate railing"), "Squeeze-through", new Tile(3425, 3484, 0), new SpecialCondition() {
+
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                Tile dest = destinationDetails.getDestination().getTile();
+                RealTimeCollisionTile nextCollisionTile = destinationDetails.getNextTile();
+                if(nextCollisionTile == null)
+                    return false;
+                Tile next = nextCollisionTile.getTile();
+                return (next.equals(new Tile(3425, 3484, 0)) && dest.equals(new Tile(3425, 3483, 0))) ||
+                               (next.equals(new Tile(3425, 3483, 0)) && dest.equals(new Tile(3425, 3484, 0))) ||
+                               (next.equals(new Tile(3424, 3476, 0)) && dest.equals(new Tile(3423, 3476, 0))) ||
+                               (next.equals(new Tile(3423, 3476, 0)) && dest.equals(new Tile(3424, 3476, 0)));
+            }
+        });
 
         private Predicate<GameObject> filter;
         private String action;
@@ -426,6 +441,13 @@ public class PathObjectHandler implements Loggable {
                 case BASILISK_SHORTCUT:
                     object.bounds(-52, 42, -217, 20, -52, 52);
                     break;
+
+                case PATERDOMUS_ORNATE_RAILING:
+                    GameObject railing = Objects.stream().filter(Filters.Objects.nameEquals("Ornate railing")).filter(o -> o.tile().distanceTo(destinationDetails.getAssumed()) <= 2).first();
+                    return railing.valid() && InteractionHelper.click(railing, new String[]{"Squeeze-through"},
+                        ()-> Players.local().tile().equals(destinationDetails.getNextTile().getTile()) ?
+                                     WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE,Random.nextInt(6000, 9000)) && WaitFor.milliseconds(400, 800) != null;
+
             }
         }
 
