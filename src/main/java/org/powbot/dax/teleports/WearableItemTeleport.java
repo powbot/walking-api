@@ -2,10 +2,9 @@ package org.powbot.dax.teleports;
 
 import org.powbot.api.Random;
 import org.powbot.api.Tile;
-import org.powbot.api.rt4.Equipment;
-import org.powbot.api.rt4.Inventory;
-import org.powbot.api.rt4.Item;
-import org.powbot.api.rt4.Players;
+import org.powbot.api.rt4.*;
+import org.powbot.api.waiter.Waiter;
+import org.powbot.api.waiter.Waiters;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.NPCInteraction;
 import org.powbot.dax.teleports.utils.ItemFilters;
@@ -38,6 +37,7 @@ public class WearableItemTeleport {
 	public static final Predicate<Item> SLAYER_RING = ItemFilters.nameContains("Slayer ring");
 	public static final Predicate<Item> FARMING_CAPE_FILTER = ItemFilters.nameContains("Farming cape");
 	public static final Predicate<Item> DRAKANS_MEDALLION_FILTER = ItemFilters.nameEquals("Drakan's medallion");
+	public static final Predicate<Item> PENDANT_OF_ATES_FILTER = ItemFilters.nameContains("Pendant of ates");
 
 
 	private WearableItemTeleport() {
@@ -79,6 +79,28 @@ public class WearableItemTeleport {
 					}
 					return WaitFor.Return.IGNORE;
 				}) == WaitFor.Return.SUCCESS;
+	}
+
+	public static boolean teleportWithPendantOfAtes(String destination){
+		Item teleportItem = Inventory.stream().filter(PENDANT_OF_ATES_FILTER).first();
+		if (!teleportItem.valid()) {
+			teleportItem = Equipment.stream().filter(PENDANT_OF_ATES_FILTER).first();
+		}
+
+		if (!teleportItem.valid()) {
+			return false;
+		}
+
+		final Tile startingPosition = Players.local().tile();
+
+
+		boolean interact = teleportItem.interact(c -> c.getAction().matches("Rub"));
+		if(!interact){
+			return false;
+		}
+		Component targetComponent;
+		Waiters.withTimeout(4000, Waiter);
+		return targetComponent.valid() &&
 	}
 
 }
