@@ -45,6 +45,7 @@ public class PlayerDetails {
                 3618, //dream mentor
                 3741,
                 4163, //teleblock
+				4464, //falador hard diary
                 4493,
                 4494, //fremmy elite diary status
                 4538,
