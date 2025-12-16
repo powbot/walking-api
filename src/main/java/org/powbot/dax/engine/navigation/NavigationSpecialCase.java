@@ -44,11 +44,6 @@ public class NavigationSpecialCase implements Loggable {
      */
     public enum SpecialLocation {
 
-
-        RELLEKA_UPPER_PORT (2621, 3688, 0),
-        SMALL_PIRATES_COVE_AREA (2213, 3794, 0),
-
-        PIRATE_COVE_SHIP_TILE (2138, 3900, 2),
         CAPTAIN_BENTLY_PIRATES_COVE (2223, 3796, 2),
         CAPTAIN_BENTLY_LUNAR_ISLE (2130, 3899, 2),
 
@@ -433,15 +428,6 @@ public class NavigationSpecialCase implements Loggable {
                 }
                 break;
 
-            case RELLEKA_UPPER_PORT:
-            case SMALL_PIRATES_COVE_AREA:
-                if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Lokar"), new String[]{"Travel"}, new String[]{
-                		"That's fine, I'm just going to Pirates' Cove."})){
-                    System.out.println("Was not able to travel with Lokar");
-                    break;
-                }
-                WaitFor.milliseconds(3300, 5200);
-                break;
             case CAPTAIN_BENTLY_PIRATES_COVE:
             case CAPTAIN_BENTLY_LUNAR_ISLE:
                 if (!NPCInteraction.talkTo(Filters.NPCs.nameContains("Captain"), new String[]{"Travel"}, new String[]{})){
@@ -492,8 +478,8 @@ public class NavigationSpecialCase implements Loggable {
                 break;
 
             case WATERBIRTH:
-                String option = Npcs.get(Filters.NPCs.nameContains("Jarvald").and(Filters.NPCs.actionsContains(
-                		"Travel"))).size() > 0 ? "Travel" : "Talk-to";
+                String option = !Npcs.get(Filters.NPCs.nameContains("Jarvald").and(Filters.NPCs.actionsContains(
+						"Travel"))).isEmpty() ? "Travel" : "Talk-to";
                 if (NPCInteraction.talkTo(Filters.NPCs.nameEquals("Jarvald"), new String[]{option}, new String[]{
                         "What Jarvald is doing.",
                         "Can I come?",
@@ -1181,7 +1167,8 @@ public class NavigationSpecialCase implements Loggable {
             case LOKAR_SEARUNNER_RELLEKKA:
                 return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Lokar Searunner"),"Rellekka") &&
                                WaitFor.condition(15000,() -> specialLocation.getTile().distanceTo(Players.local().tile()) < 10
-                                                                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                                                                     ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS &&
+                               WaitFor.milliseconds(800, 1600) != null;
             case LOKAR_SEARUNNER_PIRATES_COVE:
                 return NPCInteraction.clickNpc(Filters.NPCs.nameEquals("Lokar Searunner"),"Pirate's Cove") &&
                                WaitFor.condition(15000,() -> {
@@ -1190,7 +1177,8 @@ public class NavigationSpecialCase implements Loggable {
                                    }
                                    return specialLocation.getTile().distanceTo(Players.local().tile()) < 10
                                                   ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE;
-                               }) == WaitFor.Return.SUCCESS;
+                               }) == WaitFor.Return.SUCCESS &&
+                               WaitFor.milliseconds(800, 1600) != null;
 
             case PRIF_MINE_INSIDE:
                 return clickObject(Filters.Objects.nameEquals("Cave entrance"), "Enter",
