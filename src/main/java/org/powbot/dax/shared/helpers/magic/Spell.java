@@ -73,7 +73,7 @@ public enum Spell {
         if (this == ARDOUGNE_TELEPORT && Varpbits.varpbit(165, true) < 30){
             return false;
         }
-        if (this == KOUREND_TELEPORT && Varpbits.value(6027) < 11){
+        if (this == KOUREND_TELEPORT && !Quests.Quest.CLIENT_OF_KOUREND.completed()){
             return false;
         }
         if (this == CIVITAS_ILLA_FORTIS && Varpbits.value(9649) <= 48){
