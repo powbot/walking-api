@@ -905,11 +905,11 @@ public enum Teleport {
 			(i1, i2) -> Varpbits.value(9819) > 5 && i1.stream().anyMatch(ItemFilters.nameEquals("Calcified moth")),
 			() -> ItemHelper.click("Calcified moth", "Crush")
 	),
-	RALOS_RISE_PENDANT_OF_ATES(
-			35, new Tile(1459, 3135, 0),
-			(i1, i2) -> Varpbits.value(11177) >= 1 && WearableItemTeleport.has(WearableItemTeleport.PENDANT_OF_ATES_FILTER, i1, i2),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.PENDANT_OF_ATES_FILTER, "Rub")
-	)
+//	RALOS_RISE_PENDANT_OF_ATES(
+//			35, new Tile(1459, 3135, 0),
+//			(i1, i2) -> Varpbits.value(11177) >= 1 && WearableItemTeleport.has(WearableItemTeleport.PENDANT_OF_ATES_FILTER, i1, i2),
+//			() -> WearableItemTeleport.teleport(WearableItemTeleport.PENDANT_OF_ATES_FILTER, "Rub")
+//	)
 
 	;
 
@@ -1131,6 +1131,8 @@ public enum Teleport {
 	private static boolean hasCompletedDesertTreasure(){
 		return Varpbits.value(358, true) >= 15;
 	}
+
+
 
 }
 

@@ -81,26 +81,26 @@ public class WearableItemTeleport {
 				}) == WaitFor.Return.SUCCESS;
 	}
 
-	public static boolean teleportWithPendantOfAtes(String destination){
-		Item teleportItem = Inventory.stream().filter(PENDANT_OF_ATES_FILTER).first();
-		if (!teleportItem.valid()) {
-			teleportItem = Equipment.stream().filter(PENDANT_OF_ATES_FILTER).first();
-		}
-
-		if (!teleportItem.valid()) {
-			return false;
-		}
-
-		final Tile startingPosition = Players.local().tile();
-
-
-		boolean interact = teleportItem.interact(c -> c.getAction().matches("Rub"));
-		if(!interact){
-			return false;
-		}
-		Component targetComponent;
-		Waiters.withTimeout(4000, Waiter);
-		return targetComponent.valid() &&
-	}
+//	public static boolean teleportWithPendantOfAtes(String destination){
+//		Item teleportItem = Inventory.stream().filter(PENDANT_OF_ATES_FILTER).first();
+//		if (!teleportItem.valid()) {
+//			teleportItem = Equipment.stream().filter(PENDANT_OF_ATES_FILTER).first();
+//		}
+//
+//		if (!teleportItem.valid()) {
+//			return false;
+//		}
+//
+//		final Tile startingPosition = Players.local().tile();
+//
+//
+//		boolean interact = teleportItem.interact(c -> c.getAction().matches("Rub"));
+//		if(!interact){
+//			return false;
+//		}
+//		Component targetComponent;
+//		Waiters.withTimeout(4000, Waiter);
+//		return targetComponent.valid() &&
+//	}
 
 }
