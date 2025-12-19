@@ -709,11 +709,11 @@ public enum Teleport {
 			"No."
 	),
 
-//	MOONCLAN_TELEPORT_TAB(
-//			35, new Tile(2115, 3914, 0),
-//			() -> Quest.LUNAR_DIPLOMACY.getState() == Quest.State.COMPLETE && Inventory.getCount("Moonclan teleport") > 0,
-//			() -> ItemHelper.click("Moonclan tele.*", "Break")
-//	),
+	MOONCLAN_TELEPORT_TAB(
+			35, new Tile(2115, 3914, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Moonclan teleport")),
+			() -> ItemHelper.click("Moonclan tele.*", "Break")
+	),
 
 	OURANIA_TELEPORT_TAB(
 			35, new Tile(2468, 3246, 0),
