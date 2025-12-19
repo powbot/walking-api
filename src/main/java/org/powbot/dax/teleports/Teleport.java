@@ -711,7 +711,7 @@ public enum Teleport {
 
 	MOONCLAN_TELEPORT_TAB(
 			35, new Tile(2115, 3914, 0),
-			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Moonclan teleport")),
+			(i1, i2) -> Quests.Quest.LUNAR_DIPLOMACY.state() > 125 && i1.stream().anyMatch(ItemFilters.nameEquals("Moonclan teleport")),
 			() -> ItemHelper.click("Moonclan tele.*", "Break")
 	),
 
