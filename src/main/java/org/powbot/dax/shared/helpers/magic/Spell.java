@@ -23,7 +23,7 @@ public enum Spell {
     ARDOUGNE_TELEPORT   (
 	    SpellBook.Type.STANDARD, 51, Magic.Spell.ARDOUGNE_TELEPORT,   new Pair<>(2, RuneElement.LAW), new Pair<>(2, RuneElement.WATER)),
     KOUREND_TELEPORT	(
-	    SpellBook.Type.STANDARD, 69, Magic.Spell.KOUREND_CASTLE_TELEPORT,new Pair<>(2, RuneElement.LAW),new Pair<>(1, RuneElement.WATER), new Pair<>(1, RuneElement.FIRE)),
+	    SpellBook.Type.STANDARD, 48, Magic.Spell.KOUREND_CASTLE_TELEPORT,new Pair<>(2, RuneElement.LAW),new Pair<>(1, RuneElement.WATER), new Pair<>(1, RuneElement.FIRE)),
     TELEPORT_TO_HOUSE   (
         SpellBook.Type.STANDARD, 40, Magic.Spell.TELEPORT_TO_HOUSE,new Pair<>(1, RuneElement.LAW), new Pair<>(1, RuneElement.AIR), new Pair<>(1, RuneElement.EARTH)),
     CIVITAS_ILLA_FORTIS (
