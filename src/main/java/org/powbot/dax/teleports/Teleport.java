@@ -97,14 +97,14 @@ public enum Teleport {
 	),
 
 	KOUREND_CASTLE_TELEPORT(
-			35, new Tile(2661, 3300, 0),
+			35, new Tile(1639, 3673, 0),
 			Spell.KOUREND_TELEPORT::canUse,
 			() -> selectSpell(Spell.KOUREND_TELEPORT,"Cast")
 	),
 
 	KOUREND_CASTLE_TELEPORT_TAB(
-			35, new Tile(2661, 3300, 0),
-			(i1, i2) -> Varpbits.value(6027, true) < 11 && i1.stream().anyMatch(ItemFilters.nameEquals("Kourend castle teleport")),
+			35, new Tile(1639, 3673, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameEquals("Kourend castle teleport")),
 			() -> ItemHelper.click("Kourend castle.*", "Break")
 	),
 
