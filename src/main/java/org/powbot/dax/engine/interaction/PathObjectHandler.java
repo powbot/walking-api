@@ -1,6 +1,7 @@
 package org.powbot.dax.engine.interaction;
 
 import org.powbot.api.Area;
+import org.powbot.api.ModelInteractionType;
 import org.powbot.api.Random;
 import org.powbot.api.Tile;
 import org.powbot.api.rt4.Objects;
@@ -52,210 +53,235 @@ public class PathObjectHandler implements Loggable {
         return instance != null ? instance : (instance = new PathObjectHandler());
     }
 
-    private enum SpecialObject {
-        WEB(Filters.Objects.nameEquals("Web"), "Slash", null, new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.stream(15).filter(
-                        Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
-                                .and(Filters.Objects.nameEquals("Web"))
-                                .and(Filters.Objects.actionsContains("Slash"))).count() > 0;
-            }
-        }),
-        ROCKFALL(Filters.Objects.nameEquals("Rockfall"), "Mine", null, new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return  Objects.stream(15).filter(
-                        Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
-                                .and(Filters.Objects.nameEquals("Rockfall"))
-                                .and(Filters.Objects.actionsContains("Mine"))).count() > 0;
-            }
-        }),
-        ROOTS(Filters.Objects.nameEquals("Roots"), "Chop", null, new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.stream(15).filter(
-                        Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
-                                .and(Filters.Objects.nameEquals("Roots"))
-                                .and(Filters.Objects.actionsContains("Chop"))).count() > 0;
-            }
-        }),
-        ROCK_SLIDE(Filters.Objects.nameEquals("Rockslide"), "Climb-over", null, new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.stream(15).filter(
-                        Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
-                                .and(Filters.Objects.nameEquals("Rockslide"))
-                                .and(Filters.Objects.actionsContains("Climb-over"))).count() > 0;
-            }
-        }),
-        ROOT(Filters.Objects.nameEquals("Root"), "Step-over", null, new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.stream(15).filter(
-                        Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
-                                .and(Filters.Objects.nameEquals("Root"))
-                                .and(Filters.Objects.actionsContains("Step-over"))).count() > 0;
-            }
-        }),
-        BRIMHAVEN_VINES(Filters.Objects.nameEquals("Vines"), "Chop-down", null, new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Objects.stream(15).filter(
-                        Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
-                                .and(Filters.Objects.nameEquals("Vines"))
-                                .and(Filters.Objects.actionsContains("Chop-down"))).count() > 0;
-            }
-        }),
-        AVA_BOOKCASE (Filters.Objects.nameEquals("Bookcase"), "Search", new Tile(3097, 3359, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getX() >= 3097 && destinationDetails.getAssumed().equals(new Tile(3097, 3359, 0));
-            }
-        }),
-        AVA_LEVER (Filters.Objects.nameEquals("Lever"), "Pull", new Tile(3096, 3357, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getX() < 3097 && destinationDetails.getAssumed().equals(new Tile(3097, 3359, 0));
-            }
-        }),
-        ARDY_DOOR_LOCK_SIDE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2565, 3356, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Players.local().tile().getX() >= 2565 && destinationDetails.getAssumed().equals(new Tile(2564, 3356, 0));
-            }
-        }),
-        YANILLE_DOOR_LOCK_SIDE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2601, 9481, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return Players.local().tile().getY() <= 9481 && destinationDetails.getAssumed().equals(new Tile(2601, 9482, 0));
-            }
-        }),
-        EDGEVILLE_UNDERWALL_TUNNEL(Filters.Objects.nameEquals("Underwall tunnel"), "Climb-into", new Tile(3138, 3516, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getAssumed().equals(new Tile(3138, 3516, 0));
-            }
-        }),
-        VARROCK_UNDERWALL_TUNNEL(Filters.Objects.nameEquals("Underwall tunnel"), "Climb-into", new Tile(3141, 3513, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getAssumed().equals(new Tile(3141, 3513, 0 ));
-            }
-        }),
-        GAMES_ROOM_STAIRS(Filters.Objects.nameEquals("Stairs"), "Climb-down", new Tile(2899, 3565, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getTile().equals(new Tile(2899, 3565, 0)) &&
-                        destinationDetails.getAssumed().equals(new Tile(2205, 4934, 1));
-            }
-        }),
-        FALADOR_GATE(Filters.Objects.nameEquals("Gate"), "Close", new Tile(3031, 3314, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getTile().equals(new Tile(3031, 3314, 0));
-            }
-        }),
-        CANIFIS_BASEMENT_WALL(Filters.Objects.nameEquals("Wall"), "Search", new Tile(3480, 9836, 0),new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getTile().equals(new Tile(3480, 9836, 0)) ||
-                        destinationDetails.getAssumed().equals(new Tile(3480, 9836, 0));
-            }
-        }),
-        BRINE_RAT_CAVE_BOULDER(Filters.Objects.nameEquals("Cave"), "Exit", new Tile(2690, 10125, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getTile().equals(new Tile(2690, 10125, 0))
-                        && Npcs.stream().name("Boulder").action("Roll").count() > 0;
-            }
-        }),
-        ARDOUGNE_LOCKED_HOUSE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2611, 3316, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getAssumed().equals(new Tile(2611, 3316, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(2610, 3316, 0));
-            }
-        }),
-        WILDERNESS_CAVERN(Filters.Objects.nameEquals("Cavern"), "Enter", new Tile(3126, 3832, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getAssumed().equals(new Tile(3126, 3832, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(3241, 10233, 0));
-            }
-        }),
-        WILDERNESS_CREVICE(Filters.Objects.nameEquals("Crevice"), "Jump-Down", new Tile(3067, 3740, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getAssumed().equals(new Tile(3067, 3740, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(3187, 10127, 0));
-            }
-        }),
-        WILDERNESS_CAVERN_2(Filters.Objects.nameEquals("Cavern"), "Enter", new Tile(3075, 3653, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getAssumed().equals(new Tile(3075, 3653, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(3197, 10056, 0));
-            }
-        }),
-        BASILISK_SHORTCUT(Filters.Objects.nameEquals("Crevice"), "Squeeze-through", new Tile(2735, 10008, 0), new SpecialCondition() {
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                return destinationDetails.getDestination().getTile().equals(new Tile(2735, 10008, 0)) || destinationDetails.getDestination().getTile().equals(new Tile(2730, 10008, 0));
-            }
-        }),
-        PATERDOMUS_ORNATE_RAILING(Filters.Objects.nameEquals("Ornate railing"), "Squeeze-through", new Tile(3425, 3484, 0), new SpecialCondition() {
+	private enum SpecialObject {
+		ARDOUGNE_LOCKED_HOUSE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2611, 3316, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getAssumed().equals(new Tile(2611, 3316, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(2610, 3316, 0));
+			}
+		}),
+		ARDY_DOOR_LOCK_SIDE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2565, 3356, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return Players.local().tile().getX() >= 2565 && destinationDetails.getAssumed().equals(new Tile(2564, 3356, 0));
+			}
+		}),
+		AVA_BOOKCASE(Filters.Objects.nameEquals("Bookcase"), "Search", new Tile(3097, 3359, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getDestination().getX() >= 3097 && destinationDetails.getAssumed().equals(new Tile(3097, 3359, 0));
+			}
+		}),
+		AVA_LEVER(Filters.Objects.nameEquals("Lever"), "Pull", new Tile(3096, 3357, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getDestination().getX() < 3097 && destinationDetails.getAssumed().equals(new Tile(3097, 3359, 0));
+			}
+		}),
+		BASILISK_SHORTCUT(Filters.Objects.nameEquals("Crevice"), "Squeeze-through", new Tile(2735, 10008, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getDestination().getTile().equals(new Tile(2735, 10008, 0)) || destinationDetails.getDestination().getTile().equals(new Tile(2730, 10008, 0));
+			}
+		}),
+		BRIMHAVEN_VINES(Filters.Objects.nameEquals("Vines"), "Chop-down", null, new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return Objects.stream(15).filter(
+						Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
+								.and(Filters.Objects.nameEquals("Vines"))
+								.and(Filters.Objects.actionsContains("Chop-down"))).count() > 0;
+			}
+		}),
+		BRINE_RAT_CAVE_BOULDER(Filters.Objects.nameEquals("Cave"), "Exit", new Tile(2690, 10125, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getDestination().getTile().equals(new Tile(2690, 10125, 0))
+							   && Npcs.stream().name("Boulder").action("Roll").count() > 0;
+			}
+		}),
+		CANIFIS_BASEMENT_WALL(Filters.Objects.nameEquals("Wall"), "Search", new Tile(3480, 9836, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getDestination().getTile().equals(new Tile(3480, 9836, 0)) ||
+							   destinationDetails.getAssumed().equals(new Tile(3480, 9836, 0));
+			}
+		}),
+		EDGEVILLE_UNDERWALL_TUNNEL(Filters.Objects.nameEquals("Underwall tunnel"), "Climb-into", new Tile(3138, 3516, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getAssumed().equals(new Tile(3138, 3516, 0));
+			}
+		}),
+		FALADOR_GATE(Filters.Objects.nameEquals("Gate"), "Close", new Tile(3031, 3314, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getDestination().getTile().equals(new Tile(3031, 3314, 0));
+			}
+		}),
+		FOSSIL_ISLAND_LADDER_DOWN_EAST(Filters.Objects.nameEquals("Ladder"), "Climb Down", new Tile(3745, 3831, 1), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getNextTile() != null && destinationDetails.getNextTile().getTile().equals(new Tile(3747, 3831, 0));
+			}
+		}),
+		FOSSIL_ISLAND_LADDER_DOWN_WEST(Filters.Objects.nameEquals("Ladder"), "Climb Down", new Tile(3730, 3831, 1), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getNextTile() != null && destinationDetails.getNextTile().getTile().equals(new Tile(3728, 3831, 0));
+			}
+		}),
+		GAMES_ROOM_STAIRS(Filters.Objects.nameEquals("Stairs"), "Climb-down", new Tile(2899, 3565, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getDestination().getTile().equals(new Tile(2899, 3565, 0)) &&
+							   destinationDetails.getAssumed().equals(new Tile(2205, 4934, 1));
+			}
+		}),
+		HAM_JAIL(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(3183, 9611, 0), new SpecialCondition() {
 
-            @Override
-            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
-                Tile dest = destinationDetails.getDestination().getTile();
-                RealTimeCollisionTile nextCollisionTile = destinationDetails.getNextTile();
-                if(nextCollisionTile == null)
-                    return false;
-                Tile next = nextCollisionTile.getTile();
-                return (next.equals(new Tile(3425, 3484, 0)) && dest.equals(new Tile(3425, 3483, 0))) ||
-                               (next.equals(new Tile(3425, 3483, 0)) && dest.equals(new Tile(3425, 3484, 0))) ||
-                               (next.equals(new Tile(3424, 3476, 0)) && dest.equals(new Tile(3423, 3476, 0))) ||
-                               (next.equals(new Tile(3423, 3476, 0)) && dest.equals(new Tile(3424, 3476, 0)));
-            }
-        });
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getNextTile() != null && destinationDetails.getNextTile().getTile().equals(new Tile(3182, 9611, 0));
+			}
+		}),
+		MLM_LADDER(Filters.Objects.nameEquals("Ladder"), "Climb", new Tile(3755, 5673, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getDestination().getTile().equals(new Tile(3755, 5672, 0)) && destinationDetails.getAssumed().equals(new Tile(3755, 5675, 0));
+			}
+		}),
+		PATERDOMUS_ORNATE_RAILING(Filters.Objects.nameEquals("Ornate railing"), "Squeeze-through", new Tile(3425, 3484, 0), new SpecialCondition() {
 
-        private Predicate<GameObject> filter;
-        private String action;
-        private Tile location;
-        private SpecialCondition specialCondition;
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				Tile dest = destinationDetails.getDestination().getTile();
+				RealTimeCollisionTile nextCollisionTile = destinationDetails.getNextTile();
+				if (nextCollisionTile == null)
+					return false;
+				Tile next = nextCollisionTile.getTile();
+				return (next.equals(new Tile(3425, 3484, 0)) && dest.equals(new Tile(3425, 3483, 0))) ||
+							   (next.equals(new Tile(3425, 3483, 0)) && dest.equals(new Tile(3425, 3484, 0))) ||
+							   (next.equals(new Tile(3424, 3476, 0)) && dest.equals(new Tile(3423, 3476, 0))) ||
+							   (next.equals(new Tile(3423, 3476, 0)) && dest.equals(new Tile(3424, 3476, 0)));
+			}
+		}),
+		ROCKFALL(Filters.Objects.nameEquals("Rockfall"), "Mine", null, new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return Objects.stream(15).filter(
+						Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
+								.and(Filters.Objects.nameEquals("Rockfall"))
+								.and(Filters.Objects.actionsContains("Mine"))).count() > 0;
+			}
+		}),
+		ROCK_SLIDE(Filters.Objects.nameEquals("Rockslide"), "Climb-over", null, new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return Objects.stream(15).filter(
+						Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
+								.and(Filters.Objects.nameEquals("Rockslide"))
+								.and(Filters.Objects.actionsContains("Climb-over"))).count() > 0;
+			}
+		}),
+		ROOT(Filters.Objects.nameEquals("Root"), "Step-over", null, new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return Objects.stream(15).filter(
+						Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
+								.and(Filters.Objects.nameEquals("Root"))
+								.and(Filters.Objects.actionsContains("Step-over"))).count() > 0;
+			}
+		}),
+		ROOTS(Filters.Objects.nameEquals("Roots"), "Chop", null, new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return Objects.stream(15).filter(
+						Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
+								.and(Filters.Objects.nameEquals("Roots"))
+								.and(Filters.Objects.actionsContains("Chop"))).count() > 0;
+			}
+		}),
+		VARROCK_UNDERWALL_TUNNEL(Filters.Objects.nameEquals("Underwall tunnel"), "Climb-into", new Tile(3141, 3513, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getAssumed().equals(new Tile(3141, 3513, 0));
+			}
+		}),
+		WEB(Filters.Objects.nameEquals("Web"), "Slash", null, new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return Objects.stream(15).filter(
+						Filters.Objects.inArea(AreaHelper.fromCenter(destinationDetails.getAssumed(), 1))
+								.and(Filters.Objects.nameEquals("Web"))
+								.and(Filters.Objects.actionsContains("Slash"))).count() > 0;
+			}
+		}),
+		WILDERNESS_CAVERN(Filters.Objects.nameEquals("Cavern"), "Enter", new Tile(3126, 3832, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getAssumed().equals(new Tile(3126, 3832, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(3241, 10233, 0));
+			}
+		}),
+		WILDERNESS_CAVERN_2(Filters.Objects.nameEquals("Cavern"), "Enter", new Tile(3075, 3653, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getAssumed().equals(new Tile(3075, 3653, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(3197, 10056, 0));
+			}
+		}),
+		WILDERNESS_CREVICE(Filters.Objects.nameEquals("Crevice"), "Jump-Down", new Tile(3067, 3740, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return destinationDetails.getAssumed().equals(new Tile(3067, 3740, 0)) && destinationDetails.getDestination().getTile().equals(new Tile(3187, 10127, 0));
+			}
+		}),
+		YANILLE_DOOR_LOCK_SIDE(Filters.Objects.nameEquals("Door"), "Pick-lock", new Tile(2601, 9481, 0), new SpecialCondition() {
+			@Override
+			boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+				return Players.local().tile().getY() <= 9481 && destinationDetails.getAssumed().equals(new Tile(2601, 9482, 0));
+			}
+		});
 
-        SpecialObject(Predicate<GameObject> filter, String action, Tile location, SpecialCondition specialCondition){
-            this.filter = filter;
-            this.action = action;
-            this.location = location;
-            this.specialCondition = specialCondition;
-        }
+		private Predicate<GameObject> filter;
+		private String action;
+		private Tile location;
+		private SpecialCondition specialCondition;
 
-        public Predicate<GameObject> getFilter() {
-            return filter;
-        }
+		SpecialObject(Predicate<GameObject> filter, String action, Tile location, SpecialCondition specialCondition) {
+			this.filter = filter;
+			this.action = action;
+			this.location = location;
+			this.specialCondition = specialCondition;
+		}
 
-        public String getAction() {
-            return action;
-        }
+		public Predicate<GameObject> getFilter() {
+			return filter;
+		}
 
-        public Tile getLocation() {
-            return location;
-        }
+		public String getAction() {
+			return action;
+		}
 
-        public boolean isSpecialCondition(PathAnalyzer.DestinationDetails destinationDetails){
-            return specialCondition.isSpecialLocation(destinationDetails);
-        }
+		public Tile getLocation() {
+			return location;
+		}
 
-        public static SpecialObject getValidSpecialObjects(PathAnalyzer.DestinationDetails destinationDetails){
-            for (SpecialObject object : values()){
-                if (object.isSpecialCondition(destinationDetails)){
-                    return object;
-                }
-            }
-            return null;
-        }
+		public boolean isSpecialCondition(PathAnalyzer.DestinationDetails destinationDetails) {
+			return specialCondition.isSpecialLocation(destinationDetails);
+		}
 
-    }
+		public static SpecialObject getValidSpecialObjects(PathAnalyzer.DestinationDetails destinationDetails) {
+			for (SpecialObject object : values()) {
+				if (object.isSpecialCondition(destinationDetails)) {
+					return object;
+				}
+			}
+			return null;
+		}
 
-    private abstract static class SpecialCondition {
+	}
+
+	private abstract static class SpecialCondition {
         abstract boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails);
     }
 
@@ -316,8 +342,8 @@ public class PathObjectHandler implements Loggable {
                 case WEB:
                     List<GameObject> webs;
                     int iterations = 0;
-                    while ((webs = Objects.get(object.getTile()).stream()
-                            .filter(object1 -> Arrays.asList(GameObjectHelper.getActions(object1)).contains("Slash")).collect(Collectors.toList())).size() > 0){
+                    while (!(webs = Objects.stream().at(object.getTile())
+											.filter(object1 -> Arrays.asList(GameObjectHelper.getActions(object1)).contains("Slash")).list()).isEmpty()){
                         GameObject web = webs.get(0);
                         if (canLeftclickWeb()) {
                             InteractionHelper.click(web, "Slash");
@@ -333,7 +359,7 @@ public class PathObjectHandler implements Loggable {
                             WaitFor.milliseconds(2000, 4000);
                         }
                         if (Reachable.getMap().getParent(destinationDetails.getAssumedX(), destinationDetails.getAssumedY()) != null &&
-                                (webs = Objects.get(object.getTile()).stream().filter(object1 -> Arrays.asList(GameObjectHelper.getActions(object1)).contains("Slash")).collect(Collectors.toList())).size() == 0){
+									Objects.stream().at(object.getTile()).filter(object1 -> Arrays.asList(GameObjectHelper.getActions(object1)).contains("Slash")).list().isEmpty()){
                             successfulClick = true;
                             break;
                         }
@@ -410,6 +436,17 @@ public class PathObjectHandler implements Loggable {
                         }
                     }
                     break;
+				case FOSSIL_ISLAND_LADDER_DOWN_WEST:
+				case FOSSIL_ISLAND_LADDER_DOWN_EAST:
+					GameObject ladder =
+							InteractionHelper.getGameObject(Filters.Objects.nameEquals("Ladder").and(Filters.Objects.actionsContains("Climb Down")));
+					if (ladder == null)
+						return false;
+					if (InteractionHelper.click(ladder, "Climb Down")) {
+						WaitFor.condition(10000, () -> Game.floor() == 0 ? WaitFor.Return.SUCCESS :
+															   WaitFor.Return.IGNORE);
+					}
+					break;
                 case ARDOUGNE_LOCKED_HOUSE:
                     for (int i = 0; i < Random.nextInt(10, 15); i++) {
                         if (Players.local().tile().equals(specialObject.getLocation())) {
@@ -438,6 +475,21 @@ public class PathObjectHandler implements Loggable {
                         }
                     }
                     break;
+				case MLM_LADDER:
+					ladder =
+							InteractionHelper.getGameObject(Filters.Objects.nameEquals("Ladder").and(Filters.Objects.actionsContains("Climb")));
+					if (ladder == null)
+						return false;
+					ladder.bounds(-32, 32, -144, -40, 8, 72);
+					ladder.interactionType(ModelInteractionType.BoundingModel);
+					if (InteractionHelper.click(ladder, "Climb")) {
+						return WaitFor.condition(10000, () -> Players.local().tile().getY() == 5675 ?
+																	  WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+					}
+					break;
+				case ROCKFALL:
+					object.setInteractionType(ModelInteractionType.HullQuick);
+					break;
                 case BASILISK_SHORTCUT:
                     object.bounds(-52, 42, -217, 20, -52, 52);
                     break;
