@@ -143,10 +143,10 @@ public class Grouping {
 
     private static Component minigameBox(Component currentMinigame) {
         Component minigamesBox = Widgets.component(MAIN_INTERFACE_ID, MINIGAMES_SELECTION_BOX_INDEX);
-        if ((!minigamesBox.visible() || minigamesBox.components().getSize() == 0) && currentMinigame.click()) {
+        if ((!minigamesBox.visible() || minigamesBox.components().isEmpty()) && currentMinigame.click()) {
             if (!Condition.wait(() -> {
                 Component minigamesBox1 = Widgets.component(MAIN_INTERFACE_ID, MINIGAMES_SELECTION_BOX_INDEX);
-                return minigamesBox1.visible() && minigamesBox1.components().getSize() > 0;
+                return minigamesBox1.visible() && !minigamesBox1.components().isEmpty();
             }, 200, 10)) {
                 System.out.println("Failed to wait for minigames children to appear.");
                 return Component.Companion.getNil();
