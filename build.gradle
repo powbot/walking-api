@@ -13,9 +13,10 @@ repositories {
     maven { url = "https://repo.powbot.org/releases" }
 }
 
+
 dependencies {
     compileOnly 'com.google.code.gson:gson:2.8.6'
-    implementation "org.powbot:client-sdk:1.0.46-SNAPSHOT"
+    implementation "org.powbot:client-sdk:3.0.0-SNAPSHOT"
     implementation 'com.google.guava:guava:31.1-jre'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
