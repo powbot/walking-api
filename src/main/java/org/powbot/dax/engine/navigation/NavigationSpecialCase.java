@@ -379,6 +379,20 @@ public class NavigationSpecialCase implements Loggable {
 
         LUMBRIDGE_GROUND_FLOOR(3206, 3208, 0),
         LUMBRIDGE_TOP_FLOOR(3205, 3209, 2),
+
+        QUETZ_MOUNTAIN_GUIDE(1486, 3232, 0),
+        AUBURNVALE_MOUNTAIN_GUIDE(1360, 3310, 0),
+
+        ACHILKA_GLOOMTHORN_TRAIL(1400, 3246, 0),
+        ACHILKA_TAL_TEKLAN(1258, 3126, 0),
+        ACHILKA_KASTORI(1390, 3074, 0),
+
+
+        PATERDOMUS_SHORTCUT_E( 3427, 3477, 0),
+        PATERDOMUS_SHORTCUT_W(3424, 3476, 0),
+
+        HUNTER_GUILD_BASEMENT(1558, 9451, 0),
+        HUNTER_GUILD_MAIN_FLOOR(1557, 3047, 0)
         ;
 
         int x, y, z;
@@ -1396,6 +1410,35 @@ public class NavigationSpecialCase implements Loggable {
                 return clickObject(Filters.Objects.nameEquals("Staircase"), action,
                         ()-> Players.local().tile().equals(specialLocation.getTile()) ?
                                      WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, Random.nextInt(12000, 15000));
+            case QUETZ_MOUNTAIN_GUIDE:
+            case AUBURNVALE_MOUNTAIN_GUIDE:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Mountain Guide"), new String[]{"Follow"}, new String[]{})
+                        && WaitFor.condition(10000, () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+
+            case ACHILKA_KASTORI:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Achilka"), new String[]{"Kastori"}, new String[]{})
+                        && WaitFor.condition(10000, () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+            case ACHILKA_GLOOMTHORN_TRAIL:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Achilka"), new String[]{"Gloomthorn Trail"}, new String[]{})
+                        && WaitFor.condition(10000, () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+            case ACHILKA_TAL_TEKLAN:
+                return NPCInteraction.talkTo(Filters.NPCs.nameEquals("Achilka"), new String[]{"Tal Teklan"}, new String[]{})
+                        && WaitFor.condition(10000, () -> Players.local().tile().distanceTo(specialLocation.getTile()) < 10 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != null;
+
+            case PATERDOMUS_SHORTCUT_E:
+            case PATERDOMUS_SHORTCUT_W:
+                return clickObject(Filters.Objects.nameEquals("Rocks"), "Climb",
+                        ()-> Players.local().tile().equals(specialLocation.getTile()) ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, Random.nextInt(6000, 9000));
+
+            case HUNTER_GUILD_BASEMENT:
+                return clickObject(Filters.Objects.nameEquals("Stairs"), "Climb-down",
+                        ()-> Players.local().tile().equals(specialLocation.getTile()) ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, Random.nextInt(6000, 9000));
+            case HUNTER_GUILD_MAIN_FLOOR:
+                return clickObject(Filters.Objects.nameEquals("Stairs"), "Climb-up",
+                        ()-> Players.local().tile().equals(specialLocation.getTile()) ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE, Random.nextInt(6000, 9000));
         }
 
         return false;
