@@ -56,6 +56,9 @@ public class RunePouch{
                 case 18: return "Lava rune";
                 case 19: return "Steam rune";
                 case 20: return "Smoke rune";
+                case 21: return "Wrath rune";
+                case 22: return "Sunfire rune";
+                case 23: return "Aether rune";
                 default: return null;
             }
         }

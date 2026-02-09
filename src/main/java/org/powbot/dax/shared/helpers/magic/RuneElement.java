@@ -10,11 +10,11 @@ public enum RuneElement {
 
     AIR("Air", "Smoke", "Mist", "Dust"),
     EARTH("Earth", "Lava", "Mud", "Dust"),
-    FIRE("Fire", "Lava", "Smoke", "Steam", "Twinflame"),
+    FIRE("Fire", "Lava", "Smoke", "Steam", "Twinflame", "Sunfire"),
     WATER("Water", "Mud", "Steam", "Mist", "Twinflame"),
     LAW("Law"),
     NATURE("Nature"),
-    SOUL("Soul");
+    SOUL("Soul", "Aether");
 
     private String[] alternativeNames;
 
