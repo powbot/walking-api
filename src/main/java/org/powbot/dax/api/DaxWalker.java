@@ -1,7 +1,9 @@
 package org.powbot.dax.api;
 
+import com.google.common.eventbus.Subscribe;
 import org.powbot.api.Locatable;
 import org.powbot.api.Tile;
+import org.powbot.api.event.MessageEvent;
 import org.powbot.api.rt4.Objects;
 import org.powbot.api.rt4.*;
 import org.powbot.api.rt4.walking.FailureReason;
@@ -11,11 +13,14 @@ import org.powbot.dax.engine.Loggable;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.WalkerEngine;
 import org.powbot.dax.engine.WalkingCondition;
+import org.powbot.dax.engine.navigation.Quetzal;
 import org.powbot.dax.engine.navigation.ShipUtils;
 import org.powbot.dax.teleports.Teleport;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class DaxWalker implements Loggable {
@@ -301,5 +306,33 @@ public class DaxWalker implements Loggable {
     @Override
     public String getName() {
         return "DaxWalker";
+    }
+
+    @Subscribe
+    public void handleMessageEvent(MessageEvent event){
+        String message = event.getMessage();
+        int whistleCharges = getWhistleCharges(message);
+        if (whistleCharges >= 0) {
+            Quetzal.getInstance().setCurrentCharges(whistleCharges);
+        }
+    }
+
+    private static final Pattern WHISTLE_CHARGE_PATTERN =
+            Pattern.compile("^Your (?:basic |enhanced |perfected )?quetzal whistle has (\\d+) charges remaining\\.$", Pattern.CASE_INSENSITIVE);
+
+    public int getWhistleCharges(String message) {
+        String cleanMessage = message.replaceAll("<[^>]*>", "");
+
+        Matcher matcher = WHISTLE_CHARGE_PATTERN.matcher(cleanMessage);
+
+        if (matcher.find()) {
+            try {
+                return Integer.parseInt(matcher.group(1));
+            } catch (NumberFormatException e) {
+                return -1;
+            }
+        }
+
+        return -1;
     }
 }

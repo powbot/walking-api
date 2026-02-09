@@ -4,6 +4,7 @@ import org.powbot.api.*;
 import org.powbot.api.rt4.*;
 import org.powbot.api.rt4.walking.model.Skill;
 import org.powbot.dax.api.models.Requirement;
+import org.powbot.dax.engine.navigation.Quetzal;
 import org.powbot.dax.teleports.utils.POH;
 import org.powbot.dax.engine.WaitFor;
 import org.powbot.dax.engine.interaction.NPCInteraction;
@@ -905,11 +906,81 @@ public enum Teleport {
 			(i1, i2) -> Varpbits.value(9819) > 5 && i1.stream().anyMatch(ItemFilters.nameEquals("Calcified moth")),
 			() -> ItemHelper.click("Calcified moth", "Crush")
 	),
-//	RALOS_RISE_PENDANT_OF_ATES(
-//			35, new Tile(1459, 3135, 0),
-//			(i1, i2) -> Varpbits.value(11177) >= 1 && WearableItemTeleport.has(WearableItemTeleport.PENDANT_OF_ATES_FILTER, i1, i2),
-//			() -> WearableItemTeleport.teleport(WearableItemTeleport.PENDANT_OF_ATES_FILTER, "Rub")
-//	)
+	RALOS_RISE_PENDANT_OF_ATES(
+			35, new Tile(1459, 3135, 0),
+			(i1, i2) -> Varpbits.value(11177) >= 1 && WearableItemTeleport.has(WearableItemTeleport.PENDANT_OF_ATES_FILTER, i1, i2),
+			() -> WearableItemTeleport.teleport(WearableItemTeleport.PENDANT_OF_ATES_FILTER, "Rub")
+	),
+	QUETZAL_WHISTLE_ALDARIN(
+			35, new Tile(1390, 2901, 0),
+			(i1, i2) ->  i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.ALDARIN)
+	),
+	QUETZAL_WHISTLE_AUBURNVALE(
+			35, new Tile(1411, 3361, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.AUBURNVALE)
+	),
+	QUETZAL_WHISTLE_CAM_TORUM(
+			35, new Tile(1446, 3108, 0),
+			(i1, i2) ->  Varpbits.value(9955) >= 1 && i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.CAM_TORUM_ENTRANCE)
+	),
+	QUETZAL_WHISTLE_CIVITAS_ILLA_FORTIS(
+			35, new Tile(1696, 3140, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.CIVITAS_ILLA_FORTIS)
+	),
+	QUETZAL_WHISTLE_COLOSSAL_WYRM_REMAINS(
+			35, new Tile(1670, 2934, 0),
+			(i1, i2) -> Varpbits.value(9956) >= 1 && i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.COLOSSAL_WYRM_REMAINS)
+	),
+	QUETZAL_WHISTLE_FORTIS_COLOSSEUM(
+			35, new Tile(1779, 3111, 0),
+			(i1, i2) -> Varpbits.value(9958) >= 1 && i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.FORTIS_COLOSSEUM)
+	),
+	QUETZAL_WHISTLE_KASTORI(
+			35, new Tile(1344, 3022, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.KASTORI)
+	),
+	QUETZAL_WHISTLE_OUTER_FORTIS(
+			35, new Tile(1700, 3035, 0),
+			(i1, i2) -> Varpbits.value(9957) >= 1 && i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.OUTER_FORTIS)
+	),
+	QUETZAL_WHISTLE_QUETZACALLI_GORGE(
+			35, new Tile(1510, 3222, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.QUETZACALLI_GORGE)
+	),
+	QUETZAL_WHISTLE_HUNTER_GUILD(
+			35, new Tile(1585, 3053, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.HUNTER_GUILD)
+	),
+	QUETZAL_WHISTLE_SALVAGER_OUTLOOK(
+			35, new Tile(1614, 3300, 0),
+			(i1, i2) -> Varpbits.value(11379) >= 1 && i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.SALVAGER_OVERLOOK)
+	),
+	QUETZAL_WHISTLE_SUNSET_COAST(
+			35, new Tile(1548, 2995, 0),
+			(i1, i2) -> Varpbits.value(9953) >= 1 && i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.SUNSET_COAST)
+	),
+	QUETZAL_WHISTLE_TAL_TEKLAN(
+			35, new Tile(1226, 3091, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.TAL_TEKLAN)
+	),
+	QUETZAL_WHISTLE_THE_TEOMAT(
+			35, new Tile(1437, 3171, 0),
+			(i1, i2) -> i1.stream().anyMatch(ItemFilters.nameContains("quetzal whistle")),
+			() -> Quetzal.teleport(Quetzal.Location.THE_TEOMAT)
+	)
 
 	;
 
