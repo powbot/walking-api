@@ -11,6 +11,7 @@ import org.powbot.dax.teleports.utils.ItemFilters;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public class WearableItemTeleport {
 
@@ -81,26 +82,38 @@ public class WearableItemTeleport {
 				}) == WaitFor.Return.SUCCESS;
 	}
 
-//	public static boolean teleportWithPendantOfAtes(String destination){
-//		Item teleportItem = Inventory.stream().filter(PENDANT_OF_ATES_FILTER).first();
-//		if (!teleportItem.valid()) {
-//			teleportItem = Equipment.stream().filter(PENDANT_OF_ATES_FILTER).first();
-//		}
-//
-//		if (!teleportItem.valid()) {
-//			return false;
-//		}
-//
-//		final Tile startingPosition = Players.local().tile();
-//
-//
-//		boolean interact = teleportItem.interact(c -> c.getAction().matches("Rub"));
-//		if(!interact){
-//			return false;
-//		}
-//		Component targetComponent;
-//		Waiters.withTimeout(4000, Waiter);
-//		return targetComponent.valid() &&
-//	}
+	public static boolean teleportWithPendantOfAtes(String destination){
+		if(!Widgets.component(879, 0).visible()){
+			Item teleportItem = Inventory.stream().filter(PENDANT_OF_ATES_FILTER).first();
+			if (!teleportItem.valid()) {
+				teleportItem = Equipment.stream().filter(PENDANT_OF_ATES_FILTER).first();
+			}
+
+			if (!teleportItem.valid()) {
+				return false;
+			}
+
+			boolean interact = teleportItem.interact(c -> c.getAction().matches("Rub"));
+			if(!interact){
+				return false;
+			}
+			if(WaitFor.condition(Random.nextInt(600, 1800), () -> {
+				if(Widgets.component(879, 0).visible())
+					return WaitFor.Return.SUCCESS;
+				return WaitFor.Return.IGNORE;
+			}) != WaitFor.Return.SUCCESS) {
+				return false;
+			}
+		}
+		final Tile startingPosition = Players.local().tile();
+		Component targetComponent = Components.stream(879).name(Pattern.compile(".*"+destination+".*")).firstOrNull();
+		return targetComponent != null && targetComponent.valid() && targetComponent.click() && WaitFor.condition(
+				Random.nextInt(3800, 4600), () -> {
+					if (startingPosition.distanceTo(Players.local().tile()) > 5) {
+						return WaitFor.Return.SUCCESS;
+					}
+					return WaitFor.Return.IGNORE;
+				}) == WaitFor.Return.SUCCESS;
+	}
 
 }

@@ -908,8 +908,39 @@ public enum Teleport {
 	),
 	RALOS_RISE_PENDANT_OF_ATES(
 			35, new Tile(1459, 3135, 0),
-			(i1, i2) -> Varpbits.value(11177) >= 1 && WearableItemTeleport.has(WearableItemTeleport.PENDANT_OF_ATES_FILTER, i1, i2),
-			() -> WearableItemTeleport.teleport(WearableItemTeleport.PENDANT_OF_ATES_FILTER, "Rub")
+			(i1, i2) -> Varpbits.value(11177) >= 1 && WearableItemTeleport.has(WearableItemTeleport.PENDANT_OF_ATES_FILTER, i1, i2) &&
+				Varpbits.value(16175) > 0,
+			() -> WearableItemTeleport.teleportWithPendantOfAtes("Ralos' Rise")
+	),
+	KASTORI_PENDANT_OF_ATES(
+			35, new Tile(1366, 3087, 0),
+			(i1, i2) -> Varpbits.value(16752) >= 1 && WearableItemTeleport.has(WearableItemTeleport.PENDANT_OF_ATES_FILTER, i1, i2) &&
+				Varpbits.value(16175) > 0,
+			() -> WearableItemTeleport.teleportWithPendantOfAtes("Kastori")
+	),
+	TWILIGHT_TEMPLE_PENDANT_OF_ATES(
+			35, new Tile(1666, 3222, 0),
+			(i1, i2) -> Varpbits.value(11176) >= 1 && WearableItemTeleport.has(WearableItemTeleport.PENDANT_OF_ATES_FILTER, i1, i2) &&
+				Varpbits.value(16175) > 0,
+			() -> WearableItemTeleport.teleportWithPendantOfAtes("Twilight Temple")
+	),
+	DARKFROST_PENDANT_OF_ATES(
+			35, new Tile(1491, 3284, 0),
+			(i1, i2) -> Varpbits.value(11175) >= 1 && WearableItemTeleport.has(WearableItemTeleport.PENDANT_OF_ATES_FILTER, i1, i2) &&
+				Varpbits.value(16175) > 0,
+			() -> WearableItemTeleport.teleportWithPendantOfAtes("Darkfrost")
+	),
+	NORTH_ALDARIN_PENDANT_OF_ATES(
+			35, new Tile(1424, 2994, 0),
+			(i1, i2) -> Varpbits.value(11178) >= 1 && WearableItemTeleport.has(WearableItemTeleport.PENDANT_OF_ATES_FILTER, i1, i2) &&
+				Varpbits.value(16175) > 0,
+			() -> WearableItemTeleport.teleportWithPendantOfAtes("North Aldarin")
+	),
+	NEMUS_RETREAT_PENDANT_OF_ATES(
+			35, new Tile(1365, 3277, 0),
+			(i1, i2) -> Varpbits.value(16757) >= 1 && WearableItemTeleport.has(WearableItemTeleport.PENDANT_OF_ATES_FILTER, i1, i2) &&
+				Varpbits.value(16175) > 0,
+			() -> WearableItemTeleport.teleportWithPendantOfAtes("Nemus Retreat")
 	),
 	QUETZAL_WHISTLE_ALDARIN(
 			35, new Tile(1390, 2901, 0),
