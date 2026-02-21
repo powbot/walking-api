@@ -87,7 +87,7 @@ public class Quetzal {
 
 	public static boolean to(Location location){
 		if (!Widgets.component(QUETZAL_WIDGET_ROOT, 0).visible()
-					&& !InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Renu")), "Travel", () -> Components.stream(QUETZAL_WIDGET_ROOT).anyMatch(Component::valid) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
+					&& !InteractionHelper.click(InteractionHelper.getRSNPC(Filters.NPCs.nameEquals("Renu")), "Travel", () -> Widgets.component(QUETZAL_WIDGET_ROOT, 0).visible() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE)) {
 			return false;
 		}
 
