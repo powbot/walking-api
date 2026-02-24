@@ -9,6 +9,8 @@ import org.powbot.dax.shared.helpers.Filters;
 import org.powbot.dax.shared.helpers.ItemHelper;
 import org.powbot.dax.teleports.utils.ItemFilters;
 
+import java.util.regex.Pattern;
+
 public class Quetzal {
 
 	public static final int
@@ -114,6 +116,10 @@ public class Quetzal {
 			if (!Widgets.component(WHISTLE_WIDGET_ROOT, WHISTLE_WIDGET_CHILD).visible() &&
 						!ItemHelper.click(ItemFilters.nameContains("quetzal whistle"), "Signal") &&
 						WaitFor.condition(4500, () -> Components.stream(WHISTLE_WIDGET_ROOT).anyMatch(Component::valid) ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS){
+				Component option = Components.stream(229).text(Pattern.compile(".*whistle.*no charges.*")).firstOrNull();
+				if (option != null && option.valid()) {
+					getInstance().setCurrentCharges(0);
+				}
 				return false;
 			}
 			Component option = Components.stream(WHISTLE_WIDGET_ROOT, WHISTLE_WIDGET_CHILD).action(location.getName()).findAny().orElse(null);
